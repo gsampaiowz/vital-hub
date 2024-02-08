@@ -1,18 +1,29 @@
 import styled from "styled-components/native";
 
-export const Link = styled.Text`
+const LinkStyled = styled.Text`
   font-size: 14px;
   text-decoration: underline;
-  color: #8c8a97;
+  text-align: center;
   font-family: MontserratAlternates_600SemiBold;
-  align-self: start;
 `;
 
-export const LinkCadastroContainer = styled(Link)`
-  align-self: center;
-  color: #4E4B59;
-`;
-
-export const LinkCadastro = styled(LinkCadastroContainer)`
-  color: #4d659d;
-`;
+export const Link = ({
+  color = "black",
+  text = "",
+  doubleColor = false,
+  text2 = "",
+  color2 = "black",
+  align = "center",
+  underline = true,
+}) => {
+  return (
+    <LinkStyled
+      style={{ alignSelf: align, color: color2, textDecorationLine: "none" }}
+    >
+      {doubleColor && text2}
+      <LinkStyled style={{ color: color, textDecorationColor: underline ? color : "transparent" }}>
+        {text}
+      </LinkStyled>
+    </LinkStyled>
+  );
+};

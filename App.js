@@ -1,4 +1,4 @@
-import * as SplashScreen from "expo-splash-screen";
+// import * as SplashScreen from "expo-splash-screen";
 
 import {
   useFonts,
@@ -7,12 +7,16 @@ import {
   MontserratAlternates_600SemiBold,
 } from "@expo-google-fonts/montserrat-alternates";
 
+import { Quicksand_500Medium } from "@expo-google-fonts/quicksand";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { NavigationContainer } from "@react-navigation/native";
 
 import { Navigation } from "./src/screens/Navigation";
 import { Login } from "./src/screens/Login";
+import { RecuperarSenha } from "./src/screens/RecuperarSenha";
+import { VerificarEmail } from "./src/screens/VerificarEmail";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +27,7 @@ export default function App() {
     MontserratAlternates_700Bold,
     MontserratAlternates_500Medium,
     MontserratAlternates_600SemiBold,
+    Quicksand_500Medium,
   });
 
   if (!fontsLoaded) {
@@ -48,6 +53,26 @@ export default function App() {
             component={Login}
             options={{ title: "Login" }}
           />
+          <Stack.Screen
+            name="RecuperarSenha"
+            component={RecuperarSenha}
+            options={{ title: "Recuperar Senha" }}
+          />
+          <Stack.Screen
+            name="VerificarEmail"
+            component={VerificarEmail}
+            options={{ title: "Verificar Email" }}
+          />
+          {/* <Stack.Screen
+            name="RedefinirSenha"
+            component={RedefinirSenha}
+            options={{ title: "Redefinir Senha" }}
+          />
+          <Stack.Screen
+            name="CriarConta"
+            component={CriarConta}
+            options={{ title: "Criar Conta" }}
+          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     );

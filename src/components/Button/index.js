@@ -1,21 +1,45 @@
 import styled from "styled-components/native";
 
-export const Button = styled.Pressable`
+const ButtonStyled = styled.Pressable`
   background-color: #496bba;
-  color: #fff;
+  width: 100%;
   padding: 12px 8px;
   border-radius: 5px;
-  font-size: 14px;
-  width: 90%;
-  font-family: MontserratAlternates_600SemiBold;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
+  gap: 27px;
 `;
 
-export const GoogleButton = styled(Button)`
+const OutlinedButton = styled(ButtonStyled)`
   background-color: #fff;
-  flex-direction: row;
-  color: #496BBA;
-  gap: 27px;
-  border: 1px solid #496BBA;
+  border: 1px solid #496bba;
 `;
+
+const TextButton = styled.Text`
+  font-size: 14px;
+  font-family: MontserratAlternates_600SemiBold;
+  color: #fff;
+`;
+
+export const ButtonsContainer = styled.View`
+  width: 100%;
+  gap: 10px;
+`;
+
+export const Button = ({ text = "", outlined = false, icon = null }) => {
+  if (outlined) {
+    return (
+      <OutlinedButton>
+        {icon}
+        <TextButton style={{ color: "#496bba" }}>{text}</TextButton>
+      </OutlinedButton>
+    );
+  }
+  return (
+    <ButtonStyled>
+      {icon}
+      <TextButton>{text}</TextButton>
+    </ButtonStyled>
+  );
+};

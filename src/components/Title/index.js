@@ -1,8 +1,12 @@
 import styled from "styled-components/native";
 
-export const Title = styled.Text`
-    font-size: 20px;
-    color: #000;
-    font-family: MontserratAlternates_600SemiBold;
-    text-align: center;
+const TitleStyled = styled.Text`
+  font-size: 20px;
+  color: #33303e;
+  font-family: MontserratAlternates_600SemiBold;
+  text-align: center;
 `;
+
+export const Title = ({ text = "" }) => {
+  return <TitleStyled>{text}</TitleStyled>;
+};
