@@ -17,6 +17,9 @@ import { Navigation } from "./src/screens/Navigation";
 import { Login } from "./src/screens/Login";
 import { RecuperarSenha } from "./src/screens/RecuperarSenha";
 import { VerificarEmail } from "./src/screens/VerificarEmail";
+import { RedefinirSenha } from './src/screens/RedefinirSenha/index';
+import { CriarConta } from "./src/screens/CriarConta";
+import { PerfilCliente } from "./src/screens/PerfilCliente";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +66,7 @@ export default function App() {
             component={VerificarEmail}
             options={{ title: "Verificar Email" }}
           />
-          {/* <Stack.Screen
+          <Stack.Screen
             name="RedefinirSenha"
             component={RedefinirSenha}
             options={{ title: "Redefinir Senha" }}
@@ -72,7 +75,12 @@ export default function App() {
             name="CriarConta"
             component={CriarConta}
             options={{ title: "Criar Conta" }}
-          /> */}
+          />
+          <Stack.Screen
+            name="PerfilCliente"
+            component={PerfilCliente}
+            options={{ title: "Perfil Cliente" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );

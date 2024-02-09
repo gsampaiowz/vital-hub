@@ -22,22 +22,19 @@ const TextButton = styled.Text`
   color: #fff;
 `;
 
-export const ButtonsContainer = styled.View`
-  width: 100%;
-  gap: 10px;
-`;
-
-export const Button = ({ text = "", outlined = false, icon = null }) => {
-  if (outlined) {
-    return (
-      <OutlinedButton>
-        {icon}
-        <TextButton style={{ color: "#496bba" }}>{text}</TextButton>
-      </OutlinedButton>
-    );
-  }
-  return (
-    <ButtonStyled>
+export const Button = ({
+  text = "",
+  outlined = false,
+  icon = null,
+  onPress = () => {},
+}) => {
+  return outlined ? (
+    <OutlinedButton onPress={onPress}>
+      {icon}
+      <TextButton style={{ color: "#496bba" }}>{text}</TextButton>
+    </OutlinedButton>
+  ) : (
+    <ButtonStyled onPress={onPress}>
       {icon}
       <TextButton>{text}</TextButton>
     </ButtonStyled>

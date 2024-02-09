@@ -1,18 +1,19 @@
 import { AntDesign } from "@expo/vector-icons";
 import { NavigationButton } from "../../components/NavigationButton";
-import { Container } from "../../components/Container";
+import { ContainerSafe } from "../../components/Container";
 import { Subtitle } from "../../components/Subtitle";
 import { Title } from "../../components/Title";
-import LogoImage from "../../assets/Logo.png";
+import LogoImage from "../../assets/img/Logo.png";
 import { Logo } from "../../components/Logo";
-import { Input, InputsRow } from "../../components/Input";
+import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { Link } from "./../../components/Link/index";
+import { Group } from "../../components/Group";
 
 export const VerificarEmail = ({navigation}) => {
 
   return (
-    <Container>
+    <ContainerSafe>
       <NavigationButton
         onPress={() => navigation.navigate("Login")}
         content={<AntDesign name="close" size={24} color="#34898f" />}
@@ -35,7 +36,7 @@ export const VerificarEmail = ({navigation}) => {
         }
       />
 
-      <InputsRow>
+      <Group row justifyContent="space-between">
         <Input
           textAlign={"center"}
           width={60}
@@ -67,9 +68,9 @@ export const VerificarEmail = ({navigation}) => {
           fontSize={32}
           placeholder="0"
         />
-      </InputsRow>
-      <Button text="Entrar" />
+      </Group>
+      <Button onPress={() => navigation.navigate("RedefinirSenha")} text="Continuar" />
       <Link color="#344F8F" text="Reenviar código" />
-    </Container>
+    </ContainerSafe>
   );
 };

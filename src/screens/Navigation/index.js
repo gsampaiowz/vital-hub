@@ -12,6 +12,18 @@ export const Navigation = ({ navigation }) => {
         title="Verificar Email"
         onPress={() => navigation.navigate("VerificarEmail")}
       />
+      <Button
+        title="Redefinir Senha"
+        onPress={() => navigation.navigate("RedefinirSenha")}
+      />
+      <Button
+        title="Criar Conta"
+        onPress={() => navigation.navigate("CriarConta")}
+      />
+      <Button
+        title="Perfil Cliente"
+        onPress={() => navigation.navigate("PerfilCliente")}
+      />
     </View>
   );
 };

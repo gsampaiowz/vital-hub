@@ -8,20 +8,27 @@ const LinkStyled = styled.Text`
 `;
 
 export const Link = ({
-  color = "black",
+  color = "#344F8F",
   text = "",
   doubleColor = false,
   text2 = "",
-  color2 = "black",
+  color2 = "#33303E",
   align = "center",
   underline = true,
+  onPress = () => {},
 }) => {
   return (
     <LinkStyled
       style={{ alignSelf: align, color: color2, textDecorationLine: "none" }}
     >
       {doubleColor && text2}
-      <LinkStyled style={{ color: color, textDecorationColor: underline ? color : "transparent" }}>
+      <LinkStyled
+      onPress={onPress}
+        style={{
+          color: color,
+          textDecorationColor: underline ? color : "transparent",
+        }}
+      >
         {text}
       </LinkStyled>
     </LinkStyled>

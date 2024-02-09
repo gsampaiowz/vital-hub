@@ -1,9 +1,22 @@
 import styled from "styled-components/native";
 
-export const Container = styled.SafeAreaView`
-    flex: 1;
-    align-items: center;
-    background-color: white;
-    padding: 0 5%;
-    gap: 20px;
+const ContainersStyle = `
+flex: 1;
+background-color: white;
+padding: 0 5%;
+gap: 20px;
+`;
+
+export const ContainerSafe = styled.SafeAreaView`
+  ${ContainersStyle}
+  align-items: center;
+`;
+
+export const Container = styled.View`
+  ${ContainersStyle}
+  align-items: center;
+`;
+
+export const ContainerScroll = styled.ScrollView`
+  ${ContainersStyle}
 `;
