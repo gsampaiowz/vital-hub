@@ -2,25 +2,48 @@ import { ClienteImage } from "../../components/ClienteImage";
 import { ContainerScroll } from "./../../components/Container";
 import { Title } from "./../../components/Title";
 import { Subtitle } from "./../../components/Subtitle";
-import { Group } from "../../components/Group";
+import { Input } from "./../../components/Input";
+import { Group } from "./../../components/Group";
+import { Button } from "./../../components/Button";
 
 export const PerfilCliente = ({ navigation }) => {
   return (
-    <ContainerScroll contentContainerStyle={{ alignItems: "center", gap: 20 }}>
+    <ContainerScroll
+      contentContainerStyle={{
+        alignItems: "center",
+        gap: 20,
+        marginHorizontal: "5%",
+      }}
+    >
       {/* <NavigationButton
         onPress={() => navigation.navigate("Home")}
         content={<AntDesign name="close" size={24} color="#34898f" />}
       /> */}
 
-      <ClienteImage
-        source={require("./../../assets/img/UserImage.png")}
-      />
+      <ClienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
-      <Title text={"Fulano de Tal"} />
+      <Title text={"Romário"} />
 
-      <Subtitle text="fulanodetal@email.com" />
+      <Subtitle text="romario@email.com" />
 
-      
+      <Input label="Data de nascimento:" placeholder="04/05/1999" />
+
+      <Input label="CPF" placeholder="859********" />
+
+      <Input label="Endereço" placeholder="Rua Vicenso Silva, 987" />
+
+      <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
+        <Input label="Cep" placeholder="06548-909" />
+
+        <Input label="Cidade" placeholder="Moema-SP" />
+      </Group>
+      <Group gap={10}>
+        <Button text="SALVAR" />
+
+        <Button text="EDITAR" />
+
+        <Button bgColor="#999999" text="SAIR DO APP" />
+      </Group>
     </ContainerScroll>
   );
 };

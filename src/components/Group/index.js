@@ -1,18 +1,21 @@
-import { View } from "react-native";
 import styled from "styled-components/native";
+
+const GroupView = styled.View`
+  flex: 1;
+`;
 
 export const Group = ({
   children,
   row,
+  maxWidth = "100%",
   alignItems = "center",
   justifyContent = "center",
   gap = 10,
 }) => {
   return (
-    <View
+    <GroupView
       style={{
-        width: "100%",
-        display: "flex",
+        maxWidth: maxWidth,
         flexDirection: row ? "row" : "column",
         alignItems: alignItems,
         justifyContent: justifyContent,
@@ -20,6 +23,6 @@ export const Group = ({
       }}
     >
       {children}
-    </View>
+    </GroupView>
   );
 };

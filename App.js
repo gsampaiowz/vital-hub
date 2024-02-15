@@ -7,7 +7,7 @@ import {
   MontserratAlternates_600SemiBold,
 } from "@expo-google-fonts/montserrat-alternates";
 
-import { Quicksand_500Medium } from "@expo-google-fonts/quicksand";
+import { Quicksand_500Medium, Quicksand_600SemiBold } from "@expo-google-fonts/quicksand";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -20,6 +20,7 @@ import { VerificarEmail } from "./src/screens/VerificarEmail";
 import { RedefinirSenha } from './src/screens/RedefinirSenha/index';
 import { CriarConta } from "./src/screens/CriarConta";
 import { PerfilCliente } from "./src/screens/PerfilCliente";
+import { ConsultasCliente } from './src/screens/ConsultasCliente/index';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function App() {
     MontserratAlternates_500Medium,
     MontserratAlternates_600SemiBold,
     Quicksand_500Medium,
+    Quicksand_600SemiBold
   });
 
   if (!fontsLoaded) {
@@ -80,6 +82,11 @@ export default function App() {
             name="PerfilCliente"
             component={PerfilCliente}
             options={{ title: "Perfil Cliente" }}
+          />
+          <Stack.Screen
+            name="ConsultasCliente"
+            component={ConsultasCliente}
+            options={{ title: "Consultas Cliente" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

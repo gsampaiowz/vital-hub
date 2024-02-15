@@ -1,7 +1,6 @@
 import styled from "styled-components/native";
 
 const ButtonStyled = styled.Pressable`
-  background-color: #496bba;
   width: 100%;
   padding: 12px 8px;
   border-radius: 5px;
@@ -24,6 +23,7 @@ const TextButton = styled.Text`
 
 export const Button = ({
   text = "",
+  bgColor = "#496bba",
   outlined = false,
   icon = null,
   onPress = () => {},
@@ -34,7 +34,7 @@ export const Button = ({
       <TextButton style={{ color: "#496bba" }}>{text}</TextButton>
     </OutlinedButton>
   ) : (
-    <ButtonStyled onPress={onPress}>
+    <ButtonStyled style={{backgroundColor: bgColor}} onPress={onPress}>
       {icon}
       <TextButton>{text}</TextButton>
     </ButtonStyled>
