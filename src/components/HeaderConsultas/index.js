@@ -11,11 +11,15 @@ const HeaderConsultasStyled = styled(LinearGradient).attrs({
   end: { x: 1, y: 0 },
 })`
   width: 100vw;
-  height: 144px;
   flex-direction: row;
   align-items: center;
-  padding: 60px 20px 20px 20px;
+  padding: 20px 20px 20px 20px;
   gap: 10px;
+  shadow-color: #000;
+  shadow-opacity: 0.08;
+  shadow-radius: 25px;
+  elevation: 10;
+  border-bottom: 4px solid black;
   justify-content: center;  
   border-radius: 0px 0px 15px 15px;
 `;

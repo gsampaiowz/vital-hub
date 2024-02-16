@@ -19,5 +19,11 @@ export const Container = styled.View`
 
 export const ContainerScroll = styled.ScrollView`
   ${ContainersStyle}
-  padding: 0;
+  padding: 0 0 20px 0;
+`;
+
+export const ContainerSpacing = styled.View`
+  ${ContainersStyle}
+  flex: none;
+  width: 100%;
 `;

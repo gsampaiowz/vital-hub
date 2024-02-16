@@ -1,5 +1,8 @@
 import { ClienteImage } from "../../components/ClienteImage";
-import { ContainerScroll } from "./../../components/Container";
+import {
+  ContainerScroll,
+  ContainerSpacing,
+} from "./../../components/Container";
 import { Title } from "./../../components/Title";
 import { Subtitle } from "./../../components/Subtitle";
 import { Input } from "./../../components/Input";
@@ -12,7 +15,6 @@ export const PerfilCliente = ({ navigation }) => {
       contentContainerStyle={{
         alignItems: "center",
         gap: 20,
-        marginHorizontal: "5%",
       }}
     >
       {/* <NavigationButton
@@ -22,28 +24,30 @@ export const PerfilCliente = ({ navigation }) => {
 
       <ClienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
-      <Title text={"Romário"} />
+      <ContainerSpacing>
+        <Title text={"Romário"} />
 
-      <Subtitle text="romario@email.com" />
+        <Subtitle text="romario@email.com" />
 
-      <Input label="Data de nascimento:" placeholder="04/05/1999" />
+        <Input label="Data de nascimento:" placeholder="04/05/1999" />
 
-      <Input label="CPF" placeholder="859********" />
+        <Input label="CPF" placeholder="859********" />
 
-      <Input label="Endereço" placeholder="Rua Vicenso Silva, 987" />
+        <Input label="Endereço" placeholder="Rua Vicenso Silva, 987" />
 
-      <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
-        <Input label="Cep" placeholder="06548-909" />
+        <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
+          <Input label="Cep" placeholder="06548-909" />
 
-        <Input label="Cidade" placeholder="Moema-SP" />
-      </Group>
-      <Group gap={10}>
-        <Button text="SALVAR" />
+          <Input label="Cidade" placeholder="Moema-SP" />
+        </Group>
+        <Group gap={10}>
+          <Button text="SALVAR" />
 
-        <Button text="EDITAR" />
+          <Button text="EDITAR" />
 
-        <Button bgColor="#999999" text="SAIR DO APP" />
-      </Group>
+          <Button bgColor="#999999" text="SAIR DO APP" />
+        </Group>
+      </ContainerSpacing>
     </ContainerScroll>
   );
 };

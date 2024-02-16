@@ -30,7 +30,7 @@ export const Input = ({
   textAlign = "left",
 }) => {
   return (
-    <InputGroup style={{ flex: 1, maxWidth: maxWidth }}>
+    <InputGroup style={{ flexShrink: 1, maxWidth: maxWidth, height: "min-content" }}>
       {label !== "" && <InputLabel>{label}</InputLabel>}
       <InputStyled onFocus={() => color = "transparent"}
         style={{

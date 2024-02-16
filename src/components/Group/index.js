@@ -1,7 +1,8 @@
 import styled from "styled-components/native";
 
 const GroupView = styled.View`
-  flex: 1;
+  width: 100%;
+  flex-shrink: 1;
 `;
 
 export const Group = ({
