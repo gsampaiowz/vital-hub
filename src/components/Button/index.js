@@ -8,35 +8,38 @@ const ButtonStyled = styled.Pressable`
   justify-content: center;
   flex-direction: row;
   gap: 27px;
-`;
+  flex-shrink: 1;
+  border: 2px solid #496bba;
 
-const OutlinedButton = styled(ButtonStyled)`
-  background-color: #fff;
-  border: 1px solid #496bba;
 `;
 
 const TextButton = styled.Text`
-  font-size: 14px;
   font-family: MontserratAlternates_600SemiBold;
-  color: #fff;
 `;
 
 export const Button = ({
   text = "",
-  bgColor = "#496bba",
   outlined = false,
+  fontSize = 14,
   icon = null,
+  clickButton = true,
   onPress = () => {},
 }) => {
-  return outlined ? (
-    <OutlinedButton onPress={onPress}>
+  return (
+    <ButtonStyled
+      style={{ backgroundColor: outlined ? "white" : !clickButton ? "white" : "#496bba"}}
+      onPress={onPress}
+      clickButton={clickButton}
+    >
       {icon}
-      <TextButton style={{ color: "#496bba" }}>{text}</TextButton>
-    </OutlinedButton>
-  ) : (
-    <ButtonStyled style={{backgroundColor: bgColor}} onPress={onPress}>
-      {icon}
-      <TextButton>{text}</TextButton>
+      <TextButton
+        style={{
+          color: outlined ? "#496bba" : clickButton ? "#fbfbfb" : "#496bba",
+          fontSize: fontSize,
+        }}
+      >
+        {text}
+      </TextButton>
     </ButtonStyled>
   );
 };

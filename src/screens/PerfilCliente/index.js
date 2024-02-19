@@ -45,7 +45,7 @@ export const PerfilCliente = ({ navigation }) => {
 
           <Button text="EDITAR" />
 
-          <Button bgColor="#999999" text="SAIR DO APP" />
+          <Button outlined text="SAIR DO APP" />
         </Group>
       </ContainerSpacing>
     </ContainerScroll>

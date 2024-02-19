@@ -8,6 +8,7 @@ const GroupView = styled.View`
 export const Group = ({
   children,
   row,
+  flexWrap,
   maxWidth = "100%",
   alignItems = "center",
   justifyContent = "center",
@@ -16,6 +17,7 @@ export const Group = ({
   return (
     <GroupView
       style={{
+        flexWrap: flexWrap ? "wrap" : "nowrap",
         maxWidth: maxWidth,
         flexDirection: row ? "row" : "column",
         alignItems: alignItems,

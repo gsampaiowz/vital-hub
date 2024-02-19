@@ -76,7 +76,8 @@ export const Calendar = () => {
         minHeight: 90,
         width: "100%",
       }}
-      scrollerPaging
+      minDayComponentSize={45}
+      maxDayComponentSize={50}
       scrollable
       selectedDate={moment()}
       locale={localeBrazil}
