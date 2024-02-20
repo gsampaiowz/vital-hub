@@ -19,7 +19,6 @@ const HeaderConsultasStyled = styled(LinearGradient).attrs({
   shadow-opacity: 0.08;
   shadow-radius: 25px;
   elevation: 10;
-  border-bottom: 4px solid black;
   justify-content: center;  
   border-radius: 0px 0px 15px 15px;
 `;

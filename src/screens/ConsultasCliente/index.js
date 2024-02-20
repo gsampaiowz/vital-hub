@@ -1,4 +1,8 @@
-import { ContainerScroll, ContainerSpacing } from "../../components/Container";
+import {
+  ContainerSafe,
+  ContainerScroll,
+  ContainerSpacing,
+} from "../../components/Container";
 import { HeaderConsultas } from "./../../components/HeaderConsultas/index";
 import { Calendar } from "./../../components/Calendar/index";
 import { Button } from "./../../components/Button/index";
@@ -24,7 +28,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
-      status: "Realizada",
+      status: "Agendada",
     },
     {
       id: 3,
@@ -32,17 +36,36 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
+      status: "Agendada",
+    },
+    {
+      id: 4,
+      nome: "Romário",
+      idade: 32,
+      categoria: "Cardiologista",
+      horario: "12:00",
+      status: "Agendada",
+    },
+    {
+      id: 5,
+      nome: "Romário",
+      idade: 32,
+      categoria: "Urologista",
+      horario: "14:00",
+      status: "Realizada",
+    },
+    {
+      id: 6,
+      nome: "Romário",
+      idade: 32,
+      categoria: "Oftalmologista",
+      horario: "16:00",
       status: "Cancelada",
     },
   ]);
 
   return (
-    <ContainerScroll
-      contentContainerStyle={{
-        alignItems: "center",
-        gap: 20,
-      }}
-    >
+    <ContainerSafe>
       <HeaderConsultas
         image={require("./../../assets/img/UserImage.jpg")}
         nome={"Romário"}
@@ -71,7 +94,13 @@ export const ConsultasCliente = ({ navigation }) => {
           />
         </Group>
 
-        <Group>
+        <ContainerScroll
+          contentContainerStyle={{
+            alignItems: "center",
+            gap: 10,
+            flex: 1
+          }}
+        >
           {consultas
             .filter(
               (consulta) => consulta.status === statusButtons.replace("as", "a")
@@ -84,17 +113,11 @@ export const ConsultasCliente = ({ navigation }) => {
                 idade={consulta.idade}
                 categoria={consulta.categoria}
                 horario={consulta.horario}
+                situacao={consulta.status}
               />
             ))}
-        </Group>
+        </ContainerScroll>
       </ContainerSpacing>
-    </ContainerScroll>
+    </ContainerSafe>
   );
 };
-
-// ${props => props.clickButton ? css`
-// 	background-color: #496bba;
-// 	`: css`
-// 	background-color: transparent;
-// 	border: 2px solid #607ec5
-// `

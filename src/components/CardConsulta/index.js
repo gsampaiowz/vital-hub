@@ -8,7 +8,13 @@ import { AntDesign } from "@expo/vector-icons";
 const CardConsultaStyled = styled.View`
   width: 100%;
   padding: 10px;
+  height: 100px;
   border-radius: 5px;
+  shadow-color: #000;
+  shadow-opacity: 0.08;
+  shadow-offset: -2px 4px;
+  shadow-radius: 25px;
+  elevation: 10;
   background-color: #fff;
   display: flex;
   flex-direction: row;
@@ -23,31 +29,66 @@ const CardConsultaImage = styled.Image`
   border-radius: 5px;
 `;
 
-const ButtonCancelar = styled.Pressable`
-  color: #c81d25;
-  width: 100%;
-  border-radius: 5px;
-  flex-shrink: 1;
-  font-size: 12px;
-  font-family: MontserratAlternates_500Medium;
-`;
-
-export const CardConsulta = ({ image, name, idade, categoria, horario }) => {
+export const CardConsulta = ({
+  image,
+  name,
+  idade,
+  categoria,
+  horario,
+  situacao,
+}) => {
   return (
     <CardConsultaStyled>
       <CardConsultaImage source={image} />
       <Group gap={5}>
         <Title fontSize={16} text={name} />
-        <Group gap={5} flexWrap row>
-          <Subtitle fontSize={14} color="#8C8A97" text={idade + " anos •"} />
-          <Subtitle fontSize={14} color="#8C8A97" bold text={categoria} />
+        <Group flexWrap gap={5} row>
+          <Subtitle fontSize={14} color="#8C8A97" text={idade + " anos"} />
+          <Subtitle
+            breakLine={false}
+            fontSize={14}
+            color="#8C8A97"
+            bold
+            text={categoria}
+          />
         </Group>
-        <Group row gap={5}>
-          <AntDesign name="clockcircle" size={14} color="#49B3BA" />
-          <Subtitle fontSize={14} bold color="#49B3BA" text={horario} />
+        <Group padding={2} radius={5} bgColor={situacao === "Agendada" ? "#E8FCFD" : "#F1F0F5"} row gap={5}>
+          <AntDesign
+            name="clockcircle"
+            size={12}
+            color={situacao === "Agendada" ? "#49B3BA" : "#4E4B59"}
+          />
+          <Subtitle
+            fontSize={12}
+            bold
+            color={situacao === "Agendada" ? "#49B3BA" : "#4E4B59"}
+            text={horario}
+          />
         </Group>
       </Group>
-      <ButtonCancelar>Cancelar</ButtonCancelar>
+      {situacao === "Agendada" ? (
+        <Button
+          width={150}
+          spacing={4}
+          fontSize={12}
+          self={"flex-end"}
+          border={false}
+          outlined
+          color="#C81D25"
+          text="Cancelar"
+        />
+      ) : situacao === "Realizada" ? (
+        <Button
+          width={150}
+          spacing={4}
+          fontSize={12}
+          self={"flex-end"}
+          border={false}
+          outlined
+          color="#344F8F"
+          text="Ver prontuário"
+        />
+      ) : null}
     </CardConsultaStyled>
   );
 };

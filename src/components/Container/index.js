@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 const ContainersStyle = `
 flex: 1;
 background-color: white;
-padding: 0 5%;
 gap: 20px;
 `;
 
@@ -25,5 +24,5 @@ export const ContainerScroll = styled.ScrollView`
 export const ContainerSpacing = styled.View`
   ${ContainersStyle}
   flex: none;
-  width: 100%;
+  width: 90%;
 `;
