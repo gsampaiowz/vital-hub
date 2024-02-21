@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 const GroupView = styled.View`
   width: 100%;
   flex-shrink: 1;
+  min-height: auto;
 `;
 
 export const Group = ({

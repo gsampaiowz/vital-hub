@@ -6,15 +6,17 @@ import { Button } from "./../Button/index";
 import { AntDesign } from "@expo/vector-icons";
 
 const CardConsultaStyled = styled.View`
-  width: 100%;
+  width: 90%;
   padding: 10px;
   height: 100px;
+  align-self: center;
+  margin-bottom: 10px;
   border-radius: 5px;
   shadow-color: #000;
   shadow-opacity: 0.08;
   shadow-offset: -2px 4px;
   shadow-radius: 25px;
-  elevation: 10;
+  elevation: 5;
   background-color: #fff;
   display: flex;
   flex-direction: row;
@@ -36,6 +38,8 @@ export const CardConsulta = ({
   categoria,
   horario,
   situacao,
+  setShowModalProntuario,
+  setShowModalCancel,
 }) => {
   return (
     <CardConsultaStyled>
@@ -45,28 +49,33 @@ export const CardConsulta = ({
         <Group flexWrap gap={5} row>
           <Subtitle fontSize={14} color="#8C8A97" text={idade + " anos"} />
           <Subtitle
-            breakLine={false}
             fontSize={14}
             color="#8C8A97"
             bold
             text={categoria}
           />
         </Group>
-        <Group padding={2} radius={5} bgColor={situacao === "Agendada" ? "#E8FCFD" : "#F1F0F5"} row gap={5}>
+        <Group
+          padding={2}
+          radius={5}
+          bgColor={situacao === "Agendadas" ? "#E8FCFD" : "#F1F0F5"}
+          row
+          gap={5}
+        >
           <AntDesign
             name="clockcircle"
             size={12}
-            color={situacao === "Agendada" ? "#49B3BA" : "#4E4B59"}
+            color={situacao === "Agendadas" ? "#49B3BA" : "#4E4B59"}
           />
           <Subtitle
             fontSize={12}
             bold
-            color={situacao === "Agendada" ? "#49B3BA" : "#4E4B59"}
+            color={situacao === "Agendadas" ? "#49B3BA" : "#4E4B59"}
             text={horario}
           />
         </Group>
       </Group>
-      {situacao === "Agendada" ? (
+      {situacao === "Agendadas" ? (
         <Button
           width={150}
           spacing={4}
@@ -74,10 +83,11 @@ export const CardConsulta = ({
           self={"flex-end"}
           border={false}
           outlined
+          onPress={() => setShowModalCancel(true)}
           color="#C81D25"
           text="Cancelar"
         />
-      ) : situacao === "Realizada" ? (
+      ) : situacao === "Realizadas" ? (
         <Button
           width={150}
           spacing={4}
@@ -85,6 +95,7 @@ export const CardConsulta = ({
           self={"flex-end"}
           border={false}
           outlined
+          onPress={() => setShowModalProntuario(true)}
           color="#344F8F"
           text="Ver prontuário"
         />

@@ -1,14 +1,13 @@
-import {
-  ContainerSafe,
-  ContainerScroll,
-  ContainerSpacing,
-} from "../../components/Container";
+import { ContainerSafe, ContainerSpacing } from "../../components/Container";
 import { HeaderConsultas } from "./../../components/HeaderConsultas/index";
 import { Calendar } from "./../../components/Calendar/index";
 import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
 import { useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
+import { ListComponent } from "../../components/CardList";
+import { MyModal } from "./../../components/Modal/index";
+import { View } from "react-native";
 
 export const ConsultasCliente = ({ navigation }) => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
@@ -20,7 +19,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
-      status: "Agendada",
+      status: "Agendadas",
     },
     {
       id: 2,
@@ -28,7 +27,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
-      status: "Agendada",
+      status: "Agendadas",
     },
     {
       id: 3,
@@ -36,7 +35,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
-      status: "Agendada",
+      status: "Agendadas",
     },
     {
       id: 4,
@@ -44,7 +43,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Cardiologista",
       horario: "12:00",
-      status: "Agendada",
+      status: "Agendadas",
     },
     {
       id: 5,
@@ -52,7 +51,7 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Urologista",
       horario: "14:00",
-      status: "Realizada",
+      status: "Realizadas",
     },
     {
       id: 6,
@@ -60,9 +59,13 @@ export const ConsultasCliente = ({ navigation }) => {
       idade: 32,
       categoria: "Oftalmologista",
       horario: "16:00",
-      status: "Cancelada",
+      status: "Canceladas",
     },
   ]);
+
+  const [showModalCancel, setShowModalCancel] = useState(false);
+
+  const [showModalProntuario, setShowModalProntuario] = useState(false);
 
   return (
     <ContainerSafe>
@@ -93,31 +96,37 @@ export const ConsultasCliente = ({ navigation }) => {
             text="Canceladas"
           />
         </Group>
-
-        <ContainerScroll
-          contentContainerStyle={{
-            alignItems: "center",
-            gap: 10,
-            flex: 1
-          }}
-        >
-          {consultas
-            .filter(
-              (consulta) => consulta.status === statusButtons.replace("as", "a")
-            )
-            .map((consulta) => (
-              <CardConsulta
-                key={consulta.id}
-                image={require("./../../assets/img/UserImage.jpg")}
-                name={consulta.nome}
-                idade={consulta.idade}
-                categoria={consulta.categoria}
-                horario={consulta.horario}
-                situacao={consulta.status}
-              />
-            ))}
-        </ContainerScroll>
       </ContainerSpacing>
+
+      <ListComponent
+        data={consultas}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) =>
+          statusButtons === item.status && (
+            <CardConsulta
+              image={require("./../../assets/img/UserImage.jpg")}
+              name={item.nome}
+              idade={item.idade}
+              setShowModalCancel={setShowModalCancel}
+              setShowModalProntuario={setShowModalProntuario}
+              categoria={item.categoria}
+              horario={item.horario}
+              situacao={item.status}
+            />
+          )
+        }
+        showsVerticalScrollIndicator={false}
+      />
+
+      <MyModal
+        cancel
+        setShowModal={setShowModalCancel}
+        visible={showModalCancel}
+      />
+      <MyModal
+        setShowModal={setShowModalProntuario}
+        visible={showModalProntuario}
+      />
     </ContainerSafe>
   );
 };

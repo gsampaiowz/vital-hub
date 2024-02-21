@@ -33,8 +33,8 @@ export const HeaderConsultas = ({ image, nome }) => {
     <HeaderConsultasStyled>
       <ImageUsuario source={image} />
       <Group alignItems="start" gap={5}>
-        <Subtitle color="#4E4B59" text="Bem vindo" />
-        <Title color="#fbfbfb" text={nome} />
+        <Subtitle textAlign="left" color="#4E4B59" text="Bem vindo" />
+        <Title textAlign="left" color="#fbfbfb" text={nome} />
       </Group>
       <Ionicons name="notifications" size={25} color="white" />
     </HeaderConsultasStyled>
