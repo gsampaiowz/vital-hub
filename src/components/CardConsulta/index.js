@@ -80,7 +80,6 @@ export const CardConsulta = ({
           width={150}
           spacing={4}
           fontSize={12}
-          self={"flex-end"}
           border={false}
           outlined
           onPress={() => setShowModalCancel(true)}
@@ -89,10 +88,9 @@ export const CardConsulta = ({
         />
       ) : situacao === "Realizadas" ? (
         <Button
-          width={150}
+          width={160}
           spacing={4}
           fontSize={12}
-          self={"flex-end"}
           border={false}
           outlined
           onPress={() => setShowModalProntuario(true)}

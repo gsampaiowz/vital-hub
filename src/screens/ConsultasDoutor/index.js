@@ -1,15 +1,14 @@
 import { ContainerSafe, ContainerSpacing } from "../../components/Container";
-import { HeaderConsultas } from "./../../components/HeaderConsultas/index";
-import { Calendar } from "./../../components/Calendar/index";
-import { Button } from "./../../components/Button/index";
-import { Group } from "./../../components/Group/index";
+import { HeaderConsultas } from "../../components/HeaderConsultas/index";
+import { Calendar } from "../../components/Calendar/index";
+import { Button } from "../../components/Button/index";
+import { Group } from "../../components/Group/index";
 import { useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
-import { MyModal } from "./../../components/Modal/index";
-import { View } from "react-native";
+import { MyModal } from "../../components/Modal/index";
 
-export const ConsultasCliente = ({ navigation }) => {
+export const ConsultasDoutor = ({ navigation }) => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
 
   const [consultas] = useState([
@@ -124,6 +123,11 @@ export const ConsultasCliente = ({ navigation }) => {
         visible={showModalCancel}
       />
       <MyModal
+      nome={"Romário"}
+      email={"romario@email.com"}
+      idade={32}
+      image={require("./../../assets/img/UserImage.jpg")}
+
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}
       />

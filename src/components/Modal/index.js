@@ -3,6 +3,7 @@ import { Title } from "./../Title/index";
 import { Subtitle } from "./../Subtitle/index";
 import { Button } from "../Button";
 import { Modal } from "react-native";
+import { Group } from "./../Group/index";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -10,6 +11,7 @@ const PatientModal = styled.View`
   width: 100%;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
+
   align-items: center;
   justify-content: center;
 `;
@@ -24,7 +26,21 @@ const ModalContent = styled.View`
   align-items: center;
 `;
 
-export const MyModal = ({ cancel = false, visible = false, setShowModal, ...rest }) => {
+const ImageModal = styled.Image`
+    width: 100%;
+    height: 250px;
+`;
+
+export const MyModal = ({
+  cancel = false,
+  visible = false,
+  setShowModal,
+  image,
+  nome,
+  email,
+  idade,
+  ...rest
+}) => {
   return (
     <Modal {...rest} visible={visible} animationType="fade">
       <PatientModal>
@@ -34,15 +50,19 @@ export const MyModal = ({ cancel = false, visible = false, setShowModal, ...rest
               <Title text="Cancelar consulta" />
               <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
               <Button text="CONFIRMAR" />
-              <Button onPress={() => setShowModal(false)} outlined text="Voltar" />
             </>
           ) : (
             <>
-              <Title text="Prontuário" />
-              <Subtitle text="Aqui você pode visualizar o prontuário do paciente" />
-              <Button text="CONFIRMAR" />
+              <ImageModal source={image} />
+              <Title text={nome} />
+              <Group row gap={5}>
+                <Subtitle fontSize={12} text={idade + " anos"} />
+                <Subtitle fontSize={12} text={email} />
+              </Group>
+              <Button text="INSERIR PRONTUÁRIO" />
             </>
           )}
+          <Button onPress={() => setShowModal(false)} outlined text="Voltar" />
         </ModalContent>
       </PatientModal>
     </Modal>

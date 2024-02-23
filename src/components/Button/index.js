@@ -8,6 +8,7 @@ const ButtonStyled = styled.Pressable`
   justify-content: center;
   flex-direction: row;
   gap: 27px;
+  min-height: 35px;
   flex-shrink: 1;
   border: 2px solid #496bba;
 `;
@@ -21,7 +22,6 @@ const TextButton = styled.Text`
 export const Button = ({
   text = "",
   border = true,
-  self,
   color = "#496bba",
   outlined = false,
   fontSize = 14,
@@ -37,7 +37,6 @@ export const Button = ({
         width: width,
         paddingVertical: spacing,
         paddingHorizontal: spacing / 2,
-        alignSelf: self,
         borderColor: border ? "#496bba" : "transparent",
         backgroundColor: outlined
           ? "white"
