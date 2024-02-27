@@ -9,6 +9,7 @@ gap: 20px;
 
 export const ContainerSafe = styled.SafeAreaView`
   ${ContainersStyle}
+  padding-bottom: 20px;
   align-items: center;
 `;
 

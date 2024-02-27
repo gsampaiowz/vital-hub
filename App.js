@@ -19,8 +19,9 @@ import { RecuperarSenha } from "./src/screens/RecuperarSenha";
 import { VerificarEmail } from "./src/screens/VerificarEmail";
 import { RedefinirSenha } from './src/screens/RedefinirSenha/index';
 import { CriarConta } from "./src/screens/CriarConta";
-import { PerfilCliente } from "./src/screens/PerfilCliente";
+import { PacientePerfil } from "./src/screens/PacientePerfil";
 import { ConsultasDoutor } from './src/screens/ConsultasDoutor/index';
+import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 
 const Stack = createNativeStackNavigator();
 
@@ -79,14 +80,19 @@ export default function App() {
             options={{ title: "Criar Conta" }}
           />
           <Stack.Screen
-            name="PerfilCliente"
-            component={PerfilCliente}
-            options={{ title: "Perfil Cliente" }}
+            name="PacientePerfil"
+            component={PacientePerfil}
+            options={{ title: "Paciente Perfil" }}
           />
           <Stack.Screen
             name="ConsultasDoutor"
             component={ConsultasDoutor}
             options={{ title: "Consultas Doutor" }}
+          />
+          <Stack.Screen
+            name="SelecionarClinica"
+            component={SelecionarClinica}
+            options={{ title: "Selecionar Clinica" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

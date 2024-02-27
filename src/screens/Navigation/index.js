@@ -21,12 +21,16 @@ export const Navigation = ({ navigation }) => {
         onPress={() => navigation.navigate("CriarConta")}
       />
       <Button
-        title="Perfil Cliente"
-        onPress={() => navigation.navigate("PerfilCliente")}
+        title="Paciente Perfil"
+        onPress={() => navigation.navigate("PacientePerfil")}
       />
       <Button
         title="Consultas Doutor"
         onPress={() => navigation.navigate("ConsultasDoutor")}
+      />
+      <Button
+        title="Selecionar Clinica"
+        onPress={() => navigation.navigate("SelecionarClinica")}
       />
     </View>
   );

@@ -12,6 +12,10 @@ export const Subtitle = ({
     font-size: ${fontSize}px;
     font-family: ${bold ? "Quicksand_600SemiBold" : "Quicksand_500Medium"};
     text-align: ${textAlign};
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
   `;
   return <SubtitleStyled>{text}</SubtitleStyled>;
 };
