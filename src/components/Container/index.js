@@ -27,6 +27,7 @@ export const ContainerSpacing = styled.View`
   ${ContainersStyle}
   flex-shrink: 1;
   flex-grow: 0;
+  margin: 0 auto;
   width: 90%;
   min-height: auto;
 `;

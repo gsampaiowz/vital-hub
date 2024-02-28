@@ -88,7 +88,6 @@ export const Calendar = () => {
         fontFamily: "MontserratAlternates_600SemiBold",
         fontSize: 20,
       }}
-      header
       calendarHeaderContainerStyle={{ paddingLeft: 30 }}
       iconLeft={false}
       iconRight={false}

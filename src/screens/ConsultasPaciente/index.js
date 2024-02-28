@@ -7,14 +7,17 @@ import { useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
 import { MyModal } from "../../components/Modal/index";
+import { AddConsulta } from "./../../components/AddConsulta/index";
+import { Fontisto } from "@expo/vector-icons";
+import { ModalAddConsulta } from "../../components/ModalAddConsulta";
 
-export const ConsultasDoutor = () => {
+export const ConsultasPaciente = () => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
 
   const [consultas] = useState([
     {
       id: 1,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "12:00",
@@ -22,7 +25,7 @@ export const ConsultasDoutor = () => {
     },
     {
       id: 2,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "12:00",
@@ -30,7 +33,7 @@ export const ConsultasDoutor = () => {
     },
     {
       id: 3,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "12:00",
@@ -38,7 +41,7 @@ export const ConsultasDoutor = () => {
     },
     {
       id: 4,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "12:00",
@@ -46,7 +49,7 @@ export const ConsultasDoutor = () => {
     },
     {
       id: 5,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "14:00",
@@ -54,13 +57,15 @@ export const ConsultasDoutor = () => {
     },
     {
       id: 6,
-      nome: "Cliente",
+      nome: "Médico",
       idade: 32,
       categoria: "Rotina",
       horario: "16:00",
       status: "Canceladas",
     },
   ]);
+
+  const [showModalConsulta, setShowModalConsulta] = useState(false);
 
   const [showModalCancel, setShowModalCancel] = useState(false);
 
@@ -123,14 +128,17 @@ export const ConsultasDoutor = () => {
         visible={showModalCancel}
       />
       <MyModal
-      nome={"Romário"}
-      email={"romario@email.com"}
-      idade={32}
-      image={require("./../../assets/img/UserImage.jpg")}
-
+        nome={"Romário"}
+        email={"romario@email.com"}
+        idade={32}
+        image={require("./../../assets/img/UserImage.jpg")}
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}
       />
+      <AddConsulta onPress={() => setShowModalConsulta(true)}>
+        <Fontisto name="stethoscope" size={24} color="white" />
+      </AddConsulta>
+      {showModalConsulta && <ModalAddConsulta />}
     </ContainerSafe>
   );
 };

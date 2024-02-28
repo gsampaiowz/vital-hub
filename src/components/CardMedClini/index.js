@@ -12,6 +12,8 @@ const CardStyled = styled.Pressable`
   flex-direction: row;
   padding: 10px;
   width: 90%;
+  align-items: center;
+  gap: 10px;
   margin: 0 auto;
   margin-bottom: 10px;
   shadow-color: #000;
@@ -59,7 +61,7 @@ export const CardMedClini = ({
       {!clinica && <ImageStyled source={image} />}
       <Group alignItems="flex-start">
         <Title fontSize={16} text={name} />
-        <Subtitle bold fontSize={14} text={desc} />
+        <Subtitle bold fontSize={14} textAlign="left" text={desc} />
       </Group>
       {clinica && (
         <Group alignItems="flex-end">
