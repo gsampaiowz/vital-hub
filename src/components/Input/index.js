@@ -45,7 +45,7 @@ export const Input = ({
     >
       {label !== "" && <InputLabel>{label}</InputLabel>}
       <InputStyled
-        editable={border}
+        readOnly={!border}
         value={inputValue}
         onFocus={() =>
           border && setColorState(inputValue.length < 1 ? "transparent" : "#34898f")

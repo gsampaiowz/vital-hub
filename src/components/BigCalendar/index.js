@@ -3,25 +3,52 @@ import { useState } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 
 const CalendarComponent = () => {
-  const [selected, setSelected] = useState("");
-
   const currentDate = new Date();
-  const startingDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  const startingDate = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    currentDate.getDate()
+  );
+
+  const [selected, setSelected] = useState(startingDate.toLocaleDateString().split("/").reverse().join("-"));
 
   LocaleConfig.locales["pt-br"] = {
     monthNames: [
-      "Janeiro", "Fevereiro", "Março", "Abril",
-      "Maio", "Junho", "Julho", "Agosto",
-      "Setembro", "Outubro", "Novembro", "Dezembro",
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
     ],
     monthNamesShort: [
-      "Jan", "Fev", "Mar", "Abr", "Mai",
-      "Jun", "Jul", "Ago", "Set", "Out",
-      "Nov", "Dez",
+      "Jan",
+      "Fev",
+      "Mar",
+      "Abr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Set",
+      "Out",
+      "Nov",
+      "Dez",
     ],
     dayNames: [
-      "Domingo", "Segunda", "Terça", "Quarta",
-      "Quinta", "Sexta", "Sábado",
+      "Domingo",
+      "Segunda",
+      "Terça",
+      "Quarta",
+      "Quinta",
+      "Sexta",
+      "Sábado",
     ],
     dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
   };
@@ -30,37 +57,35 @@ const CalendarComponent = () => {
   return (
     <Calendar
       style={{
-        width : "100%",
-        alignSelf : 'center',
-        backgroundColor : '#FAFAFA'
+        width: "100%",
+        alignSelf: "center",
+        backgroundColor: "#FAFAFA",
       }}
-    
       onDayPress={(day) => {
         setSelected(day.dateString);
       }}
+      current={startingDate.toString()}
       markedDates={{
         [selected]: {
           selected: true,
-          disableTouchEvent: true
+          disableTouchEvent: true,
         },
       }}
-
-      minDate={startingDate}
-
+      minDate={startingDate.toString()}
       theme={{
-        calendarBackground : '#FAFAFA',
-        arrowColor : '#49B3BA',
-        textDisabledColor : '#C6C5CE',     
-        todayTextColor : '#5F5C6B',   
-        selectedDayTextColor: '#FAFAFA',
-        selectedDayBackgroundColor: '#60BFC5',
+        calendarBackground: "#FAFAFA",
+        arrowColor: "#49B3BA",
+        textDisabledColor: "#C6C5CE",
+        todayTextColor: "#5F5C6B",
+        selectedDayTextColor: "#FAFAFA",
+        selectedDayBackgroundColor: "#60BFC5",
+        textSectionTitleColor: "#5F5C6B",
 
-        textDayFontSize : 16,
-        textMonthFontSize : 20,
-        textDayHeaderFontSize : 12,
+        textDayFontSize: 16,
+        textMonthFontSize: 20,
+        textDayHeaderFontSize: 12,
 
-        textDayStyle : { "color" : '#5F5C6B'},
-
+        textDayStyle: { color: "#5F5C6B" },
         textDayFontFamily: "Quicksand_600SemiBold",
         textDayHeaderFontFamily: "Quicksand_600SemiBold",
         textMonthFontFamily: "MontserratAlternates_600SemiBold",

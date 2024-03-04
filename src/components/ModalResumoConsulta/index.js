@@ -1,7 +1,7 @@
 import styled from "styled-components/native";
 import { Modal } from "react-native";
 import { Title } from "../Title";
-import { Subtitle } from "./../Subtitle/index";
+import { Subtitle } from "../Subtitle/index";
 import { Button } from "../Button";
 import { Group } from "../Group";
 
@@ -26,7 +26,7 @@ const ModalContent = styled.View`
   align-items: center;
 `;
 
-export const ResumoConsulta = ({ setShowResumoModal, visible = false, ...rest }) => {
+export const ModalResumoConsulta = ({ setShowResumoModal, visible = false, ...rest }) => {
   return (
     <Modal {...rest} visible={visible} animationType="fade">
       <PatientModal>
@@ -37,20 +37,20 @@ export const ResumoConsulta = ({ setShowResumoModal, visible = false, ...rest })
             text="Consulte os dados selecionados para a sua consulta"
           />
           <Group>
-            <Subtitle bold text="Data da consulta" />
+            <Subtitle color="black" bold text="Data da consulta" />
             <Subtitle text="10 de Março de 2024" />
           </Group>
           <Group>
-            <Subtitle bold text="Médico(a) da consulta" />
+            <Subtitle color="black" bold text="Médico(a) da consulta" />
             <Subtitle text="Dra Alessandra" />
             <Subtitle text="Demartologa, Esteticista" />
           </Group>
           <Group>
-            <Subtitle bold text="Local da consulta" />
+            <Subtitle color="black" bold text="Local da consulta" />
             <Subtitle text="São Paulo, SP" />
           </Group>
           <Group>
-            <Subtitle bold text="Tipo da consulta" />
+            <Subtitle color="black" bold text="Tipo da consulta" />
             <Subtitle text="Rotina" />
           </Group>
           <Group gap={10}>

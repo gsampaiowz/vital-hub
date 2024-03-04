@@ -89,8 +89,7 @@ export const Calendar = () => {
         fontSize: 20,
       }}
       calendarHeaderContainerStyle={{ paddingLeft: 30 }}
-      iconLeft={false}
-      iconRight={false}
+      iconStyle={{ display: "none" }}
       dateNumberStyle={{
         fontSize: 16,
         ...calendarTextStyles,

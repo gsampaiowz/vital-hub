@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { Subtitle } from "./../../components/Subtitle/index";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { ResumoConsulta } from "../../components/ResumoConsulta";
+import { ModalResumoConsulta } from "../../components/ModalResumoConsulta";
 import { useState } from "react";
 
 const SelectHorario = styled(RNPickerSelect)`
@@ -42,7 +42,7 @@ export const SelecionarData = () => {
           <Button outlined text="Cancelar" />
         </Group>
       </ContainerSpacing>
-      {showResumoModal && <ResumoConsulta visible={showResumoModal} setShowResumoModal={setShowResumoModal} />}
+      {showResumoModal && <ModalResumoConsulta visible={showResumoModal} setShowResumoModal={setShowResumoModal} />}
     </ContainerSafe>
   );
 };

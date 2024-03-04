@@ -144,7 +144,7 @@ export const ConsultasPaciente = () => {
       <AddConsulta onPress={() => setShowModalConsulta(true)}>
         <Fontisto name="stethoscope" size={24} color="white" />
       </AddConsulta>
-      {showModalConsulta && <ModalAddConsulta setShowModalConsulta={setShowModalConsulta} items={tiposConsulta}/>}
+      {showModalConsulta && <ModalAddConsulta setShowModalConsulta={setShowModalConsulta} visible={showModalConsulta} items={tiposConsulta}/>}
     </ContainerSafe>
   );
 };
