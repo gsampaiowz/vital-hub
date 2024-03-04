@@ -23,6 +23,7 @@ export const Button = ({
   text = "",
   border = true,
   color = "#496bba",
+  borderColor = "#496bba",
   outlined = false,
   fontSize = 14,
   width = "100%",
@@ -37,12 +38,12 @@ export const Button = ({
         width: width,
         paddingVertical: spacing,
         paddingHorizontal: spacing / 2,
-        borderColor: border ? "#496bba" : "transparent",
+        borderColor: border ? borderColor : "transparent",
         backgroundColor: outlined
           ? "white"
           : !clickButton
           ? "white"
-          : "#496bba",
+          : borderColor,
       }}
       onPress={onPress}
       clickButton={clickButton}

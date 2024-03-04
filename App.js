@@ -24,6 +24,7 @@ import { ConsultasDoutor } from './src/screens/ConsultasDoutor/index';
 import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { ConsultasPaciente } from "./src/screens/ConsultasPaciente";
+import { SelecionarData } from "./src/screens/SelecionarData";
 
 const Stack = createNativeStackNavigator();
 
@@ -105,6 +106,11 @@ export default function App() {
             name="SelecionarMedico"
             component={SelecionarMedico}
             options={{ title: "Selecionar Médico" }}
+          />
+          <Stack.Screen
+            name="SelecionarData"
+            component={SelecionarData}
+            options={{ title: "Selecionar Data" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

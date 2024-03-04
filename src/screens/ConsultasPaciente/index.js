@@ -71,6 +71,12 @@ export const ConsultasPaciente = () => {
 
   const [showModalProntuario, setShowModalProntuario] = useState(false);
 
+  const tiposConsulta = [
+    { label: "Cardiologista", value: "cardiologista" },
+    { label: "Ortopedista", value: "ortopedista" },
+    { label: "Dermatologista", value: "dermatologista" },
+  ];
+
   return (
     <ContainerSafe>
       <HeaderConsultas
@@ -138,7 +144,7 @@ export const ConsultasPaciente = () => {
       <AddConsulta onPress={() => setShowModalConsulta(true)}>
         <Fontisto name="stethoscope" size={24} color="white" />
       </AddConsulta>
-      {showModalConsulta && <ModalAddConsulta />}
+      {showModalConsulta && <ModalAddConsulta setShowModalConsulta={setShowModalConsulta} items={tiposConsulta}/>}
     </ContainerSafe>
   );
 };

@@ -13,6 +13,7 @@ export const Subtitle = ({
     font-family: ${bold ? "Quicksand_600SemiBold" : "Quicksand_500Medium"};
     text-align: ${textAlign};
     display: flex;
+    justify-content: center;
     flex-direction: row;
     gap: 5px;
     align-items: center;

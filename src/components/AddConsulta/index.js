@@ -4,7 +4,7 @@ export const AddConsulta = styled.Pressable`
   width: 60px;
   height: 60px;
   border-radius: 7px;
-  position: fixed;
+  position: absolute;
   right: 20px;
   display: flex;
   align-items: center;
