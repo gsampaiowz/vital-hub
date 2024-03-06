@@ -10,7 +10,7 @@ import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
 import { useState } from "react";
 
-export const PacientePerfil = () => {
+export const Prontuario = () => {
   const [editMode, setEditMode] = useState(false);
 
   const [inputs, setInputs] = useState({

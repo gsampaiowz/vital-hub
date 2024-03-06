@@ -4,8 +4,10 @@ import { Title } from "../Title";
 import { Subtitle } from "./../Subtitle/index";
 import { Button } from "./../Button/index";
 import { AntDesign } from "@expo/vector-icons";
+import { useState } from "react";
+import { ModalVerLocal } from "../ModalVerLocal";
 
-const CardConsultaStyled = styled.View`
+const CardConsultaStyled = styled.Pressable`
   width: 90%;
   padding: 10px;
   height: 100px;
@@ -41,19 +43,17 @@ export const CardConsulta = ({
   setShowModalProntuario,
   setShowModalCancel,
 }) => {
+
+  const [showLocalModal, setShowLocalModal] = useState(false);
+
   return (
-    <CardConsultaStyled>
+    <CardConsultaStyled onPress={() => setShowLocalModal(true)}>
       <CardConsultaImage source={image} />
       <Group gap={5}>
         <Title fontSize={16} text={name} />
         <Group flexWrap gap={5} row>
           <Subtitle fontSize={14} color="#8C8A97" text={idade + " anos"} />
-          <Subtitle
-            fontSize={14}
-            color="#8C8A97"
-            bold
-            text={categoria}
-          />
+          <Subtitle fontSize={14} color="#8C8A97" bold text={categoria} />
         </Group>
         <Group
           padding={2}
@@ -80,9 +80,9 @@ export const CardConsulta = ({
           width={150}
           spacing={4}
           fontSize={12}
-          border={false}
           outlined
           onPress={() => setShowModalCancel(true)}
+          borderColor="#C81D25"
           color="#C81D25"
           text="Cancelar"
         />
@@ -91,13 +91,20 @@ export const CardConsulta = ({
           width={160}
           spacing={4}
           fontSize={12}
-          border={false}
           outlined
           onPress={() => setShowModalProntuario(true)}
+          borderColor="#344F8F"
           color="#344F8F"
           text="Ver prontuário"
         />
       ) : null}
+      <ModalVerLocal
+        setShowLocalModal={setShowLocalModal}
+        visible={showLocalModal}
+        name={name}
+        categoria={categoria}
+        crm="CRM - 329842"
+      />
     </CardConsultaStyled>
   );
 };

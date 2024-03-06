@@ -25,6 +25,7 @@ import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { ConsultasPaciente } from "./src/screens/ConsultasPaciente";
 import { SelecionarData } from "./src/screens/SelecionarData";
+import { Main } from "./src/screens/Main";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,7 @@ export default function App() {
             component={Login}
             options={{ title: "Login" }}
           />
+          <Stack.Screen name="Main" component={Main}/>
           <Stack.Screen
             name="RecuperarSenha"
             component={RecuperarSenha}

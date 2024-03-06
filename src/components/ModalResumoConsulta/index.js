@@ -28,7 +28,7 @@ const ModalContent = styled.View`
 
 export const ModalResumoConsulta = ({ setShowResumoModal, visible = false, ...rest }) => {
   return (
-    <Modal {...rest} visible={visible} animationType="fade">
+    <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
         <ModalContent>
           <Title text="Agendar consulta" />

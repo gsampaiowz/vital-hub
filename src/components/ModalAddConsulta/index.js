@@ -3,7 +3,6 @@ import RNPickerSelect from "react-native-picker-select";
 import { Title } from "../Title";
 import { Group } from "../Group";
 import { Subtitle } from "./../Subtitle/index";
-import { ContainerSpacing } from "../Container";
 import { Button } from "../Button";
 import { useState } from "react";
 import { Input } from "./../Input/index";
@@ -23,7 +22,8 @@ const PatientModal = styled.View`
 const ModalContent = styled.View`
   width: 100%;
   gap: 20px;
-  padding: 30px;
+  height: 465px;
+  padding: 20px;
   position: absolute;
   bottom: 0;
   background-color: #fff;
@@ -44,10 +44,9 @@ export const ModalAddConsulta = ({
   const [statusButtons, setStatusButtons] = useState("Rotina");
 
   return (
-    <Modal {...rest} visible={visible} animationType="fade">
+    <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
         <ModalContent>
-          <ContainerSpacing>
             <Group gap={20}>
               <Title text="Agendar Consulta" />
               <Subtitle
@@ -108,7 +107,6 @@ export const ModalAddConsulta = ({
                 />
               </Group>
             </Group>
-          </ContainerSpacing>
         </ModalContent>
       </PatientModal>
     </Modal>

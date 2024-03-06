@@ -42,7 +42,7 @@ export const MyModal = ({
   ...rest
 }) => {
   return (
-    <Modal {...rest} visible={visible} animationType="fade">
+    <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
         <ModalContent>
           {cancel ? (

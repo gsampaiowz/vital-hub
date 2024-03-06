@@ -10,6 +10,11 @@ import { AntDesign } from "@expo/vector-icons";
 import { Group } from "../../components/Group";
 
 export const Login = ({ navigation }) => {
+
+  async function Login() {
+    navigation.navigate("Main");
+  }
+
   return (
     <ContainerSafe>
       <ContainerSpacing>
@@ -26,7 +31,7 @@ export const Login = ({ navigation }) => {
           />
         </Group>
         <Group gap={10}>
-          <Button text="Entrar" />
+          <Button onPress={(e) => Login()} text="Entrar" />
 
           <Button
             outlined

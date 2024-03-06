@@ -25,14 +25,14 @@ export const VerificarEmail = ({ navigation }) => {
 
         <Subtitle
           text={
-            <>
+            <Group>
               <Subtitle text="Digite o código de 4 dígitos enviado para" />
               <Link
                 underline={false}
                 color="#496BBA"
                 text=" username@email.com"
               />
-            </>
+            </Group>
           }
         />
 
