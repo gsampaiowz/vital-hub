@@ -7,6 +7,7 @@ const InputStyled = styled.TextInput`
   padding: 0 16px;
   transition: 0.5s;
   font-family: MontserratAlternates_600SemiBold;
+  white-space: wrap;
 `;
 
 const InputLabel = styled.Text`
@@ -20,6 +21,12 @@ const InputGroup = styled.View`
   gap: 10px;
 `;
 
+const Icon = styled.View`
+  position: absolute;
+  right: 10px;
+  top: 50%;
+`;
+
 export const Input = ({
   fontSize = 14,
   placeholder = "",
@@ -27,6 +34,7 @@ export const Input = ({
   border = true,
   color,
   inputValue = "",
+  icon = null,
   onChange = () => {},
   maxWidth = "100%",
   height = 53,
@@ -48,7 +56,8 @@ export const Input = ({
         readOnly={!border}
         value={inputValue}
         onFocus={() =>
-          border && setColorState(inputValue.length < 1 ? "transparent" : "#34898f")
+          border &&
+          setColorState(inputValue.length < 1 ? "transparent" : "#34898f")
         }
         onChange={() => {
           setColorState(inputValue.length < 1 ? "transparent" : "#34898f");
@@ -66,6 +75,7 @@ export const Input = ({
         }}
         placeholder={placeholder}
       />
+      <Icon>{icon}</Icon>
     </InputGroup>
   );
 };

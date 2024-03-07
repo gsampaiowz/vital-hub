@@ -39,6 +39,7 @@ export const MyModal = ({
   nome,
   email,
   idade,
+  navigation,
   ...rest
 }) => {
   return (
@@ -59,7 +60,8 @@ export const MyModal = ({
                 <Subtitle fontSize={12} text={idade + " anos"} />
                 <Subtitle fontSize={12} text={email} />
               </Group>
-              <Button text="INSERIR PRONTUÁRIO" />
+              <Button onPress={() => navigation.replace("Prontuario")} text="INSERIR PRONTUÁRIO"/>
+              <Button onPress={() => navigation.replace("Prescricao")} text="VER PRONTUÁRIO"/>
             </>
           )}
           <Button onPress={() => setShowModal(false)} outlined text="Voltar" />

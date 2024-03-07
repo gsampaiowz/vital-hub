@@ -7,7 +7,10 @@ import {
   MontserratAlternates_600SemiBold,
 } from "@expo-google-fonts/montserrat-alternates";
 
-import { Quicksand_500Medium, Quicksand_600SemiBold } from "@expo-google-fonts/quicksand";
+import {
+  Quicksand_500Medium,
+  Quicksand_600SemiBold,
+} from "@expo-google-fonts/quicksand";
 
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -17,15 +20,18 @@ import { Navigation } from "./src/screens/Navigation";
 import { Login } from "./src/screens/Login";
 import { RecuperarSenha } from "./src/screens/RecuperarSenha";
 import { VerificarEmail } from "./src/screens/VerificarEmail";
-import { RedefinirSenha } from './src/screens/RedefinirSenha/index';
+import { RedefinirSenha } from "./src/screens/RedefinirSenha/index";
 import { CriarConta } from "./src/screens/CriarConta";
 import { PacientePerfil } from "./src/screens/PacientePerfil";
-import { ConsultasDoutor } from './src/screens/ConsultasDoutor/index';
+import { ConsultasDoutor } from "./src/screens/ConsultasDoutor/index";
 import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { ConsultasPaciente } from "./src/screens/ConsultasPaciente";
 import { SelecionarData } from "./src/screens/SelecionarData";
 import { Main } from "./src/screens/Main";
+import { Prontuario } from "./src/screens/Prontuario";
+import { LocalConsulta } from "./src/screens/LocalConsulta/index";
+import { Prescricao } from "./src/screens/Prescricao";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,7 +43,7 @@ export default function App() {
     MontserratAlternates_500Medium,
     MontserratAlternates_600SemiBold,
     Quicksand_500Medium,
-    Quicksand_600SemiBold
+    Quicksand_600SemiBold,
   });
 
   if (!fontsLoaded) {
@@ -63,7 +69,7 @@ export default function App() {
             component={Login}
             options={{ title: "Login" }}
           />
-          <Stack.Screen name="Main" component={Main}/>
+          <Stack.Screen name="Main" component={Main} />
           <Stack.Screen
             name="RecuperarSenha"
             component={RecuperarSenha}
@@ -113,6 +119,21 @@ export default function App() {
             name="SelecionarData"
             component={SelecionarData}
             options={{ title: "Selecionar Data" }}
+          />
+          <Stack.Screen
+            name="Prontuario"
+            component={Prontuario}
+            options={{ title: "Prontuario" }}
+          />
+          <Stack.Screen
+            name="Prescricao"
+            component={Prescricao}
+            options={{ title: "Prescricao" }}
+          />
+          <Stack.Screen
+            name="LocalConsulta"
+            component={LocalConsulta}
+            options={{ title: "Local Consulta" }}
           />
         </Stack.Navigator>
       </NavigationContainer>

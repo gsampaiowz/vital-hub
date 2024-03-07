@@ -15,7 +15,13 @@ const ButtonStyled = styled.Pressable`
 
 const TextButton = styled.Text`
   text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 5;
+  justify-content: center;
+  flex-direction: row;
   flex-wrap: nowrap;
+
   font-family: MontserratAlternates_600SemiBold;
 `;
 
