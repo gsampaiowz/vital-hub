@@ -1,7 +1,7 @@
 import { Logo } from "../../components/Logo";
 import { Title } from "../../components/Title";
 import LogoImage from "../../assets/img/Logo.png";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Subtitle } from "./../../components/Subtitle/index";
 import { Input } from "./../../components/Input/index";
 import { Button } from "./../../components/Button/index";
@@ -10,7 +10,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 export const RecuperarSenha = ({ navigation }) => {
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -29,6 +29,6 @@ export const RecuperarSenha = ({ navigation }) => {
           text="Continuar"
         />
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

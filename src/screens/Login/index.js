@@ -1,33 +1,54 @@
 import { Logo } from "../../components/Logo";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import LogoImage from "../../assets/img/Logo.png";
 import { Title } from "./../../components/Title/index";
 import { Input } from "../../components/Input";
 import { Link } from "../../components/Link";
 import { Button } from "../../components/Button";
-
 import { AntDesign } from "@expo/vector-icons";
 import { Group } from "../../components/Group";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { userContext } from "../../../App";
+import ToastManager, { Toast } from "toastify-react-native";
 
 export const Login = ({ navigation }) => {
-  async function Login() {
-    navigation.navigate("Main");
-  }
+  const { users } = useContext(userContext);
 
   const [inputs, setInputs] = useState({
     email: "",
     password: "",
   });
 
+  async function Login() {
+    const user = users.find(
+      (user) => user.email === inputs.email && user.password === inputs.password
+    );
+
+    if (!user) {
+      Toast.error("Usuário ou senha inválidos");
+    } else {
+      Toast.success("Login efetuado com sucesso");
+      navigation.navigate("Main");
+    }
+  }
+
   return (
-    <ContainerSafe>
+    <ContainerScroll>
+      <ToastManager />
       <ContainerSpacing>
         <Logo source={LogoImage} />
         <Title text={"Entrar ou criar conta"} />
         <Group gap={10}>
-          <Input inputValue={inputs.email} placeholder="Usuário ou E-mail" />
-          <Input inputValue={inputs.password} placeholder="Senha" />
+          <Input
+            inputValue={inputs.email}
+            onChange={(text) => setInputs({ ...inputs, email: text })}
+            placeholder="Usuário ou E-mail"
+          />
+          <Input
+            inputValue={inputs.password}
+            onChange={(text) => setInputs({ ...inputs, password: text })}
+            placeholder="Senha"
+          />
           <Link
             onPress={() => navigation.navigate("RecuperarSenha")}
             color="#8C8A97"
@@ -36,11 +57,11 @@ export const Login = ({ navigation }) => {
           />
         </Group>
         <Group gap={10}>
-          <Button onPress={(e) => Login()} text="Entrar" />
+          <Button onPress={() => Login()} text="Entrar" />
 
           <Button
             outlined
-            onPress={(e) => Login()}
+            onPress={() => Login()}
             text="Entrar com google"
             icon={<AntDesign name="google" size={16} color="#4D659D" />}
           />
@@ -54,6 +75,6 @@ export const Login = ({ navigation }) => {
           color="#4D659D"
         />
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Logo } from "../../components/Logo";
 import LogoImage from "../../assets/img/Logo.png";
 import { Subtitle } from "./../../components/Subtitle/index";
@@ -11,7 +11,7 @@ import { Group } from "../../components/Group/index";
 
 export const RedefinirSenha = ({ navigation }) => {
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -29,6 +29,6 @@ export const RedefinirSenha = ({ navigation }) => {
         </Group>
         <Button onPress={() => navigation.navigate("Login")} text="Redefinir" />
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

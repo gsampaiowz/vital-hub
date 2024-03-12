@@ -32,19 +32,39 @@ import { Main } from "./src/screens/Main";
 import { Prontuario } from "./src/screens/Prontuario";
 import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
+import { createContext } from "react";
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: ...']); 
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 
 // SplashScreen.preventAutoHideAsync();
+export const userContext = createContext(null);
 
 export default function App() {
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     MontserratAlternates_700Bold,
     MontserratAlternates_500Medium,
     MontserratAlternates_600SemiBold,
     Quicksand_500Medium,
     Quicksand_600SemiBold,
   });
+
+  const users = [
+    {
+      id: 1,
+      email: "magalhoes@email.com",
+      password: "123456",
+      role: "paciente"
+    },
+    {
+      id: 2,
+      email: "vascaino@email.com",
+      password: "123456",
+      role: "doutor"
+    },
+  ];
 
   if (!fontsLoaded) {
     return null;
@@ -56,87 +76,88 @@ export default function App() {
       // >> name: Nome da tela.
       // >> component: Componente que será chamado.
       // >> options ( title ): Título da tela.
-
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Navigation"
-            component={Navigation}
-            options={{ title: "Navegação" }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ title: "Login" }}
-          />
-          <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen
-            name="RecuperarSenha"
-            component={RecuperarSenha}
-            options={{ title: "Recuperar Senha" }}
-          />
-          <Stack.Screen
-            name="VerificarEmail"
-            component={VerificarEmail}
-            options={{ title: "Verificar Email" }}
-          />
-          <Stack.Screen
-            name="RedefinirSenha"
-            component={RedefinirSenha}
-            options={{ title: "Redefinir Senha" }}
-          />
-          <Stack.Screen
-            name="CriarConta"
-            component={CriarConta}
-            options={{ title: "Criar Conta" }}
-          />
-          <Stack.Screen
-            name="PacientePerfil"
-            component={PacientePerfil}
-            options={{ title: "Paciente Perfil" }}
-          />
-          <Stack.Screen
-            name="ConsultasDoutor"
-            component={ConsultasDoutor}
-            options={{ title: "Consultas Doutor" }}
-          />
-          <Stack.Screen
-            name="ConsultasPaciente"
-            component={ConsultasPaciente}
-            options={{ title: "Consultas Paciente" }}
-          />
-          <Stack.Screen
-            name="SelecionarClinica"
-            component={SelecionarClinica}
-            options={{ title: "Selecionar Clinica" }}
-          />
-          <Stack.Screen
-            name="SelecionarMedico"
-            component={SelecionarMedico}
-            options={{ title: "Selecionar Médico" }}
-          />
-          <Stack.Screen
-            name="SelecionarData"
-            component={SelecionarData}
-            options={{ title: "Selecionar Data" }}
-          />
-          <Stack.Screen
-            name="Prontuario"
-            component={Prontuario}
-            options={{ title: "Prontuario" }}
-          />
-          <Stack.Screen
-            name="Prescricao"
-            component={Prescricao}
-            options={{ title: "Prescricao" }}
-          />
-          <Stack.Screen
-            name="LocalConsulta"
-            component={LocalConsulta}
-            options={{ title: "Local Consulta" }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <userContext.Provider value={{ users }}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Navigation"
+              component={Navigation}
+              options={{ title: "Navegação" }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ title: "Login" }}
+            />
+            <Stack.Screen name="Main" component={Main} />
+            <Stack.Screen
+              name="RecuperarSenha"
+              component={RecuperarSenha}
+              options={{ title: "Recuperar Senha" }}
+            />
+            <Stack.Screen
+              name="VerificarEmail"
+              component={VerificarEmail}
+              options={{ title: "Verificar Email" }}
+            />
+            <Stack.Screen
+              name="RedefinirSenha"
+              component={RedefinirSenha}
+              options={{ title: "Redefinir Senha" }}
+            />
+            <Stack.Screen
+              name="CriarConta"
+              component={CriarConta}
+              options={{ title: "Criar Conta" }}
+            />
+            <Stack.Screen
+              name="PacientePerfil"
+              component={PacientePerfil}
+              options={{ title: "Paciente Perfil" }}
+            />
+            <Stack.Screen
+              name="ConsultasDoutor"
+              component={ConsultasDoutor}
+              options={{ title: "Consultas Doutor" }}
+            />
+            <Stack.Screen
+              name="ConsultasPaciente"
+              component={ConsultasPaciente}
+              options={{ title: "Consultas Paciente" }}
+            />
+            <Stack.Screen
+              name="SelecionarClinica"
+              component={SelecionarClinica}
+              options={{ title: "Selecionar Clinica" }}
+            />
+            <Stack.Screen
+              name="SelecionarMedico"
+              component={SelecionarMedico}
+              options={{ title: "Selecionar Médico" }}
+            />
+            <Stack.Screen
+              name="SelecionarData"
+              component={SelecionarData}
+              options={{ title: "Selecionar Data" }}
+            />
+            <Stack.Screen
+              name="Prontuario"
+              component={Prontuario}
+              options={{ title: "Prontuario" }}
+            />
+            <Stack.Screen
+              name="Prescricao"
+              component={Prescricao}
+              options={{ title: "Prescricao" }}
+            />
+            <Stack.Screen
+              name="LocalConsulta"
+              component={LocalConsulta}
+              options={{ title: "Local Consulta" }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </userContext.Provider>
     );
   }
 }

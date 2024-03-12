@@ -1,4 +1,4 @@
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { NavigationButton } from "../../components/NavigationButton";
 import { AntDesign } from "@expo/vector-icons";
 import LogoImage from "../../assets/img/Logo.png";
@@ -12,7 +12,7 @@ import { Group } from "../../components/Group";
 
 export const CriarConta = ({ navigation }) => {
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -39,6 +39,6 @@ export const CriarConta = ({ navigation }) => {
           onPress={() => navigation.navigate("Login")}
         />
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

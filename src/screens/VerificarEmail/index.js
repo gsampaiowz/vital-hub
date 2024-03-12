@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { NavigationButton } from "../../components/NavigationButton";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Subtitle } from "../../components/Subtitle";
 import { Title } from "../../components/Title";
 import LogoImage from "../../assets/img/Logo.png";
@@ -12,7 +12,7 @@ import { Group } from "../../components/Group";
 
 export const VerificarEmail = ({ navigation }) => {
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -75,6 +75,6 @@ export const VerificarEmail = ({ navigation }) => {
         />
         <Link color="#344F8F" text="Reenviar código" />
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

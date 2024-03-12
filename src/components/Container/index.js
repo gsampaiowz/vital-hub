@@ -18,9 +18,12 @@ export const Container = styled.View`
   align-items: center;
 `;
 
-export const ContainerScroll = styled.ScrollView`
+export const ContainerScroll = styled.ScrollView.attrs({
+  contentContainerStyle: {
+    paddingBottom: 20, 
+  },
+})`
   ${ContainersStyle}
-  padding: 0 0 20px 0;
 `;
 
 export const ContainerSpacing = styled.View`

@@ -1,4 +1,4 @@
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Title } from "./../../components/Title/index";
 import CalendarComponent from "./../../components/BigCalendar/index";
 import RNPickerSelect from "react-native-picker-select";
@@ -23,7 +23,7 @@ export const SelecionarData = () => {
   const [showResumoModal, setShowResumoModal] = useState(false);
 
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <Title text="Selecionar data" />
       <CalendarComponent />
       <Subtitle
@@ -43,6 +43,6 @@ export const SelecionarData = () => {
         </Group>
       </ContainerSpacing>
       {showResumoModal && <ModalResumoConsulta visible={showResumoModal} setShowResumoModal={setShowResumoModal} />}
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

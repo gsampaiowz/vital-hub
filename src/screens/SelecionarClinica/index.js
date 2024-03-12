@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Title } from "./../../components/Title/index";
 import { ListComponent } from "../../components/CardList";
 import { CardMedClini } from "../../components/CardMedClini";
@@ -46,7 +46,7 @@ export const SelecionarClinica = () => {
   ];
 
   return (
-    <ContainerSafe style={{ paddingTop: 20 }}>
+    <ContainerScroll style={{ paddingTop: 20 }}>
       <Title text="Selecionar Clínica" />
       <ListComponent
         data={clinicas}
@@ -70,6 +70,6 @@ export const SelecionarClinica = () => {
           <Button outlined text="Cancelar" />
         </Group>
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

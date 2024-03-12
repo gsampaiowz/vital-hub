@@ -25,7 +25,6 @@ export const Prescricao = () => {
       contentContainerStyle={{
         alignItems: "center",
         gap: 20,
-        paddingBottom: 20,
       }}
     >
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />

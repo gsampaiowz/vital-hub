@@ -1,4 +1,4 @@
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { HeaderConsultas } from "../../components/HeaderConsultas/index";
 import { Calendar } from "../../components/Calendar/index";
 import { Button } from "../../components/Button/index";
@@ -78,7 +78,7 @@ export const ConsultasPaciente = () => {
   ];
 
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <HeaderConsultas
         image={require("./../../assets/img/UserImage.jpg")}
         nome={"Romário"}
@@ -151,6 +151,6 @@ export const ConsultasPaciente = () => {
           items={tiposConsulta}
         />
       )}
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };
