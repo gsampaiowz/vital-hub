@@ -21,6 +21,8 @@ export const Container = styled.View`
 export const ContainerScroll = styled.ScrollView.attrs({
   contentContainerStyle: {
     paddingBottom: 20, 
+    alignItems: "center",
+    gap: 20,
   },
 })`
   ${ContainersStyle}

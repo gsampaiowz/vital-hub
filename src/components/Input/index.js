@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 const InputStyled = styled.TextInput`
   border-radius: 5px;
   width: 100%;
+  border-width: 2px;
+  border-style: solid;
   padding: 0 16px;
-  transition: 0.5s;
   font-family: MontserratAlternates_600SemiBold;
-  white-space: wrap;
 `;
 
 const InputLabel = styled.Text`
@@ -29,6 +29,7 @@ const Icon = styled.View`
 
 export const Input = ({
   fontSize = 14,
+  onPress = () => {},
   placeholder = "",
   label = "",
   border = true,
@@ -53,6 +54,7 @@ export const Input = ({
     >
       {label !== "" && <InputLabel>{label}</InputLabel>}
       <InputStyled
+        onPressIn={onPress}
         readOnly={!border}
         value={inputValue}
         onFocus={() =>
@@ -66,7 +68,7 @@ export const Input = ({
         onBlur={() => border && setColorState("#34898f")}
         style={{
           fontFamily: "MontserratAlternates_500Medium",
-          border: border ? "2px solid #49b3ba" : "2px solid transparent",
+          borderColor: border ? "#49b3ba" : "transparent",
           backgroundColor: border ? "transparent" : "#f5f5f5",
           color: color,
           textAlign: textAlign,

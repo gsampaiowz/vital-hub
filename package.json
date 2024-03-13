@@ -33,7 +33,10 @@
     "react-native-picker-select": "^9.0.1",
     "react-native-web": "~0.19.6",
     "styled-components": "^6.1.8",
-    "toastify-react-native": "^5.0.0"
+    "toastify-react-native": "^5.0.0",
+    "expo-system-ui": "~2.9.3",
+    "expo-camera": "~14.0.6",
+    "expo-media-library": "~15.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

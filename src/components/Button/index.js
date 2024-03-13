@@ -17,7 +17,7 @@ const TextButton = styled.Text`
   text-align: center;
   display: flex;
   align-items: center;
-  gap: 5;
+  gap: 5px;
   justify-content: center;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -54,7 +54,7 @@ export const Button = ({
       onPress={onPress}
       clickButton={clickButton}
     >
-      {icon}
+      {icon != null ? icon : null}
       <TextButton
         style={{
           color: outlined ? color : clickButton ? "#fbfbfb" : color,

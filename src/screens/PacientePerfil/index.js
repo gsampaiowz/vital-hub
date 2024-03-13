@@ -23,10 +23,7 @@ export const PacientePerfil = () => {
 
   return (
     <ContainerScroll
-      contentContainerStyle={{
-        alignItems: "center",
-        gap: 20,
-      }}
+      
     >
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
