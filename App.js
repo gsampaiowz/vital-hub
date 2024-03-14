@@ -32,9 +32,9 @@ import { Main } from "./src/screens/Main";
 import { Prontuario } from "./src/screens/Prontuario";
 import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
-import { createContext } from "react";
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Warning: ...']); 
+import { createContext, useState } from "react";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
@@ -51,18 +51,20 @@ export default function App() {
     Quicksand_600SemiBold,
   });
 
+  const [role, setRole] = useState(null);
+
   const users = [
     {
       id: 1,
-      email: "magalhoes@email.com",
+      email: "medico@email.com",
       password: "123456",
-      role: "paciente"
+      role: "medico",
     },
     {
       id: 2,
-      email: "vascaino@email.com",
+      email: "paciente@email.com",
       password: "123456",
-      role: "doutor"
+      role: "paciente",
     },
   ];
 
@@ -76,7 +78,7 @@ export default function App() {
       // >> name: Nome da tela.
       // >> component: Componente que será chamado.
       // >> options ( title ): Título da tela.
-      <userContext.Provider value={{ users }}>
+      <userContext.Provider value={{ users, role, setRole }}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen

@@ -33,7 +33,7 @@ export const Input = ({
   placeholder = "",
   label = "",
   border = true,
-  color,
+  color = "#34898f",
   inputValue = "",
   icon = null,
   onChange = () => {},
@@ -41,7 +41,7 @@ export const Input = ({
   height = 53,
   textAlign = "left",
 }) => {
-  const [colorState, setColorState] = useState("");
+  const [colorState, setColorState] = useState("#34898f");
   color = colorState;
 
   useEffect(() => {

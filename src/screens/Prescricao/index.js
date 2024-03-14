@@ -13,6 +13,8 @@ import { Camera, CameraType } from "expo-camera";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Modal } from "react-native";
+import * as MediaLibrary from "expo-media-library";
+import { Ionicons } from "@expo/vector-icons";
 
 const Divider = styled.View`
   width: 100%;
@@ -47,12 +49,8 @@ const ModalContent = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   z-index: 10;
-`;
-
-const ModalButtons = styled.View`
-  flex-direction: row;
-  margin: 10px;
 `;
 
 const ModalImage = styled.Image`
@@ -61,8 +59,19 @@ const ModalImage = styled.Image`
 `;
 
 const InputImage = styled.Image`
-  width: 50px;
-  height: 50px;
+  width: ;
+  height: 450px;
+  border-radius: 20px;
+`;
+
+const ImagePress = styled.TouchableOpacity`
+width: 100%;`;
+
+const FlashIcon = styled(Ionicons)`
+  left: 50%;
+  top: 10px;
+  margin-left: -20px;
+  z-index: 10;
 `;
 
 export const Prescricao = () => {
@@ -72,34 +81,69 @@ export const Prescricao = () => {
 
   const [inCamera, setInCamera] = useState(false);
 
-  const [type, setType] = useState(CameraType.front);
+  const [type, setType] = useState(CameraType.back);
 
   const [photo, setPhoto] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+
   useEffect(() => {
     (async () => {
       const { status: cameraStatus } =
         await Camera.requestCameraPermissionsAsync();
+
+      const { status: mediaStatus } =
+        await MediaLibrary.requestPermissionsAsync();
     })();
   }, []);
 
+  async function UploadPhoto() {
+    await MediaLibrary.createAssetAsync(photo)
+      .then(() => {
+        alert("Foto salva com sucesso");
+      })
+      .catch(() => {
+        alert("Erro ao salvar a foto");
+      });
+  }
+
   async function CapturePhoto() {
     if (cameraRef) {
-      const fotoTirada = await cameraRef.current.takePictureAsync();
+      const options = {
+        quality: 1,
+        isImageMirror: false,
+      };
+
+      const fotoTirada = await cameraRef.current.takePictureAsync(options);
 
       await setPhoto(fotoTirada.uri);
 
+      console.log(fotoTirada);
+
       setInCamera(false);
       setModalOpen(true);
-
-      console.log(fotoTirada);
     }
+  }
+
+  async function ClearPhoto() {
+    await MediaLibrary.deleteAssetsAsync([photo])
+      .then(() => {
+        alert("Foto apagada com sucesso");
+        setPhoto(null);
+      })
+      .catch(() => {
+        alert("Falha ao apagar foto");
+      });
+
+    setOpenModal(false);
   }
 
   return inCamera ? (
     <Camera
+      flashMode={flash}
+      isIma
       ref={cameraRef}
       type={type}
       ratio="15:9"
@@ -122,6 +166,26 @@ export const Prescricao = () => {
       >
         <FontAwesome6 name="camera-rotate" size={40} color="#49B3BA" />
       </ToggleCamera>
+      <FlashIcon
+        onPress={() =>
+          setFlash(
+            flash === Camera.Constants.FlashMode.off
+              ? Camera.Constants.FlashMode.on
+              : flash === Camera.Constants.FlashMode.on
+              ? Camera.Constants.FlashMode.torch
+              : Camera.Constants.FlashMode.off
+          )
+        }
+        name={
+          flash === Camera.Constants.FlashMode.off
+            ? "flash-off"
+            : flash === Camera.Constants.FlashMode.torch
+            ? "flashlight"
+            : "flash"
+        }
+        size={40}
+        color="#49B3BA"
+      />
       <TakePhoto onPress={() => CapturePhoto()}>
         <FontAwesome name="camera" size={50} color="#49B3BA" />
       </TakePhoto>
@@ -133,7 +197,7 @@ export const Prescricao = () => {
       <ContainerSpacing>
         <Title text={"Romário"} />
 
-        <Group>
+        <Group row>
           <Subtitle text="22 anos" />
           <Subtitle text="romario@email.com" />
         </Group>
@@ -157,29 +221,35 @@ export const Prescricao = () => {
           label="Prescrição médica:"
           placeholder="Prescrição médica"
         />
-        <Group>
-          <Input
-          
-            height={100}
-            border={editMode}
-            label="Exames médicos:"
-            icon={
-              <AntDesign name="exclamationcircleo" size={24} color="#4E4B59" />
-            }
-            placeholder="Nenhuma foto informada"
-            inputValue={
-              photo != null ? <InputImage source={{ uri: photo }} /> : null
-            }
-          />
-          <Group row>
-            <Button
-              onPress={() => setInCamera(true)}
-              text={"Enviar"}
-              icon={<Feather name="camera" size={18} color="white" />}
+        <>
+          {photo != null ? (
+            <>
+              <Subtitle bold text="Exame médico" />
+              <ImagePress onPress={() => setModalOpen(true)}>
+                <InputImage source={{ uri: photo }} />
+              </ImagePress>
+            </>
+          ) : (
+            <Input
+              height={100}
+              border={editMode}
+              label="Exames médicos:"
+              icon={
+                <AntDesign
+                  name="exclamationcircleo"
+                  size={24}
+                  color="#4E4B59"
+                />
+              }
+              placeholder={"Nenhuma foto informada"}
             />
-            <Button borderColor="#C81D25" color="#C81D25" text="Cancelar" />
-          </Group>
-        </Group>
+          )}
+          <Button
+            onPress={() => setInCamera(true)}
+            text={photo != null ? "Trocar" : "Enviar"}
+            icon={<Feather name="camera" size={18} color="white" />}
+          />
+        </>
 
         <Divider />
 
@@ -200,15 +270,31 @@ export const Prescricao = () => {
       </ContainerSpacing>
       <Modal animationType="slide" transparent={false} visible={modalOpen}>
         <ModalContent>
-          <ModalButtons>
-            <AntDesign
-              onPress={() => setModalOpen(false)}
-              name="closecircle"
-              color="#49B3BA"
-              size={40}
+          <Group maxWidth="90%" row>
+            <Button
+              width="90%"
+              onPress={() => UploadPhoto()}
+              text="Salvar foto"
             />
-          </ModalButtons>
+            <Button
+              width="90%"
+              onPress={() => ClearPhoto()}
+              text="Apagar foto"
+            />
+          </Group>
+          <Button
+            width="90%"
+            onPress={() => setInCamera(true)}
+            text="Tirar outra"
+          />
+
           <ModalImage source={{ uri: photo }} />
+
+          <Button
+            width="90%"
+            onPress={() => setModalOpen(false)}
+            text="Confirmar"
+          />
         </ModalContent>
       </Modal>
     </ContainerScroll>

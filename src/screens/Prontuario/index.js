@@ -27,7 +27,7 @@ export const Prontuario = () => {
       <ContainerSpacing>
         <Title text={"Romário"} />
 
-        <Group>
+        <Group row>
           <Subtitle text="22 anos" />
           <Subtitle text="romario@email.com" />
         </Group>
