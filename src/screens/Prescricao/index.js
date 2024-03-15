@@ -9,12 +9,16 @@ import { useEffect, useRef, useState } from "react";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { Camera, CameraType } from "expo-camera";
+import { Camera, CameraType, CameraRecordingOptions } from "expo-camera";
 import { FontAwesome6 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Modal } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import { Ionicons } from "@expo/vector-icons";
+import { CameraModal } from "../../components/CameraModal";
+import {
+  PinchGestureHandler,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 const Divider = styled.View`
   width: 100%;
@@ -45,32 +49,26 @@ const TakePhoto = styled.TouchableOpacity`
   z-index: 10;
 `;
 
-const ModalContent = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  z-index: 10;
-`;
-
-const ModalImage = styled.Image`
-  width: 100%;
-  height: 500px;
-`;
-
 const InputImage = styled.Image`
-  width: ;
-  height: 450px;
+  height: 500px;
   border-radius: 20px;
 `;
 
 const ImagePress = styled.TouchableOpacity`
-width: 100%;`;
+  width: 100%;
+`;
 
 const FlashIcon = styled(Ionicons)`
   left: 50%;
   top: 10px;
   margin-left: -20px;
+  z-index: 10;
+`;
+
+const TakeVideo = styled(AntDesign)`
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   z-index: 10;
 `;
 
@@ -87,7 +85,13 @@ export const Prescricao = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [zoom, setZoom] = useState(0);
+
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+
+  const [isPhotoSaved, setIsPhotoSaved] = useState(false);
+
+  const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -98,16 +102,6 @@ export const Prescricao = () => {
         await MediaLibrary.requestPermissionsAsync();
     })();
   }, []);
-
-  async function UploadPhoto() {
-    await MediaLibrary.createAssetAsync(photo)
-      .then(() => {
-        alert("Foto salva com sucesso");
-      })
-      .catch(() => {
-        alert("Erro ao salvar a foto");
-      });
-  }
 
   async function CapturePhoto() {
     if (cameraRef) {
@@ -127,69 +121,82 @@ export const Prescricao = () => {
     }
   }
 
-  async function ClearPhoto() {
-    await MediaLibrary.deleteAssetsAsync([photo])
-      .then(() => {
-        alert("Foto apagada com sucesso");
-        setPhoto(null);
-      })
-      .catch(() => {
-        alert("Falha ao apagar foto");
-      });
-
-    setOpenModal(false);
-  }
+  const changeZoom = (event) => {
+    if (event.nativeEvent.scale > 1 && zoom < 1) {
+      setZoom(zoom + 0.1);
+    }
+    if (event.nativeEvent.scale < 1 && zoom > 0) {
+      setZoom(zoom - 0.1);
+    }
+  };
 
   return inCamera ? (
-    <Camera
-      flashMode={flash}
-      isIma
-      ref={cameraRef}
-      type={type}
-      ratio="15:9"
-      style={{
-        flex: 1,
-      }}
-    >
-      <CloseCamera
-        name="closecircle"
-        size={40}
-        color="#49B3BA"
-        onPress={() => setInCamera(false)}
-      />
-      <ToggleCamera
-        onPress={() =>
-          setType(
-            type === CameraType.front ? CameraType.back : CameraType.front
-          )
-        }
-      >
-        <FontAwesome6 name="camera-rotate" size={40} color="#49B3BA" />
-      </ToggleCamera>
-      <FlashIcon
-        onPress={() =>
-          setFlash(
-            flash === Camera.Constants.FlashMode.off
-              ? Camera.Constants.FlashMode.on
-              : flash === Camera.Constants.FlashMode.on
-              ? Camera.Constants.FlashMode.torch
-              : Camera.Constants.FlashMode.off
-          )
-        }
-        name={
-          flash === Camera.Constants.FlashMode.off
-            ? "flash-off"
-            : flash === Camera.Constants.FlashMode.torch
-            ? "flashlight"
-            : "flash"
-        }
-        size={40}
-        color="#49B3BA"
-      />
-      <TakePhoto onPress={() => CapturePhoto()}>
-        <FontAwesome name="camera" size={50} color="#49B3BA" />
-      </TakePhoto>
-    </Camera>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <PinchGestureHandler onGestureEvent={(event) => changeZoom(event)}>
+        <Camera
+          autoFocus={Camera.Constants.AutoFocus.on}
+          zoom={zoom}
+          flashMode={flash}
+          isIma
+          ref={cameraRef}
+          type={type}
+          ratio="15:9"
+          style={{
+            flex: 1,
+          }}
+        >
+          <CloseCamera
+            name="closecircle"
+            size={40}
+            color="#49B3BA"
+            onPress={() => setInCamera(false)}
+          />
+          <ToggleCamera
+            onPress={() =>
+              setType(
+                type === CameraType.front ? CameraType.back : CameraType.front
+              )
+            }
+          >
+            <FontAwesome6 name="camera-rotate" size={40} color="#49B3BA" />
+          </ToggleCamera>
+          <FlashIcon
+            onPress={() =>
+              setFlash(
+                flash === Camera.Constants.FlashMode.off
+                  ? Camera.Constants.FlashMode.on
+                  : flash === Camera.Constants.FlashMode.on
+                  ? Camera.Constants.FlashMode.torch
+                  : Camera.Constants.FlashMode.off
+              )
+            }
+            name={
+              flash === Camera.Constants.FlashMode.off
+                ? "flash-off"
+                : flash === Camera.Constants.FlashMode.torch
+                ? "flashlight"
+                : "flash"
+            }
+            size={40}
+            color="#49B3BA"
+          />
+          <TakePhoto
+            onPress={() => {
+              CapturePhoto();
+              setIsPhotoSaved(false);
+            }}
+          >
+            <FontAwesome name="camera" size={50} color="#49B3BA" />
+          </TakePhoto>
+          <TakeVideo
+            onPress={() => isRecording ? CameraRecordingOptions.stopRecording() : CameraRecordingOptions.recordAsync()}
+            name="videocamera"
+            size={24}
+            color={isRecording ? "red" : "#49B3BA"}
+          />
+        </Camera>
+      </PinchGestureHandler>
+    </GestureHandlerRootView>
   ) : (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
@@ -268,35 +275,14 @@ export const Prescricao = () => {
           <Button outlined text="Voltar" />
         </Group>
       </ContainerSpacing>
-      <Modal animationType="slide" transparent={false} visible={modalOpen}>
-        <ModalContent>
-          <Group maxWidth="90%" row>
-            <Button
-              width="90%"
-              onPress={() => UploadPhoto()}
-              text="Salvar foto"
-            />
-            <Button
-              width="90%"
-              onPress={() => ClearPhoto()}
-              text="Apagar foto"
-            />
-          </Group>
-          <Button
-            width="90%"
-            onPress={() => setInCamera(true)}
-            text="Tirar outra"
-          />
-
-          <ModalImage source={{ uri: photo }} />
-
-          <Button
-            width="90%"
-            onPress={() => setModalOpen(false)}
-            text="Confirmar"
-          />
-        </ModalContent>
-      </Modal>
+      <CameraModal
+        isPhotoSaved={isPhotoSaved}
+        setIsPhotoSaved={setIsPhotoSaved}
+        setInCamera={setInCamera}
+        setModalOpen={setModalOpen}
+        visible={modalOpen}
+        photoUri={photo}
+      />
     </ContainerScroll>
   );
 };
