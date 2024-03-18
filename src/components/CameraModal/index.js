@@ -26,6 +26,7 @@ export const CameraModal = ({
   setIsPhotoSaved,
   ...rest
 }) => {
+  
   const [fotoGaleria, setFotoGaleria] = useState(null);
 
   const handleButtonPress = async () => {
