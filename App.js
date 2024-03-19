@@ -34,6 +34,9 @@ import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
 import { createContext, useState } from "react";
 import { LogBox } from "react-native";
+//IMPORTAR RECURSOS DO EXPO-NOTIFICATION
+
+import * as Notifications from "expo-notifications";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
@@ -67,6 +70,21 @@ export default function App() {
       role: "paciente",
     },
   ];
+
+  
+//SOLICITA PERMISSÃO DE NOTIFICAÇÕES AO INICIAR O APP
+Notifications.requestPermissionsAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    //MOSTRAR ALERTA QUANDO NOTIFICAÇÃO FOR RECEBIDA
+    shouldShowAlert: true,
+    //TOCAR SOM QUANDO NOTIFICAÇÃO FOR RECEBIDA
+    shouldPlaySound: false,
+    //NUMERO DE NOTIFICACOES NO ICONE DO APP
+    shouldSetBadge: false,
+  }),
+});
 
   if (!fontsLoaded) {
     return null;

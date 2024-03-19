@@ -41,72 +41,38 @@ export const ModalAddConsulta = ({
   visible = false,
   ...rest
 }) => {
-  const [statusButtons, setStatusButtons] = useState("Rotina");
-
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
         <ModalContent>
-            <Group gap={20}>
-              <Title text="Agendar Consulta" />
-              <Subtitle
-                bold
-                fontSize={14}
-                color="black"
-                text="Informe o tipo de consulta"
+          <Group gap={20}>
+            <Title text="Agendar Consulta" />
+            <Subtitle
+              bold
+              fontSize={14}
+              color="black"
+              text="Informe o tipo de consulta"
+            />
+            <SelectTipoConsulta
+              placeholder={{ label: "Tipo de consulta" }}
+              items={items}
+            />
+            <Subtitle
+              bold
+              fontSize={14}
+              color="black"
+              text="Informe a localização desejada"
+            />
+            <Input placeholder="Informe a localização" />
+            <Group gap={10}>
+              <Button text="Continuar" onPress={() => }/>
+              <Button
+                onPress={() => setShowModalConsulta(false)}
+                outlined
+                text="Cancelar"
               />
-              <SelectTipoConsulta
-                placeholder={{ label: "Tipo de consulta" }}
-                items={items}
-              />
-              <Subtitle
-                bold
-                fontSize={14}
-                color="black"
-                text="Qual o nível da consulta?"
-              />
-              <Group row>
-                <Button
-                  borderColor="#60BFC5"
-                  color="#34898F"
-                  onPress={() => setStatusButtons("Rotina")}
-                  clickButton={statusButtons === "Rotina"}
-                  fontSize={12}
-                  text="Agendadas"
-                />
-                <Button
-                  borderColor="#60BFC5"
-                  color="#34898F"
-                  onPress={() => setStatusButtons("Exame")}
-                  clickButton={statusButtons === "Exame"}
-                  fontSize={12}
-                  text="Realizadas"
-                />
-                <Button
-                  borderColor="#60BFC5"
-                  color="#34898F"
-                  onPress={() => setStatusButtons("Urgência")}
-                  clickButton={statusButtons === "Urgência"}
-                  fontSize={12}
-                  text="Canceladas"
-                />
-              </Group>
-              <Subtitle
-                bold
-                fontSize={14}
-                color="black"
-                text="Informe a localização desejada"
-              />
-              <Input placeholder="Informe a localização" />
-              <Group gap={10}>
-                <Button text="Continuar" />
-                <Button
-                  onPress={() => setShowModalConsulta(false)}
-                  outlined
-                  text="Cancelar"
-                />
-              </Group>
             </Group>
+          </Group>
         </ModalContent>
       </PatientModal>
     </Modal>

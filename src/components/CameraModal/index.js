@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { Button } from "../Button";
 import { useState } from "react";
 import * as MediaLibrary from "expo-media-library";
+import { Toast } from "toastify-react-native";
 
 const ModalContent = styled.View`
   flex: 1;
@@ -26,7 +27,6 @@ export const CameraModal = ({
   setIsPhotoSaved,
   ...rest
 }) => {
-  
   const [fotoGaleria, setFotoGaleria] = useState(null);
 
   const handleButtonPress = async () => {
@@ -42,20 +42,20 @@ export const CameraModal = ({
       .then((response) => {
         setFotoGaleria(response);
         setIsPhotoSaved(true);
-        alert("Foto salva com sucesso");
+        Toast.success("Foto salva com sucesso");
       })
       .catch(() => {
-        alert("Erro ao salvar a foto");
+        Toast.error("Erro ao salvar a foto");
       });
   }
 
   async function ClearPhoto() {
     try {
       await MediaLibrary.deleteAssetsAsync(fotoGaleria);
-      alert("Foto apagada com sucesso");
+      Toast.success("Foto apagada com sucesso");
       setIsPhotoSaved(false);
     } catch (error) {
-      alert("Falha ao apagar foto");
+      Toast.error("Falha ao apagar foto");
     }
   }
 
