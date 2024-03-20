@@ -48,7 +48,7 @@ const TakeVideo = styled(AntDesign)`
   z-index: 10;
 `;
 
-export const MyCamera = ({ setIsPhotoSaved, setPhoto }) => {
+export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
   const cameraRef = useRef(null);
 
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -80,10 +80,9 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto }) => {
 
       await setPhoto(fotoTirada.uri);
 
-      console.log(fotoTirada);
-
       setInCamera(false);
       setModalOpen(true);
+      scrollTo(750, 0);
     }
   }
 

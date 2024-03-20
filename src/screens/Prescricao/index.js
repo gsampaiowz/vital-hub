@@ -40,7 +40,7 @@ export const Prescricao = () => {
   const [isPhotoSaved, setIsPhotoSaved] = useState(false);
 
   return inCamera ? (
-    <MyCamera setPhoto={setPhoto} setIsPhotoSaved={setIsPhotoSaved} />
+    <MyCamera setInCamera={setInCamera} setPhoto={setPhoto} setIsPhotoSaved={setIsPhotoSaved} />
   ) : (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />

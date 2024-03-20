@@ -24,6 +24,22 @@ export const ConsultasPaciente = () => {
       status: "Agendadas",
     },
     {
+      id: 1,
+      nome: "Médico",
+      idade: 32,
+      categoria: "Rotina",
+      horario: "12:00",
+      status: "Agendadas",
+    },
+    {
+      id: 1,
+      nome: "Médico",
+      idade: 32,
+      categoria: "Rotina",
+      horario: "12:00",
+      status: "Agendadas",
+    },
+    {
       id: 2,
       nome: "Médico",
       idade: 32,

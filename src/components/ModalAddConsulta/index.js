@@ -4,7 +4,6 @@ import { Title } from "../Title";
 import { Group } from "../Group";
 import { Subtitle } from "./../Subtitle/index";
 import { Button } from "../Button";
-import { useState } from "react";
 import { Input } from "./../Input/index";
 import { Modal } from "react-native";
 
@@ -65,7 +64,7 @@ export const ModalAddConsulta = ({
             />
             <Input placeholder="Informe a localização" />
             <Group gap={10}>
-              <Button text="Continuar" onPress={() => }/>
+              <Button text="Continuar"/>
               <Button
                 onPress={() => setShowModalConsulta(false)}
                 outlined

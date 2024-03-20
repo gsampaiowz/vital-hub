@@ -70,6 +70,8 @@ export const MyModal = ({
 
   //FUNCAO PARA LIDAR COM A CHAMADA DE NOTIFICACAO
   const HandleCallNotifications = async () => {
+    setShowModal(false)
+
     //OBTEM O STATUS DA PERMISSAO
     const { status } = await Notifications.getPermissionsAsync();
 
