@@ -32,7 +32,6 @@ import { Main } from "./src/screens/Main";
 import { Prontuario } from "./src/screens/Prontuario";
 import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
-import { createContext, useState } from "react";
 import { LogBox } from "react-native";
 //IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 
@@ -43,7 +42,6 @@ LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator();
 
 // SplashScreen.preventAutoHideAsync();
-export const userContext = createContext(null);
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -53,23 +51,6 @@ export default function App() {
     Quicksand_500Medium,
     Quicksand_600SemiBold,
   });
-
-  const [role, setRole] = useState(null);
-
-  const users = [
-    {
-      id: 1,
-      email: "medico@email.com",
-      password: "123456",
-      role: "medico",
-    },
-    {
-      id: 2,
-      email: "paciente@email.com",
-      password: "123456",
-      role: "paciente",
-    },
-  ];
 
   
 //SOLICITA PERMISSÃO DE NOTIFICAÇÕES AO INICIAR O APP
@@ -96,7 +77,6 @@ Notifications.setNotificationHandler({
       // >> name: Nome da tela.
       // >> component: Componente que será chamado.
       // >> options ( title ): Título da tela.
-      <userContext.Provider value={{ users, role, setRole }}>
         <NavigationContainer>
           <Stack.Navigator>
             <Stack.Screen
@@ -177,7 +157,6 @@ Notifications.setNotificationHandler({
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </userContext.Provider>
     );
   }
 }
