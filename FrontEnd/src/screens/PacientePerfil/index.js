@@ -1,16 +1,14 @@
 import { PacienteImage } from "../../components/PacienteImage";
-import {
-  ContainerScroll,
-  ContainerSpacing,
-} from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Title } from "../../components/Title";
 import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
 import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const PacientePerfil = () => {
+export const PacientePerfil = ({ navigation }) => {
   const [editMode, setEditMode] = useState(false);
 
   const [inputs, setInputs] = useState({
@@ -21,10 +19,16 @@ export const PacientePerfil = () => {
     cidade: "",
   });
 
+  async function Logout() {
+    //Remover token do AsyncStorage
+    await AsyncStorage.removeItem("token");
+
+    //Redirecionar para a tela de login
+    navigation.navigate("Login");
+  }
+
   return (
-    <ContainerScroll
-      
-    >
+    <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
       <ContainerSpacing>
@@ -79,7 +83,7 @@ export const PacientePerfil = () => {
             text={editMode ? "SALVAR" : "EDITAR"}
           />
 
-          <Button outlined text="SAIR DO APP" />
+          <Button onPress={() => Logout()} outlined text="SAIR DA CONTA" />
         </Group>
       </ContainerSpacing>
     </ContainerScroll>

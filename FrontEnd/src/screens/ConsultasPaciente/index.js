@@ -97,7 +97,6 @@ export const ConsultasPaciente = () => {
     <ContainerScroll>
       <HeaderConsultas
         image={require("./../../assets/img/UserImage.jpg")}
-        nome={"Romário"}
       />
       <Calendar />
 

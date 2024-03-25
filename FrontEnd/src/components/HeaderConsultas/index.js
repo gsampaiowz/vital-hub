@@ -4,6 +4,8 @@ import { Title } from "./../Title/index";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { Group } from "../Group";
+import { userDecodeToken } from "../../utils/Auth";
+import { useEffect, useState } from "react";
 
 const HeaderConsultasStyled = styled(LinearGradient).attrs({
   colors: ["#60BFC5", "#496BBA"],
@@ -19,7 +21,7 @@ const HeaderConsultasStyled = styled(LinearGradient).attrs({
   shadow-opacity: 0.08;
   shadow-radius: 25px;
   elevation: 10;
-  justify-content: center;  
+  justify-content: center;
   border-radius: 0px 0px 15px 15px;
 `;
 
@@ -28,7 +30,22 @@ const ImageUsuario = styled.Image`
   height: 60px;
   border-radius: 5px;
 `;
-export const HeaderConsultas = ({ image, nome }) => {
+export const HeaderConsultas = ({ image }) => {
+
+  const [nome, setNome] = useState("");
+
+  useEffect(() => {
+    ProfileLoad();
+  }, []);
+
+  async function ProfileLoad() {
+    const token = await userDecodeToken();
+    if (token) {
+      console.log(token);
+      setNome(token.name)
+    }
+  }
+
   return (
     <HeaderConsultasStyled>
       <ImageUsuario source={image} />
