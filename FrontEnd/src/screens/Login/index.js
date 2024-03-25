@@ -96,8 +96,9 @@ export const Login = ({ navigation }) => {
         email: inputs.email,
         senha: inputs.password,
       })
-      .then((response) => {
-        console.log(response.data);
+      .then(async (response) => {
+        await AsyncStorage.setItem("token", response.data);
+        navigation.navigate("Main");
       })
       .catch((error) => {
         console.log(error);
