@@ -14,9 +14,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { Subtitle } from "../../components/Subtitle";
 import api from "../../service/service";
+import { ActivityIndicator } from 'react-native';
+
 
 export const Login = ({ navigation }) => {
   const [dateHistory, setDateHistory] = useState({}); //SALVAR O OBJ COM HISTORICO DE ACESSO
+
+  const[carregando, setCarregando] = useState(false)
 
   //FUNCAO PARA VERIFICAR SE EXISTE BIOMETRIA NO APARELHO
   async function CheckExistAuthentication() {
@@ -85,12 +89,13 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "paciente@email.com",
+    email: "paciente@gmail.com",
     senha: "paciente123",
   });
 
   //METODO LOGIN COM API
   async function Login() {
+    setCarregando(true)
     await api
       .post("/Login", {
         email: inputs.email,
@@ -105,6 +110,7 @@ export const Login = ({ navigation }) => {
       .catch((error) => {
         console.log(error);
       });
+      setCarregando(false)
 
     // navigation.navigate("Main");
   }
@@ -134,7 +140,9 @@ export const Login = ({ navigation }) => {
           />
         </Group>
         <Group gap={10}>
-          <Button onPress={() => Login()} text="Entrar" />
+
+          
+          <Button disabled={carregando} onPress={() => Login()} text={carregando ? <ActivityIndicator/> : "Entrar" }/>
 
           <Button
             onPress={() => HandleAuthentication()}

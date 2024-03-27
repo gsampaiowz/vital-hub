@@ -16,7 +16,7 @@ namespace WebAPI.Repositories
             {
             Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id);
 
-            if (medicoBuscado == null) return null;
+            if (medicoBuscado == null) return null; 
 
             if (medico.Crm != null)
                 medicoBuscado.Crm = medico.Crm;
