@@ -84,10 +84,7 @@ export const ConsultasDoutor = () => {
 
   return (
     <ContainerScroll>
-      <HeaderConsultas
-        image={require("./../../assets/img/UserImage.jpg")}
-        nome={"Romário"}
-      />
+      <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
       <Calendar />
 
       <ContainerSpacing>
@@ -139,11 +136,10 @@ export const ConsultasDoutor = () => {
         visible={showModalCancel}
       />
       <MyModal
-      nome={"Romário"}
-      email={"romario@email.com"}
-      idade={32}
-      image={require("./../../assets/img/UserImage.jpg")}
-
+        nome={"Romário"}
+        email={"romario@email.com"}
+        idade={32}
+        image={require("./../../assets/img/UserImage.jpg")}
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}
       />

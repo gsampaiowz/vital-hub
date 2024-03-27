@@ -7,16 +7,17 @@ import { Link } from "../../components/Link";
 import { Button } from "../../components/Button";
 import { AntDesign } from "@expo/vector-icons";
 import { Group } from "../../components/Group";
-import { useContext, useEffect, useState } from "react";
-import { userContext } from "../../../App";
+import { useEffect, useState } from "react";
 import ToastManager, { Toast } from "toastify-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { Subtitle } from "../../components/Subtitle";
+import api from "../../service/service";
 
 export const Login = ({ navigation }) => {
   const [dateHistory, setDateHistory] = useState({}); //SALVAR O OBJ COM HISTORICO DE ACESSO
+
   //FUNCAO PARA VERIFICAR SE EXISTE BIOMETRIA NO APARELHO
   async function CheckExistAuthentication() {
     LocalAuthentication.hasHardwareAsync().then((response) => {
@@ -28,12 +29,14 @@ export const Login = ({ navigation }) => {
     });
   }
 
+  //CHECA SE EXISTE AUTENTICAÇÃO e PEGA O HISTORICO DE AUTENTICACAO MAIS RECENTE
   useEffect(() => {
     CheckExistAuthentication();
 
     GetHistory();
   }, []);
 
+  //FUNCAO PARA AUTENTICAR COM BIOMETRIA
   async function HandleAuthentication() {
     //VERIFICAR SE EXISTE UMA BIOMETRIA CADASTRADA
     const biometricExist = await LocalAuthentication.isEnrolledAsync();
@@ -49,7 +52,7 @@ export const Login = ({ navigation }) => {
       if (response.success) {
         Toast.success("Autenticado com sucesso");
         setTimeout(() => {
-          navigation.navigate("ConsultasPaciente");
+          navigation.navigate("Home");
         }, 1000);
       } else {
         Toast.error("Falha na autenticação");
@@ -61,6 +64,7 @@ export const Login = ({ navigation }) => {
     }
   }
 
+  //FUNCAO PARA DEFINIR O HISTORICO DE AUTENTICACAO
   async function SetHistory() {
     const objAuth = {
       dataAuthenticated: moment().format("DD/MM/YYYY HH:mm:ss"),
@@ -71,6 +75,7 @@ export const Login = ({ navigation }) => {
     setDateHistory(objAuth);
   }
 
+  //FUNCAO PARA PEGAR O HISTORICO DE AUTENTICACAO
   async function GetHistory() {
     const objAuth = await AsyncStorage.getItem("authenticate");
 
@@ -79,29 +84,33 @@ export const Login = ({ navigation }) => {
     }
   }
 
-  const { users } = useContext(userContext);
-
   const [inputs, setInputs] = useState({
-    email: "",
-    password: "",
+    email: "paciente@email.com",
+    senha: "paciente123",
   });
 
+  //METODO LOGIN COM API
   async function Login() {
-    const user = users.find(
-      (user) => user.email === inputs.email && user.password === inputs.password
-    );
-
-    if (!user) {
-      Toast.error("Usuário ou senha inválidos");
-    } else {
-      Toast.success("Login efetuado com sucesso");
-      navigation.navigate("Main");
-    }
+    await api
+      .post("/Login", {
+        email: inputs.email,
+        senha: inputs.senha,
+      })
+      .then(async (response) => {
+        await AsyncStorage.setItem("token", JSON.stringify(response.data));
+        navigation.navigate("Main");
+      })
+      .catch((error) => {
+        if (inputs.email === "" || inputs.senha === "") {
+          Toast.error("Preencha todos os campos");
+        }
+        Toast.error("Email ou senha incorretos: " + error);
+      });
   }
 
   return (
     <ContainerScroll>
-      <ToastManager height={"auto"} />
+      <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <Logo source={LogoImage} />
         <Title text={"Entrar ou criar conta"} />
@@ -112,8 +121,8 @@ export const Login = ({ navigation }) => {
             placeholder="Usuário ou E-mail"
           />
           <Input
-            inputValue={inputs.password}
-            onChange={(text) => setInputs({ ...inputs, password: text })}
+            inputValue={inputs.senha}
+            onChange={(text) => setInputs({ ...inputs, senha: text })}
             placeholder="Senha"
           />
           <Link

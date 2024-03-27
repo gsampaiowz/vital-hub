@@ -3,15 +3,17 @@ import { HeaderConsultas } from "../../components/HeaderConsultas/index";
 import { Calendar } from "../../components/Calendar/index";
 import { Button } from "../../components/Button/index";
 import { Group } from "../../components/Group/index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
 import { MyModal } from "../../components/Modal/index";
-import { AddConsulta } from "./../../components/AddConsulta/index";
+import { AddConsulta } from "../../components/AddConsulta/index";
 import { Fontisto } from "@expo/vector-icons";
 import { ModalAddConsulta } from "../../components/ModalAddConsulta";
+import { userDecodeToken } from "../../utils/Auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const ConsultasPaciente = () => {
+export const Home = ({ navigation }) => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
 
   const [consultas] = useState([
@@ -93,12 +95,18 @@ export const ConsultasPaciente = () => {
     { label: "Dermatologista", value: "dermatologista" },
   ];
 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    async function ProfileLoad() {
+      setUser(await userDecodeToken());
+    }
+    ProfileLoad();
+  }, []);
+
   return (
     <ContainerScroll>
-      <HeaderConsultas
-        image={require("./../../assets/img/UserImage.jpg")}
-        nome={"Romário"}
-      />
+      <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
       <Calendar />
 
       <ContainerSpacing>
@@ -157,9 +165,11 @@ export const ConsultasPaciente = () => {
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}
       />
-      <AddConsulta onPress={() => setShowModalConsulta(true)}>
-        <Fontisto name="stethoscope" size={24} color="white" />
-      </AddConsulta>
+      {user.role === "medico" ? null : (
+        <AddConsulta onPress={() => setShowModalConsulta(true)}>
+          <Fontisto name="stethoscope" size={24} color="white" />
+        </AddConsulta>
+      )}
       {showModalConsulta && (
         <ModalAddConsulta
           setShowModalConsulta={setShowModalConsulta}

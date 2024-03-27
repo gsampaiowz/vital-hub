@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { ConsultasPaciente } from "./../ConsultasPaciente/index";
-import { PacientePerfil } from "./../PacientePerfil/index";
+import { Home } from "./../Home/index";
+import { Perfil } from "../Perfil/index";
 import { ContentIcon, TextIcon } from "./style";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
@@ -9,14 +9,14 @@ export const Main = () => {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="ConsultasPaciente"
+      initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarStyle: { backgroundColor: "#fff", height: 80, paddingTop: 10 },
         tabBarActiveBackgroundColor: "transparent",
         tabBarShowLabel: false,
         headerShown: false,
         tabBarIcon: ({ focused }) => {
-          if (route.name === "ConsultasPaciente") {
+          if (route.name === "Home") {
             return (
               <>
                 <ContentIcon
@@ -47,10 +47,10 @@ export const Main = () => {
       })}
     >
       <BottomTab.Screen
-        name="ConsultasPaciente"
-        component={ConsultasPaciente}
+        name="Home"
+        component={Home}
       />
-      <BottomTab.Screen name="PacientePerfil" component={PacientePerfil} />
+      <BottomTab.Screen name="Perfil" component={Perfil} />
     </BottomTab.Navigator>
   );
 };
