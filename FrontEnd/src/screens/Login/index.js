@@ -52,7 +52,7 @@ export const Login = ({ navigation }) => {
       if (response.success) {
         Toast.success("Autenticado com sucesso");
         setTimeout(() => {
-          navigation.navigate("ConsultasPaciente");
+          navigation.navigate("Home");
         }, 1000);
       } else {
         Toast.error("Falha na autenticação");
@@ -98,20 +98,19 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
-        const token = await AsyncStorage.getItem("token");
-        console.log(token);
         navigation.navigate("Main");
       })
       .catch((error) => {
-        console.log(error);
+        if (inputs.email === "" || inputs.senha === "") {
+          Toast.error("Preencha todos os campos");
+        }
+        Toast.error("Email ou senha incorretos: " + error);
       });
-
-    // navigation.navigate("Main");
   }
 
   return (
     <ContainerScroll>
-      <ToastManager height={"auto"} />
+      <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <Logo source={LogoImage} />
         <Title text={"Entrar ou criar conta"} />

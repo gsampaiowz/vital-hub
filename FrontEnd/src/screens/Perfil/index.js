@@ -5,10 +5,11 @@ import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userDecodeToken } from "../../utils/Auth";
 
-export const PacientePerfil = ({ navigation }) => {
+export const Perfil = ({ navigation }) => {
   const [editMode, setEditMode] = useState(false);
 
   const [inputs, setInputs] = useState({
@@ -27,14 +28,23 @@ export const PacientePerfil = ({ navigation }) => {
     navigation.navigate("Login");
   }
 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    async function ProfileLoad() {
+      setUser(await userDecodeToken());
+    }
+    ProfileLoad();
+  }, []);
+
   return (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
       <ContainerSpacing>
-        <Title text={"Romário"} />
+        <Title text={user.name} />
 
-        <Subtitle text="romario@email.com" />
+        <Subtitle text={user.email} />
 
         <Input
           inputValue={inputs.dataNascimento}

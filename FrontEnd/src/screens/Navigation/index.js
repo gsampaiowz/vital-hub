@@ -20,18 +20,12 @@ export const Navigation = ({ navigation }) => {
         title="Criar Conta"
         onPress={() => navigation.navigate("CriarConta")}
       />
-      <Button
-        title="Paciente Perfil"
-        onPress={() => navigation.navigate("PacientePerfil")}
-      />
-      <Button
+      <Button title="Perfil" onPress={() => navigation.navigate("Perfil")} />
+      {/* <Button
         title="Consultas Doutor"
         onPress={() => navigation.navigate("ConsultasDoutor")}
-      />
-      <Button
-        title="Consultas Paciente"
-        onPress={() => navigation.navigate("ConsultasPaciente")}
-      />
+      /> */}
+      <Button title="Home" onPress={() => navigation.navigate("Home")} />
       <Button
         title="Selecionar Clinica"
         onPress={() => navigation.navigate("SelecionarClinica")}

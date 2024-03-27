@@ -1,50 +1,42 @@
-import React from "react";
-import { ContainerScroll, ContainerSpacing } from "../../components/Container";
+import React, { useEffect, useState } from "react";
+import { ContainerSafe, ContainerSpacing } from "../../components/Container";
 import { Title } from "./../../components/Title/index";
 import { ListComponent } from "../../components/CardList";
 import { CardMedClini } from "../../components/CardMedClini";
 import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
+import api from "../../service/service";
 
 export const SelecionarMedico = () => {
-  const medicos = [
-    {
-      id: 1,
-      nome: "Médico 1",
-      categoria: "Ortopedista, Esteticista",
-    },
-    {
-      id: 2,
-      nome: "Médico 2",
-      categoria: "Demartológa, Esteticista",
-    },
-    {
-      id: 3,
-      nome: "Médico 3",
-      categoria: "Pediatra, Clínico",
-    },
-    {
-      id: 4,
-      nome: "Médico 4",
-      categoria: "Cirurgião, Cardiologista",
-    },
-    {
-      id: 5,
-      nome: "Médico 5",
-      categoria: "Psicólogo",
-    },
-  ];
+  const [medicoLista, setMedicoLista] = useState([]);
+
+  useEffect(() => {
+    ListarMedicos();
+  }, []);
+
+  async function ListarMedicos() {
+    //Instanciar a nossa conexão da API
+
+    await api
+      .get("/Medicos")
+      .then((response) => {
+        setMedicoLista(response.data);
+      })
+      .catch((error) => console.log(error));
+
+      
+  }
 
   return (
-    <ContainerScroll style={{ paddingTop: 20 }}>
+    <ContainerSafe>
       <Title text="Selecionar Médico" />
       <ListComponent
-        data={medicos}
+        data={medicoLista}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CardMedClini
-            name={item.nome}
-            desc={item.categoria}
+            name={item.idNavigation.nome}
+            desc={item.especialidade.especialidade1}
             image={require("./../../assets/img/UserImage.jpg")}
           />
         )}
@@ -58,6 +50,6 @@ export const SelecionarMedico = () => {
           <Button outlined text="Cancelar" />
         </Group>
       </ContainerSpacing>
-    </ContainerScroll>
+    </ContainerSafe>
   );
 };

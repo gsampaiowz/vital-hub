@@ -31,7 +31,6 @@ const ImageUsuario = styled.Image`
   border-radius: 5px;
 `;
 export const HeaderConsultas = ({ image }) => {
-
   const [nome, setNome] = useState("");
 
   useEffect(() => {
@@ -39,11 +38,10 @@ export const HeaderConsultas = ({ image }) => {
   }, []);
 
   async function ProfileLoad() {
-    const token = await userDecodeToken();
-    if (token) {
-      console.log(token);
-      setNome(token.name)
-    }
+    const user = await userDecodeToken();
+    
+    user && setNome(user.name);
+    
   }
 
   return (
