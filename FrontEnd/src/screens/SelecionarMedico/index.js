@@ -24,7 +24,6 @@ export const SelecionarMedico = () => {
       })
       .catch((error) => console.log(error));
 
-      
   }
 
   return (

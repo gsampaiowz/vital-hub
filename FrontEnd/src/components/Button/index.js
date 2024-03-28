@@ -27,6 +27,7 @@ const TextButton = styled.Text`
 
 export const Button = ({
   text = "",
+  disabled,
   border = true,
   color = "#496bba",
   borderColor = "#496bba",
@@ -40,6 +41,7 @@ export const Button = ({
 }) => {
   return (
     <ButtonStyled
+    disabled={disabled}
       style={{
         width: width,
         paddingVertical: spacing,

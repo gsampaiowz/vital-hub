@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\42591939888\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj": {}
+    "C:\\Users\\47195701867\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\42591939888\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj": {
+    "C:\\Users\\47195701867\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\42591939888\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\47195701867\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj",
         "projectName": "WebAPI",
-        "projectPath": "C:\\Users\\42591939888\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj",
-        "packagesPath": "C:\\Users\\42591939888\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\42591939888\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\obj\\",
+        "projectPath": "C:\\Users\\47195701867\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\WebAPI.csproj",
+        "packagesPath": "C:\\Users\\47195701867\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\47195701867\\Desktop\\vital-hub\\BackEnd\\WebAPI\\WebAPI\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\42591939888\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\47195701867\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
