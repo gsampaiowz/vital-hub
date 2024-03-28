@@ -1,4 +1,4 @@
-import { ContainerScroll, ContainerSpacing } from "../../components/Container";
+import { ContainerSafe, ContainerSpacing } from "../../components/Container";
 import { HeaderConsultas } from "../../components/HeaderConsultas/index";
 import { Calendar } from "../../components/Calendar/index";
 import { Button } from "../../components/Button/index";
@@ -11,76 +11,15 @@ import { AddConsulta } from "../../components/AddConsulta/index";
 import { Fontisto } from "@expo/vector-icons";
 import { ModalAddConsulta } from "../../components/ModalAddConsulta";
 import { userDecodeToken } from "../../utils/Auth";
+import api from "../../service/service";
+import moment from "moment/moment";
 
 export const Home = ({ navigation }) => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
 
-  const [consultas] = useState([
-    {
-      id: 1,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 1,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 1,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 2,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 3,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 4,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "12:00",
-      status: "Agendadas",
-    },
-    {
-      id: 5,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "14:00",
-      status: "Realizadas",
-    },
-    {
-      id: 6,
-      nome: "Médico",
-      idade: 32,
-      categoria: "Rotina",
-      horario: "16:00",
-      status: "Canceladas",
-    },
-  ]);
+  const [data, setData] = useState(moment())
+
+  const [consultas, setConsultas] = useState([])
 
   const [showModalConsulta, setShowModalConsulta] = useState(false);
 
@@ -96,35 +35,49 @@ export const Home = ({ navigation }) => {
 
   const [user, setUser] = useState({});
 
+  async function getConsultas() {
+    const response = await api.get(`/Pacientes/BuscarPorData?data=${encodeURIComponent(moment(data).format("YYYY-MM-DD HH:mm:ss.SSS"))}&id=${user.id}`)
+    
+    setConsultas(response.data)
+  }
+  
+  useEffect(() => {
+    getConsultas()
+    console.log(encodeURIComponent(moment(data).format("YYYY-MM-DD HH:mm:ss.SSS")))
+  }, [data, user.jti])
+  
+  
   useEffect(() => {
     async function ProfileLoad() {
       setUser(await userDecodeToken());
     }
     ProfileLoad();
   }, []);
-
+  
   return (
-    <ContainerScroll>
+    <ContainerSafe>
       <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
-      <Calendar />
+      <Calendar 
+      data={data}
+      setData={setData} />
 
       <ContainerSpacing>
         <Group row>
           <Button
-            clickButton={statusButtons === "Agendadas"}
-            onPress={() => setStatusButtons("Agendadas")}
+            clickButton={statusButtons === "agendadas"}
+            onPress={() => setStatusButtons("agendadas")}
             fontSize={12}
             text="Agendadas"
           />
           <Button
-            clickButton={statusButtons === "Realizadas"}
-            onPress={() => setStatusButtons("Realizadas")}
+            clickButton={statusButtons === "realizadas"}
+            onPress={() => setStatusButtons("realizadas")}
             fontSize={12}
             text="Realizadas"
           />
           <Button
-            clickButton={statusButtons === "Canceladas"}
-            onPress={() => setStatusButtons("Canceladas")}
+            clickButton={statusButtons === "canceladas"}
+            onPress={() => setStatusButtons("canceladas")}
             fontSize={12}
             text="Canceladas"
           />
@@ -135,16 +88,16 @@ export const Home = ({ navigation }) => {
         data={consultas}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) =>
-          statusButtons === item.status && (
+          statusButtons === item.situacao.situacao && (
             <CardConsulta
               image={require("./../../assets/img/UserImage.jpg")}
-              name={item.nome}
+              name={item.descricao}
               idade={item.idade}
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
               categoria={item.categoria}
-              horario={item.horario}
-              situacao={item.status}
+              horario={new Date(item.dataConsulta).toLocaleTimeString()}
+              situacao={item.situacao.situacao}
             />
           )
         }
@@ -176,6 +129,6 @@ export const Home = ({ navigation }) => {
           items={tiposConsulta}
         />
       )}
-    </ContainerScroll>
+    </ContainerSafe>
   );
 };

@@ -6,7 +6,10 @@ const calendarTextStyles = {
   fontFamily: "Quicksand_600SemiBold",
 };
 
-export const Calendar = () => {
+export const Calendar = ({
+  data,
+  setData
+}) => {
   const localeBrazil = {
     name: "pt-BR",
     config: {
@@ -76,10 +79,11 @@ export const Calendar = () => {
         minHeight: 90,
         width: "100%",
       }}
+      onDateSelected={(date) => {setData(date)}}
       minDayComponentSize={45}
       maxDayComponentSize={50}
       scrollable
-      selectedDate={moment()}
+      selectedDate={data}
       locale={localeBrazil}
       highlightDateContainerStyle={{ backgroundColor: "#60BFC5" }}
       calendarHeaderStyle={{
