@@ -111,12 +111,9 @@ export const Login = ({ navigation }) => {
         }
         Toast.error("Email ou senha incorretos: " + error);
       });
-<<<<<<< HEAD
-=======
       setCarregando(false)
 
-    // navigation.navigate("Main");
->>>>>>> c1f8745a603e3a7f7a688866b3dd5fe54ea57cc8
+    navigation.navigate("Main");
   }
 
   return (

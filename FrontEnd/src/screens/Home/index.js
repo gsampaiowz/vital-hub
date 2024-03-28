@@ -11,7 +11,6 @@ import { AddConsulta } from "../../components/AddConsulta/index";
 import { Fontisto } from "@expo/vector-icons";
 import { ModalAddConsulta } from "../../components/ModalAddConsulta";
 import { userDecodeToken } from "../../utils/Auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Home = ({ navigation }) => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
