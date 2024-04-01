@@ -11,7 +11,7 @@ if (!global.btoa) {
 }
 
 export const userDecodeToken = async () => {
-  const user = await AsyncStorage.getItem("token");
+  const user = JSON.parse(await AsyncStorage.getItem("token")).token;
 
   if (user === null) {
     return null;
@@ -24,5 +24,7 @@ export const userDecodeToken = async () => {
     name: decoded.name,
     role: decoded.role,
     email: decoded.email,
+    id: decoded.id,
+    token: user
   };
 };

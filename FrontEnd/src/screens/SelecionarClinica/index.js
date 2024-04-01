@@ -1,49 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Title } from "./../../components/Title/index";
 import { ListComponent } from "../../components/CardList";
 import { CardMedClini } from "../../components/CardMedClini";
 import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
+import api from "../../service/service";
 
 export const SelecionarClinica = () => {
-  const clinicas = [
-    {
-      id: 1,
-      nome: "Clinica 1",
-      local: "São Paulo, SP",
-      aberto: "Seg-Sex",
-      estrelas: 4.5,
-    },
-    {
-      id: 2,
-      nome: "Clinica 2",
-      local: "São Paulo, SP",
-      aberto: "Seg-Sab",
-      estrelas: 5,
-    },
-    {
-      id: 3,
-      nome: "Clinica 3",
-      local: "São Paulo, SP",
-      aberto: "Seg-Sex",
-      estrelas: 4,
-    },
-    {
-      id: 4,
-      nome: "Clinica 4",
-      local: "São Paulo, SP",
-      aberto: "Seg-Sex",
-      estrelas: 3.5,
-    },
-    {
-      id: 5,
-      nome: "Clinica 5",
-      local: "São Paulo, SP",
-      aberto: "Seg-Sab",
-      estrelas: 4.5,
-    },
-  ];
+  const [clinicas, setClinicas] = useState([]);
+
+  useEffect(() => {
+    getClinicas();
+  }, []);
+
+  async function getClinicas() {
+    try {
+      const response = await api.get("/Clinica/ListarTodas");
+      setClinicas(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <ContainerScroll style={{ paddingTop: 20 }}>
@@ -54,10 +32,10 @@ export const SelecionarClinica = () => {
         renderItem={({ item }) => (
           <CardMedClini
             clinica
-            name={item.nome}
-            desc={item.local}
-            aberto={item.aberto}
-            estrelas={item.estrelas}
+            name={item.nomeFantasia}
+            desc={item.endereco.cidade}
+            aberto={"SEG - SEX"}
+            estrelas={2}
           />
         )}
         showsVerticalScrollIndicator={false}
