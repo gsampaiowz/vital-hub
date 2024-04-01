@@ -36,30 +36,34 @@ export const Home = ({ navigation }) => {
   const [user, setUser] = useState({});
 
   async function getConsultas() {
-    const response = await api.get(`/Pacientes/BuscarPorData?data=${encodeURIComponent(moment(data).format("YYYY-MM-DD HH:mm:ss.SSS"))}&id=${user.id}`)
-    
-    setConsultas(response.data)
+    try {
+
+      const response = await api.get(`/Pacientes/BuscarPorData?data=${new Date(data).toLocaleDateString().split("/").reverse().join("-")}&id=${user.id}`)
+      setConsultas(response.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
-  
+
+
   useEffect(() => {
     getConsultas()
-    console.log(encodeURIComponent(moment(data).format("YYYY-MM-DD HH:mm:ss.SSS")))
   }, [data, user.jti])
-  
-  
+
+
   useEffect(() => {
     async function ProfileLoad() {
       setUser(await userDecodeToken());
     }
     ProfileLoad();
   }, []);
-  
+
   return (
     <ContainerSafe>
       <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
-      <Calendar 
-      data={data}
-      setData={setData} />
+      <Calendar
+        data={data}
+        setData={setData} />
 
       <ContainerSpacing>
         <Group row>
@@ -96,7 +100,7 @@ export const Home = ({ navigation }) => {
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
               categoria={item.categoria}
-              horario={new Date(item.dataConsulta).toLocaleTimeString()}
+              horario={new Date(item.dataConsulta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               situacao={item.situacao.situacao}
             />
           )
