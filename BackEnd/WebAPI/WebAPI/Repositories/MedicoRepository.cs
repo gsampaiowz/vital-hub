@@ -16,11 +16,7 @@ namespace WebAPI.Repositories
         public Medico AtualizarPerfil(Guid Id, MedicoViewModel medico)
         {
 
-<<<<<<< HEAD
             Medico medicoBuscado = ctx.Medicos.FirstOrDefault(x => x.Id == Id)!;
-=======
-            if (medicoBuscado == null) return null; 
->>>>>>> c1f8745a603e3a7f7a688866b3dd5fe54ea57cc8
 
 
             if (medicoBuscado == null) return null!;

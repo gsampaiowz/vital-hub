@@ -11,18 +11,20 @@ if (!global.btoa) {
 }
 
 export const userDecodeToken = async () => {
-  const user = await AsyncStorage.getItem("token");
+  const user = JSON.parse(await AsyncStorage.getItem("token")).token;
 
   if (user === null) {
     return null;
   }
 
   //Decodifica o token recebido
-  const decoded = jwtDecode(token);
+  const decoded = jwtDecode(user);
 
   return {
     name: decoded.name,
     role: decoded.role,
     email: decoded.email,
+    id: decoded.id,
+    token: user
   };
 };
