@@ -12,13 +12,15 @@ import MapViewDirections from "react-native-maps-directions";
 import { ActivityIndicator, View } from "react-native";
 import { Title } from "../Title";
 
-export const Maps = () => {
+export const Maps = ({
+  localicao
+}) => {
   const mapsReference = useRef(null);
 
   const [initialPosition, setInitialPosition] = useState(null);
   const finalPosition = {
-    latitude: -23.686959,
-    longitude: -46.44311019,
+    latitude: -23.689007,
+    longitude: -46.590585,
   };
 
   async function CapturarLocalizacao() {
@@ -40,8 +42,8 @@ export const Maps = () => {
             longitude: initialPosition.coords.longitude,
           },
           {
-            latitude: finalPosition.latitude,
-            longitude: finalPosition.longitude,
+            latitude: localicao.endereco.latitude,
+            longitude: localicao.endereco.longitude,
           },
         ],
         {
@@ -93,8 +95,8 @@ export const Maps = () => {
         height: "100%",
       }}
       initialRegion={{
-        latitude: finalPosition.latitude,
-        longitude: finalPosition.longitude,
+        latitude: localicao.endereco.latitude,
+        longitude: localicao.endereco.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
@@ -103,8 +105,8 @@ export const Maps = () => {
       {/* Criando um marcador no mapa */}
       <Marker
         coordinate={{
-          latitude: finalPosition.latitude,
-          longitude: finalPosition.longitude,
+          latitude: localicao.endereco.latitude,
+          longitude: localicao.endereco.longitude,
         }}
         title="Senai Paulo Skaf"
         description="Melhor escola de tecnologia do Brasil"
@@ -114,8 +116,8 @@ export const Maps = () => {
       <MapViewDirections
         origin={initialPosition.coords}
         destination={{
-          latitude: finalPosition.latitude,
-          longitude: finalPosition.longitude,
+          latitude: localicao.endereco.latitude,
+          longitude: localicao.endereco.longitude,
         }}
         apikey={mapskey}
         strokeWidth={5}
