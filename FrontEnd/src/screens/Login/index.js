@@ -1,5 +1,5 @@
 import { Logo } from "../../components/Logo";
-import { ContainerScroll, ContainerSpacing } from "../../components/Container";
+import { ContainerSafe, ContainerSpacing } from "../../components/Container";
 import LogoImage from "../../assets/img/Logo.png";
 import { Title } from "./../../components/Title/index";
 import { Input } from "../../components/Input";
@@ -14,13 +14,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { Subtitle } from "../../components/Subtitle";
 import api from "../../service/service";
-import { ActivityIndicator } from 'react-native';
-
+import { ActivityIndicator } from "react-native";
 
 export const Login = ({ navigation }) => {
   const [dateHistory, setDateHistory] = useState({}); //SALVAR O OBJ COM HISTORICO DE ACESSO
 
-  const[carregando, setCarregando] = useState(false)
+  const [carregando, setCarregando] = useState(false);
 
   //FUNCAO PARA VERIFICAR SE EXISTE BIOMETRIA NO APARELHO
   async function CheckExistAuthentication() {
@@ -89,13 +88,13 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "paciente@gmail.com",
+    email: "paciente@email.com",
     senha: "paciente123",
   });
 
   //METODO LOGIN COM API
   async function Login() {
-    setCarregando(true)
+    setCarregando(true);
     await api
       .post("/Login", {
         email: inputs.email,
@@ -103,6 +102,7 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
+        console.log(response.data);
         navigation.navigate("Main");
       })
       .catch((error) => {
@@ -111,13 +111,11 @@ export const Login = ({ navigation }) => {
         }
         Toast.error("Email ou senha incorretos: " + error);
       });
-      setCarregando(false)
-
-    navigation.navigate("Main");
+    setCarregando(false);
   }
 
   return (
-    <ContainerScroll>
+    <ContainerSafe>
       <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <Logo source={LogoImage} />
@@ -141,9 +139,11 @@ export const Login = ({ navigation }) => {
           />
         </Group>
         <Group gap={10}>
-
-          
-          <Button disabled={carregando} onPress={() => Login()} text={carregando ? <ActivityIndicator/> : "Entrar" }/>
+          <Button
+            disabled={carregando}
+            onPress={() => Login()}
+            text={carregando ? <ActivityIndicator /> : "Entrar"}
+          />
 
           <Button
             onPress={() => HandleAuthentication()}
@@ -175,6 +175,6 @@ export const Login = ({ navigation }) => {
           </Group>
         ) : null}
       </ContainerSpacing>
-    </ContainerScroll>
+    </ContainerSafe>
   );
 };

@@ -239,7 +239,6 @@ C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\st
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.WebAPI.props
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\staticwebassets.pack.json
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\scopedcss\bundle\WebAPI.styles.css
-C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.csproj.CopyComplete
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.dll
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\refint\WebAPI.dll
 C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
@@ -411,3 +410,4 @@ C:\Users\47195701867\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\re
 C:\Users\47195701867\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.pdb
 C:\Users\47195701867\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.genruntimeconfig.cache
 C:\Users\47195701867\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\ref\WebAPI.dll
+C:\Users\42591939888\Desktop\vital-hub\BackEnd\WebAPI\WebAPI\obj\Debug\net7.0\WebAPI.csproj.Up2Date

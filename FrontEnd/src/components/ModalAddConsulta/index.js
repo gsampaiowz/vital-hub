@@ -36,6 +36,7 @@ const SelectTipoConsulta = styled(RNPickerSelect)`
 
 export const ModalAddConsulta = ({
   items,
+  navigation,
   setShowModalConsulta,
   visible = false,
   ...rest
@@ -64,7 +65,7 @@ export const ModalAddConsulta = ({
             />
             <Input placeholder="Informe a localização" />
             <Group gap={10}>
-              <Button text="Continuar"/>
+              <Button onPress={() => navigation.navigate("")} text="Continuar"/>
               <Button
                 onPress={() => setShowModalConsulta(false)}
                 outlined

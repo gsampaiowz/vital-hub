@@ -6,13 +6,13 @@ using WebAPI.Utils;
 using WebAPI.ViewModels;
 
 namespace WebAPI.Repositories
-{
-    public class PacienteRepository : IPacienteRepository
     {
+    public class PacienteRepository : IPacienteRepository
+        {
         VitalContext ctx = new VitalContext();
 
         public Paciente AtualizarPerfil(Guid Id, PacienteViewModel paciente)
-        {
+            {
             //foto
             //data nascimento
             //cpf
@@ -42,41 +42,45 @@ namespace WebAPI.Repositories
             ctx.SaveChanges();
 
             return pacienteBuscado!;
-        }
+            }
 
         public List<Consulta> BuscarAgendadas(Guid Id)
-        {
+            {
             return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Agendada").ToList();
-        }
+            }
 
         public List<Consulta> BuscarCanceladas(Guid Id)
-        {
+            {
             return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Cancelada").ToList();
-        }
+            }
 
         public List<Consulta> BuscarPorData(DateTime dataConsulta, Guid idPaciente)
-        {
-           return ctx.Consultas
-                .Include(x => x.Situacao)
-                .Where(x  => x.PacienteId == idPaciente && x.DataConsulta == dataConsulta)
-                .ToList();
-        }
+            {
+            return ctx.Consultas
+                 .Include(x => x.Situacao)
+                 .Include(x => x.Prioridade)
+                 .Include(x => x.MedicoClinica!.Medico!.IdNavigation)
+                 // diferença em dias entre a Data da Consulta e a dataConsulta é igual a 0.
+                 .Where(x => x.Paciente!.Id == idPaciente && EF.Functions.DateDiffDay(x.DataConsulta, dataConsulta) == 0)
+                 .ToList();
+            }
+
 
         public Paciente BuscarPorId(Guid Id)
-        {
-            return ctx.Pacientes.FirstOrDefault(x => x.Id == Id);
-        }
+            {
+            return ctx.Pacientes.FirstOrDefault(x => x.Id == Id)!;
+            }
 
         public List<Consulta> BuscarRealizadas(Guid Id)
-        {
+            {
             return ctx.Consultas.Include(x => x.Situacao).Where(x => x.PacienteId == Id && x.Situacao.Situacao == "Realizada").ToList();
-        }
+            }
 
         public void Cadastrar(Usuario user)
-        {
+            {
             user.Senha = Criptografia.GerarHash(user.Senha!);
             ctx.Usuarios.Add(user);
             ctx.SaveChanges();
+            }
         }
     }
-}

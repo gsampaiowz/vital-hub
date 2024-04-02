@@ -15,11 +15,11 @@ import api from "../../service/service";
 import moment from "moment/moment";
 
 export const Home = ({ navigation }) => {
-  const [statusButtons, setStatusButtons] = useState("Agendadas");
+  const [statusButtons, setStatusButtons] = useState("agendadas");
 
-  const [data, setData] = useState(moment())
+  const [data, setData] = useState(moment());
 
-  const [consultas, setConsultas] = useState([])
+  const [consultas, setConsultas] = useState([]);
 
   const [showModalConsulta, setShowModalConsulta] = useState(false);
 
@@ -37,19 +37,22 @@ export const Home = ({ navigation }) => {
 
   async function getConsultas() {
     try {
-
-      const response = await api.get(`/Pacientes/BuscarPorData?data=${new Date(data).toLocaleDateString().split("/").reverse().join("-")}&id=${user.id}`)
-      setConsultas(response.data)
+      const response = await api.get(
+        `/Pacientes/BuscarPorData?data=${new Date(data)
+          .toLocaleDateString()
+          .split("/")
+          .reverse()
+          .join("-")}&id=${user.id}`
+      );
+      setConsultas(response.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
-
   useEffect(() => {
-    getConsultas()
-  }, [data, user.jti])
-
+    getConsultas();
+  }, [data, user.jti]);
 
   useEffect(() => {
     async function ProfileLoad() {
@@ -59,11 +62,9 @@ export const Home = ({ navigation }) => {
   }, []);
 
   return (
-    <ContainerSafe>
+    <ContainerSafe style={{ paddingTop: 0 }}>
       <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
-      <Calendar
-        data={data}
-        setData={setData} />
+      <Calendar data={data} setData={setData} />
 
       <ContainerSpacing>
         <Group row>
@@ -100,7 +101,10 @@ export const Home = ({ navigation }) => {
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
               categoria={item.categoria}
-              horario={new Date(item.dataConsulta).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              horario={new Date(item.dataConsulta).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
               situacao={item.situacao.situacao}
             />
           )
@@ -128,6 +132,7 @@ export const Home = ({ navigation }) => {
       )}
       {showModalConsulta && (
         <ModalAddConsulta
+        navigation={navigation}
           setShowModalConsulta={setShowModalConsulta}
           visible={showModalConsulta}
           items={tiposConsulta}
