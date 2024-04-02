@@ -27,12 +27,6 @@ export const Home = ({ navigation }) => {
 
   const [showModalProntuario, setShowModalProntuario] = useState(false);
 
-  const tiposConsulta = [
-    { label: "Cardiologista", value: "cardiologista" },
-    { label: "Ortopedista", value: "ortopedista" },
-    { label: "Dermatologista", value: "dermatologista" },
-  ];
-
   const [user, setUser] = useState({});
 
   async function getConsultas() {
@@ -45,6 +39,7 @@ export const Home = ({ navigation }) => {
           .join("-")}&id=${user.id}`
       );
       setConsultas(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -52,14 +47,15 @@ export const Home = ({ navigation }) => {
 
   useEffect(() => {
     getConsultas();
-  }, [data, user.jti]);
+  }, [data]);
 
   useEffect(() => {
-    async function ProfileLoad() {
-      setUser(await userDecodeToken());
-    }
     ProfileLoad();
   }, []);
+
+  async function ProfileLoad() {
+    setUser(await userDecodeToken());
+  }
 
   return (
     <ContainerSafe style={{ paddingTop: 0 }}>
@@ -95,9 +91,16 @@ export const Home = ({ navigation }) => {
         renderItem={({ item }) =>
           statusButtons === item.situacao.situacao && (
             <CardConsulta
+              user={user}
               image={require("./../../assets/img/UserImage.jpg")}
-              name={item.descricao}
-              idade={item.idade}
+              name={item.medicoClinica.medico.idNavigation.nome}
+              idade={
+                item.prioridade.prioridade === 0
+                  ? "Exame"
+                  : item.prioridade.prioridade === 1
+                  ? "Rotina"
+                  : "Urgência"
+              }
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
               categoria={item.categoria}
@@ -132,10 +135,9 @@ export const Home = ({ navigation }) => {
       )}
       {showModalConsulta && (
         <ModalAddConsulta
-        navigation={navigation}
+          navigation={navigation}
           setShowModalConsulta={setShowModalConsulta}
           visible={showModalConsulta}
-          items={tiposConsulta}
         />
       )}
     </ContainerSafe>
