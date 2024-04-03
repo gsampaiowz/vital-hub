@@ -42,8 +42,8 @@ export const CardConsulta = ({
   situacao,
   setShowModalProntuario,
   setShowModalCancel,
+  user,
 }) => {
-
   const [showLocalModal, setShowLocalModal] = useState(false);
 
   return (
@@ -52,7 +52,11 @@ export const CardConsulta = ({
       <Group gap={5}>
         <Title fontSize={16} text={name} />
         <Group flexWrap gap={5} row>
-          <Subtitle fontSize={14} color="#8C8A97" text={idade + " anos"} />
+          <Subtitle
+            fontSize={14}
+            color="#8C8A97"
+            text={user.role === "Paciente" ? idade + " anos" : idade}
+          />
           <Subtitle fontSize={14} color="#8C8A97" bold text={categoria} />
         </Group>
         <Group
@@ -75,7 +79,7 @@ export const CardConsulta = ({
           />
         </Group>
       </Group>
-      {situacao === "Agendadas" ? (
+      {situacao === "agendadas" ? (
         <Button
           width={150}
           spacing={4}
@@ -86,7 +90,7 @@ export const CardConsulta = ({
           color="#C81D25"
           text="Cancelar"
         />
-      ) : situacao === "Realizadas" ? (
+      ) : situacao === "realizadas" ? (
         <Button
           width={160}
           spacing={4}
