@@ -6,6 +6,8 @@ import { Subtitle } from "./../Subtitle/index";
 import { Button } from "../Button";
 import { Input } from "./../Input/index";
 import { Modal } from "react-native";
+import { useEffect, useState } from "react";
+import api from "../../service/service";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -30,17 +32,51 @@ const ModalContent = styled.View`
 
   align-items: center;
 `;
-const SelectTipoConsulta = styled(RNPickerSelect)`
+const MySelect = styled(RNPickerSelect)`
   width: 90%;
 `;
 
 export const ModalAddConsulta = ({
-  items,
   navigation,
   setShowModalConsulta,
   visible = false,
   ...rest
 }) => {
+  const tiposConsulta = [
+    { label: "Exame", value: 0 },
+    { label: "Rotina", value: 1 },
+    { label: "Urgência", value: 2 },
+  ];
+
+  const [clinicaSelecionada, setClinicaSelecionada] = useState({});
+
+  const [clinicas, setClinicas] = useState([]);
+
+  useEffect(() => {
+    getClinicas();
+  }, []);
+
+  let clinicasArray = [];
+
+  async function getClinicas() {
+    try {
+      const response = await api.get("/Clinica/ListarTodas");
+      setClinicas(response.data);
+      clinicasArray.push()
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const [prioridade, setPrioridade] = useState(undefined);
+
+  function Continue() {
+    if (prioridade) {
+      setShowModalConsulta(false);
+      navigation.navigate("SelecionarClinica");
+    }
+  }
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -53,9 +89,10 @@ export const ModalAddConsulta = ({
               color="black"
               text="Informe o tipo de consulta"
             />
-            <SelectTipoConsulta
+            <MySelect
               placeholder={{ label: "Tipo de consulta" }}
-              items={items}
+              items={tiposConsulta}
+              onValueChange={(value) => setPrioridade(value)}
             />
             <Subtitle
               bold
@@ -63,9 +100,14 @@ export const ModalAddConsulta = ({
               color="black"
               text="Informe a localização desejada"
             />
-            <Input placeholder="Informe a localização" />
+            <MySelect
+              placeholder={{ label: "Clínica" }}
+              items={clinicas}
+              
+              onValueChange={(value) => setClinicaSelecionada(value)}
+            />
             <Group gap={10}>
-              <Button onPress={() => navigation.navigate("")} text="Continuar"/>
+              <Button onPress={() => Continue()} text="Continuar" />
               <Button
                 onPress={() => setShowModalConsulta(false)}
                 outlined
