@@ -44,10 +44,9 @@ export const MyModal = ({
   visible = false,
   setShowModal,
   image,
-  nome,
-  email,
-  info,
+  item,
   navigation,
+  user,
   ...rest
 }) => {
   const [sound, setSound] = useState(null);
@@ -71,7 +70,7 @@ export const MyModal = ({
 
   //FUNCAO PARA LIDAR COM A CHAMADA DE NOTIFICACAO
   const HandleCallNotifications = async () => {
-    setShowModal(false)
+    setShowModal(false);
 
     //OBTEM O STATUS DA PERMISSAO
     const { status } = await Notifications.getPermissionsAsync();
@@ -93,6 +92,25 @@ export const MyModal = ({
     });
   };
 
+  console.log(item);
+
+  let nome, info, email;
+
+  if (item) {
+    if (user.role === "paciente") {
+      nome = item.medicoClinica.medico.idNavigation.nome;
+      email = item.medicoClinica.medico.idNavigation.email;
+      info = item.medicoClinica.medico.crm;
+    } else {
+      nome = item.paciente.idNavigation.nome;
+      email = item.paciente.idNavigation.email;
+      info =
+        new Date() -
+        new Date(item.paciente.idNavigation.DataNascimento) +
+        " Anos";
+    }
+  }
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -101,14 +119,17 @@ export const MyModal = ({
             <>
               <Title text="Cancelar consulta" />
               <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
-              <Button onPress={() => HandleCallNotifications()} text="CONFIRMAR" />
+              <Button
+                onPress={() => HandleCallNotifications()}
+                text="CONFIRMAR"
+              />
             </>
           ) : (
             <>
               <ImageModal source={image} />
               <Title text={nome} />
               <Group row gap={5}>
-                <Subtitle fontSize={12} text={info + " anos"} />
+                <Subtitle fontSize={12} text={info} />
                 <Subtitle fontSize={12} text={email} />
               </Group>
               <Button

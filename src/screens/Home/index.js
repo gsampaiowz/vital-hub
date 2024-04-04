@@ -32,9 +32,11 @@ export const Home = ({ navigation }) => {
   const [user, setUser] = useState({});
 
   async function getConsultas() {
+    const url = user.role === "paciente" ? "Pacientes" : "Medicos";
+
     try {
       const response = await api.get(
-        `/Pacientes/BuscarPorData?data=${new Date(data)
+        `/${url}/BuscarPorData?data=${new Date(data)
           .toLocaleDateString()
           .split("/")
           .reverse()
@@ -49,14 +51,10 @@ export const Home = ({ navigation }) => {
   useEffect(() => {
     getConsultas();
   }, [data]);
-  
+
   useEffect(() => {
     ProfileLoad();
   }, []);
-
-  useEffect(() => {
-    console.log("sim");
-  }, [consultaSelecionada]);
 
   async function ProfileLoad() {
     setUser(await userDecodeToken());
@@ -96,6 +94,8 @@ export const Home = ({ navigation }) => {
         renderItem={({ item }) =>
           statusButtons === item.situacao.situacao && (
             <CardConsulta
+            clinica={item.medicoClinica.clinicaId}
+            navigation={navigation}
               onPress={setConsultaSelecionada(item)}
               user={user}
               image={require("./../../assets/img/UserImage.jpg")}
@@ -107,12 +107,11 @@ export const Home = ({ navigation }) => {
               info={
                 user.role === "paciente"
                   ? item.medicoClinica.medico.crm
-                  : new Date(item.paciente.DataNascimento) -
-                    new Date()
+                  : new Date(item.paciente.DataNascimento) - new Date()
               }
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
-              categoria={item.categoria}
+              prioridade={item.prioridade.prioridade}
               horario={new Date(item.dataConsulta).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -130,13 +129,8 @@ export const Home = ({ navigation }) => {
         visible={showModalCancel}
       />
       <MyModal
-        // nome={consultaSelecionada && 
-        //   user.role === "Paciente"
-        //     ? consultaSelecionada.medicoClinica.medico.idNavigation.nome
-        //     : consultaSelecionada.paciente.idNavigation.nome
-        // }
-        email={"sim"}
-        info={32}
+        user={user}
+        item={consultaSelecionada}
         image={require("./../../assets/img/UserImage.jpg")}
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}

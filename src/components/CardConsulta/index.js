@@ -6,6 +6,7 @@ import { Button } from "./../Button/index";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { ModalVerLocal } from "../ModalVerLocal";
+import api from "../../service/service";
 
 const CardConsultaStyled = styled.Pressable`
   width: 90%;
@@ -35,17 +36,22 @@ const CardConsultaImage = styled.Image`
 
 export const CardConsulta = ({
   image,
+  clinica,
   name,
   info,
-  categoria,
+  prioridade,
   horario,
   situacao,
   setShowModalProntuario,
   setShowModalCancel,
   user,
+  navigation,
   onPress,
 }) => {
   const [showLocalModal, setShowLocalModal] = useState(false);
+
+  const nivelPrioridade =
+    prioridade === 0 ? "Exame" : prioridade === 1 ? "Rotina" : "Urgência";
 
   return (
     <CardConsultaStyled
@@ -63,7 +69,7 @@ export const CardConsulta = ({
             color="#8C8A97"
             text={user.role === "Paciente" ? info + " anos" : info}
           />
-          <Subtitle fontSize={14} color="#8C8A97" bold text={categoria} />
+          <Subtitle fontSize={14} color="#8C8A97" bold text={nivelPrioridade} />
         </Group>
         <Group
           padding={2}
@@ -109,11 +115,13 @@ export const CardConsulta = ({
         />
       ) : null}
       <ModalVerLocal
+        clinica={clinica}
+        navigation={navigation}
         setShowLocalModal={setShowLocalModal}
         visible={showLocalModal}
         name={name}
-        categoria={categoria}
-        crm={info}
+        prioridade={nivelPrioridade}
+        info={info}
       />
     </CardConsultaStyled>
   );
