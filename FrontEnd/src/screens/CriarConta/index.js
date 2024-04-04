@@ -9,10 +9,27 @@ import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { Title } from "./../../components/Title";
 import { Group } from "../../components/Group";
+import { useState } from "react";
+import ToastManager, { Toast } from "toastify-react-native";
 
 export const CriarConta = ({ navigation }) => {
+
+  const [email, setEmail] = useState('pacientenovo@email.com')
+  const [senha, setSenha] = useState('pacientenovo')
+  const [confirmarSenha, setConfirmarSenha] = useState('pacientenovo')
+
+  function criarConta() {
+    if (senha !== confirmarSenha) {
+      Toast.error("As senha não são iguais")
+      return;
+    }
+    navigation.navigate("Perfil", { senha: senha, email: email })
+  }
+  // console.log(senha)
+
   return (
     <ContainerScroll>
+      <ToastManager />
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -26,12 +43,24 @@ export const CriarConta = ({ navigation }) => {
         <Subtitle text="Insira seu endereço de e-mail e senha para realizar seu cadastro." />
 
         <Group gap={10}>
-          <Input placeholder="Usuário ou E-mail" />
-          <Input placeholder="Senha" />
-          <Input placeholder="Confirmar Senha" />
+          <Input
+            inputValue={email}
+            placeholder="Usuário ou E-mail"
+            on
+            onChange={text => setEmail(text)}
+          />
+          <Input placeholder="Senha"
+            inputValue={senha}
+            onChange={text => setSenha(text)}
+
+            secureTextEntry={true}
+          />
+          <Input placeholder="Confirmar Senha"
+            inputValue={confirmarSenha}
+            onChange={text => setConfirmarSenha(text)} />
         </Group>
 
-        <Button text="Cadastrar" onPress={() => navigation.navigate("Login")} />
+        <Button text="Cadastrar" onPress={() => criarConta()} />
         <Link
           doubleColor
           text2="Já possui uma conta? "

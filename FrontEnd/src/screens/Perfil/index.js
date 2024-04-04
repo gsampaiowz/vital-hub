@@ -8,17 +8,48 @@ import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../../utils/Auth";
+import { useRoute } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-web";
+import api from "../../service/service";
 
-export const Perfil = ({ navigation }) => {
-  const [editMode, setEditMode] = useState(false);
+export const Perfil = ({ navigation, route }) => {
+  const [editMode, setEditMode] = useState(true);
 
   const [inputs, setInputs] = useState({
-    dataNascimento: "",
-    cpf: "",
-    endereco: "",
-    cep: "",
-    cidade: "",
+    dataNascimento: "02/04/2000",
+    cpf: "32132132121",
+    endereco: "Rua talvez sim",
+    cep: "12123123",
+    cidade: "Olimpia",
   });
+
+  const senha = route.params.senha;
+  const email = route.params.email;
+
+  // arrumar o metodo de poste
+
+  async function fillProfile() {
+    try {
+      await api.post("/Pacientes", {
+        rg: "3123432",
+        cpf: inputs.cpf,
+        logradouro: inputs.endereco,
+        cep: inputs.cep,
+        cidade: inputs.cidade,
+        numero: 10,
+        nome: "Sergio",
+        email: email,
+        senha: senha,
+        idTipoUsuario: "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3",
+        foto: "string",
+        dataNascimento: new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString()
+      })
+
+      console.log("foi");
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function Logout() {
     //Remover token do AsyncStorage
@@ -89,8 +120,13 @@ export const Perfil = ({ navigation }) => {
         </Group>
         <Group gap={10}>
           <Button
-            onPress={() => setEditMode(!editMode)}
+            onPress={() => {
+              fillProfile();
+              // setEditMode(!editMode)
+            }
+            }
             text={editMode ? "SALVAR" : "EDITAR"}
+
           />
 
           <Button onPress={() => Logout()} outlined text="SAIR DA CONTA" />
