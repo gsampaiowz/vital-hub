@@ -15,6 +15,7 @@ import api from "../../service/service";
 export const Perfil = ({ navigation, route }) => {
   const [editMode, setEditMode] = useState(true);
 
+
   const [inputs, setInputs] = useState({
     dataNascimento: "02/04/2000",
     cpf: "32132132121",
@@ -45,7 +46,15 @@ export const Perfil = ({ navigation, route }) => {
         dataNascimento: new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString()
       })
 
-      console.log("foi");
+      console.log("Cadastrado com sucesso");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updatePatient() {
+    try {
+      await api.put("/Pacientes?idUsuario=ADD7ADE1-9E19-44AC-B426-B90842077991")
     } catch (error) {
       console.log(error);
     }
@@ -120,9 +129,13 @@ export const Perfil = ({ navigation, route }) => {
         </Group>
         <Group gap={10}>
           <Button
-            onPress={() => {
+            onPress={!user ? () => {
               fillProfile();
-              // setEditMode(!editMode)
+              navigation.navigate("Login")
+            } : () => {
+
+              setEditMode(!editMode)
+              updatePatient()
             }
             }
             text={editMode ? "SALVAR" : "EDITAR"}
