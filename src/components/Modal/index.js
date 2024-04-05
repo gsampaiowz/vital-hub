@@ -133,11 +133,23 @@ export const MyModal = ({
                 <Subtitle fontSize={12} text={email} />
               </Group>
               <Button
-                onPress={() => navigation.replace("Prontuario")}
+                onPress={() => {
+                  setShowModal(false);
+                  navigation.navigate("Prontuario", {
+                    consulta: item,
+                    user: user,
+                  });
+                }}
                 text="INSERIR PRONTUÁRIO"
               />
               <Button
-                onPress={() => navigation.replace("Prescricao")}
+                onPress={() => {
+                  setShowModal(false);
+                  navigation.navigate("Prescricao", {
+                    consulta: item,
+                    user: user,
+                  });
+                }}
                 text="VER PRONTUÁRIO"
               />
             </>

@@ -88,8 +88,8 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "paciente@email.com",
-    senha: "paciente123",
+    email: "medico2@email.com",
+    senha: "medico123",
   });
 
   //METODO LOGIN COM API
@@ -102,7 +102,6 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
-        console.log(response.data);
         navigation.navigate("Main");
       })
       .catch((error) => {

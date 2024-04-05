@@ -46,7 +46,7 @@ export const LocalConsulta = ({ navigation, route }) => {
           />
           <Input
             border={false}
-            label="Bairro"
+            label="CEP"
             inputValue={clinica.endereco.cep}
           />
         </ContainerSpacing>

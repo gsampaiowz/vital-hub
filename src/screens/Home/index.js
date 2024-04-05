@@ -94,20 +94,23 @@ export const Home = ({ navigation }) => {
         renderItem={({ item }) =>
           statusButtons === item.situacao.situacao && (
             <CardConsulta
-            clinica={item.medicoClinica.clinicaId}
-            navigation={navigation}
+              // clinica={item.medicoClinica.clinicaId}
+              navigation={navigation}
               onPress={setConsultaSelecionada(item)}
               user={user}
               image={require("./../../assets/img/UserImage.jpg")}
               name={
                 user.role === "paciente"
                   ? item.medicoClinica.medico.idNavigation.nome
-                  : item.paciente.nome
+                  : item.paciente.idNavigation.nome
               }
               info={
                 user.role === "paciente"
                   ? item.medicoClinica.medico.crm
-                  : new Date(item.paciente.DataNascimento) - new Date()
+                  : moment().diff(
+                      new Date(item.paciente.dataNascimento),
+                      'years'
+                    )
               }
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
@@ -130,6 +133,7 @@ export const Home = ({ navigation }) => {
       />
       <MyModal
         user={user}
+        navigation={navigation}
         item={consultaSelecionada}
         image={require("./../../assets/img/UserImage.jpg")}
         setShowModal={setShowModalProntuario}

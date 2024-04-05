@@ -67,7 +67,7 @@ export const CardConsulta = ({
           <Subtitle
             fontSize={14}
             color="#8C8A97"
-            text={user.role === "Paciente" ? info + " anos" : info}
+            text={user.role === "medico" ? info + " anos" : info}
           />
           <Subtitle fontSize={14} color="#8C8A97" bold text={nivelPrioridade} />
         </Group>
