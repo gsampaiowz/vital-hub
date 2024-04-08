@@ -6,6 +6,7 @@ import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
 export const Prontuario = ({ route }) => {
   const [editMode, setEditMode] = useState(false);
@@ -29,10 +30,7 @@ export const Prontuario = ({ route }) => {
   } else {
     nome = consulta.paciente.idNavigation.nome;
     email = consulta.paciente.idNavigation.email;
-    info =
-      new Date() -
-      new Date(consulta.paciente.idNavigation.DataNascimento) +
-      " Anos";
+    info = moment().diff(new Date(consulta.paciente.dataNascimento), "years");
   }
 
   useEffect(() => {
@@ -41,6 +39,8 @@ export const Prontuario = ({ route }) => {
       descricao: consulta.descricao,
       diagnostico: consulta.diagnostico,
     });
+
+    console.log(consulta);
   }, []);
 
   return (
@@ -51,8 +51,8 @@ export const Prontuario = ({ route }) => {
         <Title text={nome} />
 
         <Group row>
-          <Subtitle text={info} />
-          <Subtitle text={email} />
+          <Subtitle text={info + " anos"} />
+          <Subtitle bold text={email} />
         </Group>
 
         <Input

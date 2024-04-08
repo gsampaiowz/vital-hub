@@ -11,6 +11,7 @@ import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
+import moment from "moment";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -104,10 +105,7 @@ export const MyModal = ({
     } else {
       nome = item.paciente.idNavigation.nome;
       email = item.paciente.idNavigation.email;
-      info =
-        new Date() -
-        new Date(item.paciente.idNavigation.DataNascimento) +
-        " Anos";
+      info = moment().diff(new Date(item.paciente.dataNascimento), "years");
     }
   }
 
@@ -128,9 +126,9 @@ export const MyModal = ({
             <>
               <ImageModal source={image} />
               <Title text={nome} />
-              <Group row gap={5}>
-                <Subtitle fontSize={12} text={info} />
-                <Subtitle fontSize={12} text={email} />
+              <Group row>
+                <Subtitle fontSize={12} text={info + " anos"} />
+                <Subtitle bold fontSize={12} text={email} />
               </Group>
               <Button
                 onPress={() => {

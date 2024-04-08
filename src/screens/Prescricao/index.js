@@ -11,6 +11,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
+import moment from "moment";
 
 const Divider = styled.View`
   width: 100%;
@@ -58,10 +59,7 @@ export const Prescricao = ({ route }) => {
   } else {
     nome = consulta.paciente.idNavigation.nome;
     email = consulta.paciente.idNavigation.email;
-    info =
-      new Date() -
-      new Date(consulta.paciente.idNavigation.DataNascimento) +
-      " Anos";
+    info = moment().diff(new Date(consulta.paciente.dataNascimento), "years");
   }
 
   useEffect(() => {
@@ -86,8 +84,8 @@ export const Prescricao = ({ route }) => {
         <Title text={nome} />
 
         <Group row>
-          <Subtitle text={info} />
-          <Subtitle text={email} />
+          <Subtitle text={info + " anos"} />
+          <Subtitle bold text={email} />
         </Group>
 
         <Input

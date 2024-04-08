@@ -94,7 +94,7 @@ export const Home = ({ navigation }) => {
         renderItem={({ item }) =>
           statusButtons === item.situacao.situacao && (
             <CardConsulta
-              // clinica={item.medicoClinica.clinicaId}
+              clinica={item.medicoClinica.clinicaId}
               navigation={navigation}
               onPress={setConsultaSelecionada(item)}
               user={user}
@@ -109,7 +109,7 @@ export const Home = ({ navigation }) => {
                   ? item.medicoClinica.medico.crm
                   : moment().diff(
                       new Date(item.paciente.dataNascimento),
-                      'years'
+                      "years"
                     )
               }
               setShowModalCancel={setShowModalCancel}
