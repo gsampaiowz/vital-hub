@@ -93,8 +93,6 @@ export const MyModal = ({
     });
   };
 
-  console.log(item);
-
   let nome, info, email;
 
   if (item) {
@@ -134,7 +132,7 @@ export const MyModal = ({
                 onPress={() => {
                   setShowModal(false);
                   navigation.navigate("Prontuario", {
-                    consulta: item,
+                    consultaId: item.id,
                     user: user,
                   });
                 }}

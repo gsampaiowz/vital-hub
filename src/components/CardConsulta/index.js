@@ -115,6 +115,7 @@ export const CardConsulta = ({
         />
       ) : null}
       <ModalVerLocal
+        user={user}
         clinica={clinica}
         navigation={navigation}
         setShowLocalModal={setShowLocalModal}

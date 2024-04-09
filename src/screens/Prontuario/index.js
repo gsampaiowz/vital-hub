@@ -7,6 +7,7 @@ import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import api from "./../../service/service";
 
 export const Prontuario = ({ route }) => {
   const [editMode, setEditMode] = useState(false);
@@ -17,42 +18,92 @@ export const Prontuario = ({ route }) => {
     prescricao: "",
   });
 
+  const [consulta, setConsulta] = useState({});
+
   const user = route.params.user;
 
-  const consulta = route.params.consulta;
+  const consultaId = route.params.consultaId;
 
-  let nome, info, email;
-
-  if (user.role === "paciente") {
-    nome = consulta.medicoClinica.medico.idNavigation.nome;
-    email = consulta.medicoClinica.medico.idNavigation.email;
-    info = consulta.medicoClinica.medico.crm;
-  } else {
-    nome = consulta.paciente.idNavigation.nome;
-    email = consulta.paciente.idNavigation.email;
-    info = moment().diff(new Date(consulta.paciente.dataNascimento), "years");
-  }
+  const [dados, setDados] = useState({
+    nome: "",
+    info: "",
+    email: "",
+  });
 
   useEffect(() => {
-    setInputs({
-      ...inputs,
-      descricao: consulta.descricao,
-      diagnostico: consulta.diagnostico,
-    });
-
-    console.log(consulta);
+    getConsulta();
   }, []);
+
+  async function getConsulta() {
+    try {
+      console.log("começo");
+      await api
+        .get("Consultas/BuscarPorId?id=" + consultaId)
+        .then((response) => {
+          console.log(response.data);
+          setInputs({
+            ...inputs,
+            descricao: response.data.descricao,
+            diagnostico: response.data.diagnostico,
+            prescricao:
+              "Observado: " +
+              response.data.receita.observacoes +
+              "\nMedicamento: " +
+              response.data.receita.medicamento,
+          });
+
+          if (user.role === "paciente") {
+            setDados({
+              nome: response.data.medicoClinica.medico.idNavigation.nome,
+              email: response.data.medicoClinica.medico.idNavigation.email,
+              info: response.data.medicoClinica.medico.crm,
+            });
+          } else {
+            setDados({
+              nome: response.data.paciente.idNavigation.nome,
+              email: response.data.paciente.idNavigation.email,
+              info: moment().diff(
+                new Date(response.data.paciente.dataNascimento),
+                "years"
+              ),
+            });
+          }
+          setConsulta(response.data);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateProntuario() {
+    const prescricao = inputs.prescricao.split("\n");
+    try {
+      await api.put("Consultas/Prontuario", {
+        id: consulta.id,
+        situacaoId: consulta.situacaoId,
+        pacienteId: consulta.pacienteId,
+        medicoClinicaId: consulta.medicoClinicaId,
+        receitaId: consulta.receitaId,
+        prioridadeId: consulta.prioridadeId,
+        dataConsulta: consulta.dataConsulta,
+        diagnostico: inputs.diagnostico,
+        descricao: inputs.descricao,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
       <ContainerSpacing>
-        <Title text={nome} />
+        <Title text={dados.nome} />
 
         <Group row>
-          <Subtitle text={info + " anos"} />
-          <Subtitle bold text={email} />
+          <Subtitle text={dados.info + " anos"} />
+          <Subtitle bold text={dados.email} />
         </Group>
 
         <Input
@@ -82,7 +133,10 @@ export const Prontuario = ({ route }) => {
         />
         <Group gap={10}>
           <Button
-            onPress={() => setEditMode(!editMode)}
+            onPress={() => {
+              setEditMode(!editMode);
+              editMode && updateProntuario();
+            }}
             text={editMode ? "SALVAR" : "EDITAR"}
           />
 
