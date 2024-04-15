@@ -5,13 +5,12 @@ import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
-import moment from "moment";
 
 const Divider = styled.View`
   width: 100%;
@@ -29,14 +28,8 @@ const ImagePress = styled.TouchableOpacity`
   width: 100%;
 `;
 
-export const Prescricao = ({ route }) => {
+export const Prescricao = () => {
   const [editMode, setEditMode] = useState(false);
-
-  const [inputs, setInputs] = useState({
-    descricao: "",
-    diagnostico: "",
-    prescricao: "",
-  });
 
   const [inCamera, setInCamera] = useState(false);
 
@@ -46,60 +39,28 @@ export const Prescricao = ({ route }) => {
 
   const [isPhotoSaved, setIsPhotoSaved] = useState(false);
 
-  const user = route.params.user;
-
-  const consulta = route.params.consulta;
-
-  let nome, info, email;
-
-  if (user.role === "paciente") {
-    nome = consulta.medicoClinica.medico.idNavigation.nome;
-    email = consulta.medicoClinica.medico.idNavigation.email;
-    info = consulta.medicoClinica.medico.crm;
-  } else {
-    nome = consulta.paciente.idNavigation.nome;
-    email = consulta.paciente.idNavigation.email;
-    info = moment().diff(new Date(consulta.paciente.dataNascimento), "years");
-  }
-
-  useEffect(() => {
-    setInputs({
-      ...inputs,
-      descricao: consulta.descricao,
-      diagnostico: consulta.diagnostico,
-    });
-  }, []);
-
   return inCamera ? (
-    <MyCamera
-      setInCamera={setInCamera}
-      setPhoto={setPhoto}
-      setIsPhotoSaved={setIsPhotoSaved}
-    />
+    <MyCamera setInCamera={setInCamera} setPhoto={setPhoto} setIsPhotoSaved={setIsPhotoSaved} />
   ) : (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
 
       <ContainerSpacing>
-        <Title text={nome} />
+        <Title text={"Romário"} />
 
         <Group row>
-          <Subtitle text={info + " anos"} />
-          <Subtitle bold text={email} />
+          <Subtitle text="22 anos" />
+          <Subtitle text="romario@email.com" />
         </Group>
 
         <Input
           height={100}
-          inputValue={inputs.descricao}
-          onChange={(text) => setInputs({ ...inputs, descricao: text })}
           border={editMode}
           label="Descrição da consulta:"
           placeholder="Descrição da consulta:"
         />
 
         <Input
-          inputValue={inputs.diagnostico}
-          onChange={(text) => setInputs({ ...inputs, diagnostico: text })}
           border={editMode}
           label="Diagnóstico do paciente:"
           placeholder="Diagnóstico do paciente"
@@ -107,8 +68,6 @@ export const Prescricao = ({ route }) => {
 
         <Input
           height={100}
-          inputValue={inputs.prescricao}
-          onChange={(text) => setInputs({ ...inputs, prescricao: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"

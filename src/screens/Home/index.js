@@ -23,8 +23,6 @@ export const Home = ({ navigation }) => {
 
   const [showModalConsulta, setShowModalConsulta] = useState(false);
 
-  const [consultaSelecionada, setConsultaSelecionada] = useState(null);
-
   const [showModalCancel, setShowModalCancel] = useState(false);
 
   const [showModalProntuario, setShowModalProntuario] = useState(false);
@@ -32,17 +30,16 @@ export const Home = ({ navigation }) => {
   const [user, setUser] = useState({});
 
   async function getConsultas() {
-    const url = user.role === "paciente" ? "Pacientes" : "Medicos";
-
     try {
       const response = await api.get(
-        `/${url}/BuscarPorData?data=${new Date(data)
+        `/Pacientes/BuscarPorData?data=${new Date(data)
           .toLocaleDateString()
           .split("/")
           .reverse()
           .join("-")}&id=${user.id}`
       );
       setConsultas(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -94,27 +91,19 @@ export const Home = ({ navigation }) => {
         renderItem={({ item }) =>
           statusButtons === item.situacao.situacao && (
             <CardConsulta
-              clinica={item.medicoClinica.clinicaId}
-              navigation={navigation}
-              onPress={setConsultaSelecionada(item)}
               user={user}
               image={require("./../../assets/img/UserImage.jpg")}
-              name={
-                user.role === "paciente"
-                  ? item.medicoClinica.medico.idNavigation.nome
-                  : item.paciente.idNavigation.nome
-              }
-              info={
-                user.role === "paciente"
-                  ? item.medicoClinica.medico.crm
-                  : moment().diff(
-                      new Date(item.paciente.dataNascimento),
-                      "years"
-                    )
+              name={item.medicoClinica.medico.idNavigation.nome}
+              idade={
+                item.prioridade.prioridade === 0
+                  ? "Exame"
+                  : item.prioridade.prioridade === 1
+                  ? "Rotina"
+                  : "Urgência"
               }
               setShowModalCancel={setShowModalCancel}
               setShowModalProntuario={setShowModalProntuario}
-              prioridade={item.prioridade.prioridade}
+              categoria={item.categoria}
               horario={new Date(item.dataConsulta).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -132,9 +121,9 @@ export const Home = ({ navigation }) => {
         visible={showModalCancel}
       />
       <MyModal
-        user={user}
-        navigation={navigation}
-        item={consultaSelecionada}
+        nome={"Romário"}
+        email={"romario@email.com"}
+        idade={32}
         image={require("./../../assets/img/UserImage.jpg")}
         setShowModal={setShowModalProntuario}
         visible={showModalProntuario}

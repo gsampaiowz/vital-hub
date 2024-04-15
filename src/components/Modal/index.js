@@ -11,7 +11,6 @@ import { Audio } from "expo-av";
 import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
-import moment from "moment";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -36,8 +35,7 @@ const ModalContent = styled.View`
 
 const ImageModal = styled.Image`
   width: 100%;
-  border-radius: 10px;
-  height: 300px;
+  height: 250px;
 `;
 
 export const MyModal = ({
@@ -45,9 +43,10 @@ export const MyModal = ({
   visible = false,
   setShowModal,
   image,
-  item,
+  nome,
+  email,
+  idade,
   navigation,
-  user,
   ...rest
 }) => {
   const [sound, setSound] = useState(null);
@@ -71,7 +70,7 @@ export const MyModal = ({
 
   //FUNCAO PARA LIDAR COM A CHAMADA DE NOTIFICACAO
   const HandleCallNotifications = async () => {
-    setShowModal(false);
+    setShowModal(false)
 
     //OBTEM O STATUS DA PERMISSAO
     const { status } = await Notifications.getPermissionsAsync();
@@ -93,20 +92,6 @@ export const MyModal = ({
     });
   };
 
-  let nome, info, email;
-
-  if (item) {
-    if (user.role === "paciente") {
-      nome = item.medicoClinica.medico.idNavigation.nome;
-      email = item.medicoClinica.medico.idNavigation.email;
-      info = item.medicoClinica.medico.crm;
-    } else {
-      nome = item.paciente.idNavigation.nome;
-      email = item.paciente.idNavigation.email;
-      info = moment().diff(new Date(item.paciente.dataNascimento), "years");
-    }
-  }
-
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -115,37 +100,22 @@ export const MyModal = ({
             <>
               <Title text="Cancelar consulta" />
               <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
-              <Button
-                onPress={() => HandleCallNotifications()}
-                text="CONFIRMAR"
-              />
+              <Button onPress={() => HandleCallNotifications()} text="CONFIRMAR" />
             </>
           ) : (
             <>
               <ImageModal source={image} />
               <Title text={nome} />
-              <Group row>
-                <Subtitle fontSize={12} text={info + " anos"} />
-                <Subtitle bold fontSize={12} text={email} />
+              <Group row gap={5}>
+                <Subtitle fontSize={12} text={idade + " anos"} />
+                <Subtitle fontSize={12} text={email} />
               </Group>
               <Button
-                onPress={() => {
-                  setShowModal(false);
-                  navigation.navigate("Prontuario", {
-                    consultaId: item.id,
-                    user: user,
-                  });
-                }}
+                onPress={() => navigation.replace("Prontuario")}
                 text="INSERIR PRONTUÁRIO"
               />
               <Button
-                onPress={() => {
-                  setShowModal(false);
-                  navigation.navigate("Prescricao", {
-                    consulta: item,
-                    user: user,
-                  });
-                }}
+                onPress={() => navigation.replace("Prescricao")}
                 text="VER PRONTUÁRIO"
               />
             </>

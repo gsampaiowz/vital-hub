@@ -34,12 +34,9 @@ const ImageStyled = styled.Image`
 
 export const ModalVerLocal = ({
   setShowLocalModal,
-  user,
-  navigation,
-  clinica,
   name,
-  prioridade,
-  info,
+  categoria,
+  crm,
   visible = false,
   ...rest
 }) => {
@@ -50,17 +47,11 @@ export const ModalVerLocal = ({
           <ImageStyled source={require("./../../assets/img/UserImage.jpg")} />
           <Title text={name} />
           <Group row>
-            <Subtitle bold text={prioridade} />
-            <Subtitle text={user.role === "paciente" ? info : info + " anos"} />
+            <Subtitle text={categoria} />
+            <Subtitle text={crm} />
           </Group>
           <Group>
-            <Button
-              onPress={() => {
-                setShowLocalModal(false);
-                navigation.navigate("LocalConsulta", { clinicaId: clinica });
-              }}
-              text="VER LOCAL DA CONSULTA"
-            />
+            <Button text="VER LOCAL DA CONSULTA" />
             <Button
               onPress={() => setShowLocalModal(false)}
               outlined

@@ -12,13 +12,19 @@ import MapViewDirections from "react-native-maps-directions";
 import { ActivityIndicator, View } from "react-native";
 import { Title } from "../Title";
 
-export const Maps = ({ clinica }) => {
+export const Maps = ({
+  localizacao
+}) => {
   const mapsReference = useRef(null);
 
   const [initialPosition, setInitialPosition] = useState(null);
   const finalPosition = {
-    latitude: clinica.endereco.latitude,
-    longitude: clinica.endereco.longitude,
+    // latitude: -23.689007,
+    // longitude: -46.590585,
+
+    // fazer ternario aqui
+    // latitude: localizacao : localizacao.endereco.latitude,
+    longitude: localizacao.endereco.longitude,
   };
 
   async function CapturarLocalizacao() {
@@ -27,7 +33,7 @@ export const Maps = ({ clinica }) => {
     if (granted) {
       const currentPosition = await getCurrentPositionAsync();
 
-      setInitialPosition(currentPosition);
+      await setInitialPosition(currentPosition);
     }
   }
 
@@ -68,7 +74,7 @@ export const Maps = ({ clinica }) => {
         distanceInterval: 1,
       },
       async (response) => {
-         setInitialPosition(response);
+        await setInitialPosition(response);
 
         mapsReference.current.animateCamera({
           pitch: 60,
@@ -76,7 +82,7 @@ export const Maps = ({ clinica }) => {
         });
       }
     );
-  }, [1000]);
+  }, [localizacao]);
 
   useEffect(() => {
     RecarregarVisualizacaoMapa();
