@@ -7,8 +7,26 @@ import { Input } from "./../../components/Input/index";
 import { Button } from "./../../components/Button/index";
 import { NavigationButton } from "./../../components/NavigationButton/index";
 import { AntDesign } from "@expo/vector-icons";
+import { useState } from "react";
+import api from "../../service/service";
+
 
 export const RecuperarSenha = ({ navigation }) => {
+
+  const [email, setEmail] = useState('tinassenai@gmail.com')
+
+  async function EnviarEmail() {
+    await api.post(`/RecuperarSenha?email=${email}`)
+    
+      .then(() => {
+
+        navigation.replace("VerificarEmail", { emailRecuperacao : email })
+
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
   return (
     <ContainerScroll>
       <ContainerSpacing>
@@ -23,9 +41,16 @@ export const RecuperarSenha = ({ navigation }) => {
             "Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha"
           }
         />
-        <Input placeholder="Usuário ou E-mail" />
+        <Input
+          inputValue={setEmail}
+          placeholder="Usuário ou E-mail"
+
+          value={email}
+          onChangeText={(txt) => setEmail(txt)}
+        />
         <Button
-          onPress={() => navigation.navigate("VerificarEmail")}
+          onPress={() => EnviarEmail()}
+          // onPress={() => navigation.navigate("VerificarEmail")}
           text="Continuar"
         />
       </ContainerSpacing>
