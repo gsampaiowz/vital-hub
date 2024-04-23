@@ -15,7 +15,7 @@ export const Prontuario = ({ route }) => {
   const [inputs, setInputs] = useState({
     descricao: "",
     diagnostico: "",
-    prescricao: "",
+    medicamento: "",
   });
 
   const [consulta, setConsulta] = useState({});
@@ -36,7 +36,6 @@ export const Prontuario = ({ route }) => {
 
   async function getConsulta() {
     try {
-      console.log("começo");
       await api
         .get("Consultas/BuscarPorId?id=" + consultaId)
         .then((response) => {
@@ -45,11 +44,7 @@ export const Prontuario = ({ route }) => {
             ...inputs,
             descricao: response.data.descricao,
             diagnostico: response.data.diagnostico,
-            prescricao:
-              "Observado: " +
-              response.data.receita.observacoes +
-              "\nMedicamento: " +
-              response.data.receita.medicamento,
+            medicamento: response.data.receita.medicamento,
           });
 
           if (user.role === "paciente") {
@@ -79,15 +74,10 @@ export const Prontuario = ({ route }) => {
     const prescricao = inputs.prescricao.split("\n");
     try {
       await api.put("Consultas/Prontuario", {
-        id: consulta.id,
-        situacaoId: consulta.situacaoId,
-        pacienteId: consulta.pacienteId,
-        medicoClinicaId: consulta.medicoClinicaId,
-        receitaId: consulta.receitaId,
-        prioridadeId: consulta.prioridadeId,
-        dataConsulta: consulta.dataConsulta,
+        ConsultaId: consulta.id,
         diagnostico: inputs.diagnostico,
         descricao: inputs.descricao,
+        medicamento: inputs.medicamento,
       });
     } catch (error) {
       console.log(error);
@@ -125,8 +115,8 @@ export const Prontuario = ({ route }) => {
 
         <Input
           height={100}
-          inputValue={inputs.prescricao}
-          onChange={(text) => setInputs({ ...inputs, prescricao: text })}
+          inputValue={inputs.medicamento}
+          onChange={(text) => setInputs({ ...inputs, medicamento: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"

@@ -22,7 +22,7 @@ import { RecuperarSenha } from "./src/screens/RecuperarSenha";
 import { VerificarEmail } from "./src/screens/VerificarEmail";
 import { RedefinirSenha } from "./src/screens/RedefinirSenha/index";
 import { CriarConta } from "./src/screens/CriarConta";
-import { Perfil } from "./src/screens/Perfil";
+import { PerfilPaciente } from "./src/screens/PerfilPaciente";
 import { ConsultasDoutor } from "./src/screens/ConsultasDoutor/index";
 import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 import { SelecionarMedico } from "./src/screens/SelecionarMedico";
@@ -36,7 +36,8 @@ import { LogBox } from "react-native";
 //IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 
 import * as Notifications from "expo-notifications";
-import { createContext } from "react";
+import { MediaLibrary } from "expo-media-library";
+import { ImagePicker } from "expo-image-picker";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
@@ -111,9 +112,9 @@ export default function App() {
             options={{ title: "Criar Conta" }}
           />
           <Stack.Screen
-            name="Perfil"
-            component={Perfil}
-            options={{ title: "Paciente Perfil" }}
+            name="PerfilPaciente"
+            component={PerfilPaciente}
+            options={{ title: "Paciente PerfilPaciente" }}
           />
           <Stack.Screen
             name="ConsultasDoutor"

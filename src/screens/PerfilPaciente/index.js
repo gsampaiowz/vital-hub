@@ -8,8 +8,27 @@ import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../../utils/Auth";
+import { styled } from "styled-components/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
+import { MyCamera } from "./../../components/MyCamera/index";
 
-export const Perfil = ({ navigation }) => {
+const ButtonCamera = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #fbfbfb;
+  background-color: #496bba;
+  position: absolute;
+  right: 15px;
+  bottom: -20px;
+`;
+
+export const PerfilPaciente = ({ navigation }) => {
+  const [showCamera, setShowCamera] = useState(false);
+
   const [editMode, setEditMode] = useState(false);
 
   const [inputs, setInputs] = useState({
@@ -30,17 +49,34 @@ export const Perfil = ({ navigation }) => {
 
   const [user, setUser] = useState({});
 
+  async function requestGaleria() {
+    await MediaLibrary.requestPermissionsAsync();
+
+    await ImagePicker.requestMediaLibraryPermissionsAsync();
+  }
+
   useEffect(() => {
+    requestGaleria();
     async function ProfileLoad() {
       setUser(await userDecodeToken());
     }
     ProfileLoad();
   }, []);
 
-  return (
+  return showCamera ? (
+    <MyCamera
+      getMediaLibrary={true}
+      inCamera={showCamera}
+      setInCamera={setShowCamera}
+    />
+  ) : (
     <ContainerScroll>
-      <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
-
+      <Group>
+        <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
+        <ButtonCamera onPress={() => setShowCamera(true)}>
+          <MaterialCommunityIcons name="camera-plus" size={24} color="white" />
+        </ButtonCamera>
+      </Group>
       <ContainerSpacing>
         <Title text={user.name} />
 

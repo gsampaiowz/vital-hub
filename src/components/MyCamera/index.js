@@ -1,6 +1,6 @@
 import { Camera, CameraType } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
-import { MediaLibrary } from "expo-media-library";
+import * as MediaLibrary from "expo-media-library";
 import styled from "styled-components/native";
 import {
   AntDesign,
@@ -48,16 +48,47 @@ const TakeVideo = styled(AntDesign)`
   z-index: 10;
 `;
 
-export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
+export const MyCamera = ({
+  setIsPhotoSaved,
+  setPhoto,
+  setInCamera,
+  inCamera,
+  getMediaLibrary = false,
+}) => {
   const cameraRef = useRef(null);
 
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
 
   const [zoom, setZoom] = useState(0);
 
+  const [capturePhoto, setCapturePhoto] = useState(null);
+
   const [isRecording, setIsRecording] = useState(false);
 
   const [type, setType] = useState(CameraType.back);
+
+  const [lastPhoto, setLastPhoto] = useState(null);
+
+  useEffect(() => {
+    setCapturePhoto(null);
+
+    if (getMediaLibrary) {
+      GetLatestPhoto();
+    }
+  }, [inCamera]);
+
+  async function GetLatestPhoto() {
+    const assets = await MediaLibrary.getAssetsAsync({
+      sortBy: [[MediaLibrary.SortBy.creationTime, false]],
+      first: 1,
+    });
+
+    if (assets.length > 0) {
+      setLastPhoto(assets[0].uri);
+    }
+
+    console.log(assets);
+  }
 
   useEffect(() => {
     (async () => {
