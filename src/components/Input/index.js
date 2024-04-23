@@ -34,9 +34,10 @@ export const Input = ({
   label = "",
   border = true,
   color = "#34898f",
+  onChange = () => {},
   inputValue = "",
   icon = null,
-  onChange = () => {},
+  onChangeText = () => {},
   maxWidth = "100%",
   height = 53,
   textAlign = "left",
@@ -61,10 +62,10 @@ export const Input = ({
           border &&
           setColorState(inputValue.length < 1 ? "transparent" : "#34898f")
         }
-        onChange={() => {
+        onChange={[() => {
           setColorState(inputValue.length < 1 ? "transparent" : "#34898f");
-        }}
-        onChangeText={onChange}
+        }, onChange]}
+        onChangeText={onChangeText}
         onBlur={() => border && setColorState("#34898f")}
         style={{
           fontFamily: "MontserratAlternates_500Medium",

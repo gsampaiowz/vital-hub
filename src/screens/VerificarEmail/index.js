@@ -31,9 +31,12 @@ export const VerificarEmail = ({ navigation, route }) => {
   }
 
   async function validarCodigo() {
-    await api.post(`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.emailRecuperacao}&codigo${codigo}`)
+    console.log(codigo);
+
+    await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
       .then(() => {
-        navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao })
+        navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao });
+
       }).catch(error => {
         console.log(error);
       })
@@ -58,8 +61,8 @@ export const VerificarEmail = ({ navigation, route }) => {
               <Link
                 underline={false}
                 color="#496BBA"
-                // text=" {route.params.emailRecuperacao} "
-                text=" username@email.com"
+                text={route.params.emailRecuperacao}
+                // text=" username@email.com"
               />
             </Group>
           }
@@ -77,6 +80,7 @@ export const VerificarEmail = ({ navigation, route }) => {
           {
             [0, 1, 2, 3].map((index) => (
               <Input
+              inputValue={inputs[index]}
                 key={index}
                 ref={inputs[index]}
 
@@ -85,20 +89,21 @@ export const VerificarEmail = ({ navigation, route }) => {
                 height={60}
                 fontSize={32}
                 placeholder="0"
+                
 
                 onChangeText={(txt) => {
                   //verificar se o campo é vazio
                   if (txt == "") {
 
-                    focusPrevInput(index)
+                    // focusPrevInput(index)
 
                   } else {
                     //verificar se o campo foi preenchido
-                    const codigoInformado = [...codigo]
+                    const codigoInformado = [... codigo]
                     codigoInformado[index] = txt
-                    setCodigo(codigoInformado.join(''))
+                    setCodigo(codigoInformado.join(""))
 
-                    focusNextInput(index)
+                    // focusNextInput(index)
                   }
                 }}
               />

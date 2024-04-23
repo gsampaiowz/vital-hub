@@ -17,7 +17,6 @@ export const RecuperarSenha = ({ navigation }) => {
 
   async function EnviarEmail() {
     await api.post(`/RecuperarSenha?email=${email}`)
-    
       .then(() => {
 
         navigation.replace("VerificarEmail", { emailRecuperacao : email })
@@ -40,12 +39,11 @@ export const RecuperarSenha = ({ navigation }) => {
           text={
             "Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha"
           }
+          
         />
         <Input
-          inputValue={setEmail}
+          inputValue={email}
           placeholder="Usuário ou E-mail"
-
-          value={email}
           onChangeText={(txt) => setEmail(txt)}
         />
         <Button

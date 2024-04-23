@@ -123,12 +123,12 @@ export const Login = ({ navigation }) => {
         <Group gap={10}>
           <Input
             inputValue={inputs.email}
-            onChange={(text) => setInputs({ ...inputs, email: text })}
+            onChangeText={(text) => setInputs({ ...inputs, email: text })}
             placeholder="Usuário ou E-mail"
           />
           <Input
             inputValue={inputs.senha}
-            onChange={(text) => setInputs({ ...inputs, senha: text })}
+            onChangeText={(text) => setInputs({ ...inputs, senha: text })}
             placeholder="Senha"
           />
           <Link

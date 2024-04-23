@@ -114,7 +114,7 @@ export const Perfil = ({ navigation, route }) => {
         <Subtitle text={user.email} />
         <Input
           inputValue={inputs.dataNascimento}
-          onChange={(text) => setInputs({ ...inputs, dataNascimento: text })}
+          onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
           border={editMode}
           label="Data de nascimento:"
           placeholder="04/05/1999"
@@ -122,7 +122,7 @@ export const Perfil = ({ navigation, route }) => {
 
         <Input
           inputValue={inputs.cpf}
-          onChange={(text) => setInputs({ ...inputs, cpf: text })}
+          onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
           border={editMode}
           label="CPF"
           placeholder="859********"
@@ -130,7 +130,7 @@ export const Perfil = ({ navigation, route }) => {
 
         <Input
           inputValue={inputs.endereco}
-          onChange={(text) => setInputs({ ...inputs, endereco: text })}
+          onChangeText={(text) => setInputs({ ...inputs, endereco: text })}
           border={editMode}
           label="Endereço"
           placeholder="Rua Vicenso Silva, 987"
@@ -139,7 +139,7 @@ export const Perfil = ({ navigation, route }) => {
         <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
           <Input
             inputValue={inputs.cep}
-            onChange={(text) => setInputs({ ...inputs, cep: text })}
+            onChangeText={(text) => setInputs({ ...inputs, cep: text })}
             border={editMode}
             label="Cep"
             placeholder="06548-909"
@@ -147,7 +147,7 @@ export const Perfil = ({ navigation, route }) => {
 
           <Input
             inputValue={inputs.cidade}
-            onChange={(text) => setInputs({ ...inputs, cidade: text })}
+            onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
             border={editMode}
             label="Cidade"
             placeholder="Moema-SP"

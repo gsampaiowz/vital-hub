@@ -35,7 +35,7 @@ export const Prontuario = () => {
         <Input
           height={100}
           inputValue={inputs.dataNascimento}
-          onChange={(text) => setInputs({ ...inputs, dataNascimento: text })}
+          onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
           border={editMode}
           label="Descrição da consulta:"
           placeholder="Descrição da consulta:"
@@ -43,7 +43,7 @@ export const Prontuario = () => {
 
         <Input
           inputValue={inputs.cpf}
-          onChange={(text) => setInputs({ ...inputs, cpf: text })}
+          onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
           border={editMode}
           label="Diagnóstico do paciente:"
           placeholder="Diagnóstico do paciente"
@@ -52,7 +52,7 @@ export const Prontuario = () => {
         <Input
           height={100}
           inputValue={inputs.endereco}
-          onChange={(text) => setInputs({ ...inputs, endereco: text })}
+          onChangeText={(text) => setInputs({ ...inputs, endereco: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"
