@@ -13,6 +13,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as MediaLibrary from "expo-media-library";
 import * as ImagePicker from "expo-image-picker";
 import { MyCamera } from "./../../components/MyCamera/index";
+import { CameraModal } from "./../../components/CameraModal/index";
+import api from "./../../service/service";
 
 const ButtonCamera = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
@@ -26,10 +28,40 @@ const ButtonCamera = styled.TouchableOpacity.attrs({
   bottom: -20px;
 `;
 
+const ButtonConfirm = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #fbfbfb;
+  background-color: green;
+  position: absolute;
+  left: 15px;
+  bottom: -20px;
+`;
+
+const ButtonCancel = styled.TouchableOpacity.attrs({
+  activeOpacity: 0.8,
+})`
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #fbfbfb;
+  background-color: red;
+  position: absolute;
+  left: 75px;
+  bottom: -20px;
+`;
+
 export const PerfilPaciente = ({ navigation }) => {
   const [showCamera, setShowCamera] = useState(false);
 
   const [editMode, setEditMode] = useState(false);
+
+  const [isChangingPhoto, setIsChangingPhoto] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [photo, setPhoto] = useState(null);
 
   const [inputs, setInputs] = useState({
     dataNascimento: "",
@@ -49,22 +81,54 @@ export const PerfilPaciente = ({ navigation }) => {
 
   const [user, setUser] = useState({});
 
+  async function BuscarPorId() {
+    try {
+      const response = await api.get(`/Pacientes/BuscarPorId?id=${user.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+    console.log(response.data);
+    // setPhoto(response.data.foto);
+  }
+
   async function requestGaleria() {
     await MediaLibrary.requestPermissionsAsync();
 
     await ImagePicker.requestMediaLibraryPermissionsAsync();
   }
+  async function ProfileLoad() {
+    setUser(await { ...userDecodeToken(), foto: photo })
+  }
 
   useEffect(() => {
-    requestGaleria();
-    async function ProfileLoad() {
-      setUser(await userDecodeToken());
-    }
     ProfileLoad();
+    requestGaleria();
   }, []);
+
+  async function AlterarFotoPerfil() {
+    const formData = new FormData();
+
+    formData.append("Arquivo", {
+      name: `image.${photo.split(".")[1]}`,
+      type: `image/${photo.split(".")[1]}`,
+      uri: photo,
+    });
+
+    try {
+      await api.put(`/Usuario/AlterarFotoPerfil?id=${user.id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return showCamera ? (
     <MyCamera
+      setModalOpen={setModalOpen}
+      setPhoto={setPhoto}
       getMediaLibrary={true}
       inCamera={showCamera}
       setInCamera={setShowCamera}
@@ -72,7 +136,17 @@ export const PerfilPaciente = ({ navigation }) => {
   ) : (
     <ContainerScroll>
       <Group>
-        <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
+        <PacienteImage source={{ uri: user.foto }} />
+        {photo != null ? (
+          <>
+            <ButtonConfirm onPress={() => AlterarFotoPerfil()}>
+              <MaterialCommunityIcons name="check" size={24} color="white" />
+            </ButtonConfirm>
+            <ButtonCancel onPress={() => setPhoto(null)}>
+              <MaterialCommunityIcons name="close" size={24} color="white" />
+            </ButtonCancel>
+          </>
+        ) : null}
         <ButtonCamera onPress={() => setShowCamera(true)}>
           <MaterialCommunityIcons name="camera-plus" size={24} color="white" />
         </ButtonCamera>

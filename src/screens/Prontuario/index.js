@@ -8,6 +8,7 @@ import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import moment from "moment";
 import api from "./../../service/service";
+import { styled } from "styled-components/native";
 
 export const Prontuario = ({ route }) => {
   const [editMode, setEditMode] = useState(false);

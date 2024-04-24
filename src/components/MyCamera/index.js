@@ -8,10 +8,12 @@ import {
   FontAwesome6,
   FontAwesome,
 } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import {
   GestureHandlerRootView,
   PinchGestureHandler,
 } from "react-native-gesture-handler";
+import { Image } from "react-native";
 
 const CloseCamera = styled(AntDesign)`
   position: absolute;
@@ -41,7 +43,14 @@ const FlashIcon = styled(Ionicons)`
   z-index: 10;
 `;
 
-const TakeVideo = styled(AntDesign)`
+// const TakeVideo = styled(AntDesign)`
+//   position: absolute;
+//   bottom: 10px;
+//   right: 10px;
+//   z-index: 10;
+// `;
+
+const LastPhoto = styled.TouchableOpacity`
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -49,9 +58,10 @@ const TakeVideo = styled(AntDesign)`
 `;
 
 export const MyCamera = ({
-  setIsPhotoSaved,
+  setIsPhotoSaved = () => {},
   setPhoto,
   setInCamera,
+  setModalOpen,
   inCamera,
   getMediaLibrary = false,
 }) => {
@@ -61,8 +71,6 @@ export const MyCamera = ({
 
   const [zoom, setZoom] = useState(0);
 
-  const [capturePhoto, setCapturePhoto] = useState(null);
-
   const [isRecording, setIsRecording] = useState(false);
 
   const [type, setType] = useState(CameraType.back);
@@ -70,7 +78,7 @@ export const MyCamera = ({
   const [lastPhoto, setLastPhoto] = useState(null);
 
   useEffect(() => {
-    setCapturePhoto(null);
+    setPhoto(null);
 
     if (getMediaLibrary) {
       GetLatestPhoto();
@@ -78,7 +86,7 @@ export const MyCamera = ({
   }, [inCamera]);
 
   async function GetLatestPhoto() {
-    const assets = await MediaLibrary.getAssetsAsync({
+    const { assets } = await MediaLibrary.getAssetsAsync({
       sortBy: [[MediaLibrary.SortBy.creationTime, false]],
       first: 1,
     });
@@ -117,6 +125,19 @@ export const MyCamera = ({
     }
   }
 
+  async function SelectImageGallery() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+
+      setInCamera(false);
+    }
+  }
+
   const changeZoom = (event) => {
     if (event.nativeEvent.scale > 1 && zoom < 1) {
       setZoom(zoom + 0.1);
@@ -144,7 +165,7 @@ export const MyCamera = ({
           <CloseCamera
             name="closecircle"
             size={40}
-            color="#49B3BA"
+            color="white"
             onPress={() => setInCamera(false)}
           />
           <ToggleCamera
@@ -154,7 +175,7 @@ export const MyCamera = ({
               )
             }
           >
-            <FontAwesome6 name="camera-rotate" size={40} color="#49B3BA" />
+            <FontAwesome6 name="camera-rotate" size={40} color="white" />
           </ToggleCamera>
           <FlashIcon
             onPress={() =>
@@ -174,7 +195,7 @@ export const MyCamera = ({
                 : "flash"
             }
             size={40}
-            color="#49B3BA"
+            color="white"
           />
           <TakePhoto
             onPress={() => {
@@ -182,9 +203,9 @@ export const MyCamera = ({
               setIsPhotoSaved(false);
             }}
           >
-            <FontAwesome name="camera" size={50} color="#49B3BA" />
+            <FontAwesome name="camera" size={50} color="white" />
           </TakePhoto>
-          <TakeVideo
+          {/* <TakeVideo
             onPress={() =>
               isRecording
                 ? cameraRef.current.stopRecording()
@@ -192,8 +213,18 @@ export const MyCamera = ({
             }
             name="videocamera"
             size={24}
-            color={isRecording ? "red" : "#49B3BA"}
-          />
+            color={isRecording ? "red" : "white"}
+          /> */}
+          {lastPhoto != null ? (
+            <LastPhoto onPress={() => SelectImageGallery()}>
+              <Image
+                borderRadius={5}
+                width={60}
+                height={60}
+                source={{ uri: lastPhoto }}
+              />
+            </LastPhoto>
+          ) : null}
         </Camera>
       </PinchGestureHandler>
     </GestureHandlerRootView>
