@@ -18,71 +18,29 @@ export const Perfil = ({ navigation, route }) => {
   const [user, setUser] = useState({});
 
   const [inputs, setInputs] = useState({
-    dataNascimento: "02/04/2000",
-    cpf: "32132132121",
-    endereco: "Rua talvez sim",
-    cep: "12123123",
-    cidade: "Olimpia",
+
+    nome: "Daniel",
+    cidade: "Moema",
+    logradouro: "Rua Vicenso Silva",
+    cpf: "39294770095",
+    dataNascimento: "04/05/1999",
+    numero: 10,
+    cep: "06548-909",
+    rg: "351763053",
+    foto: "String"
+
   });
 
-  if (!user) {
-    const senha = route.params.senha;
-    const email = route.params.email;
+  //função de atualizar os dados do paciente
 
+  async function Logout() {
+    //Remover token do AsyncStorage
+    await AsyncStorage.removeItem("token");
 
-    //função de preencher o perfil do paciente, com os dados da api
-    async function fillProfile() {
-      try {
-        await api.post("/Pacientes", {
-          rg: "3123432",
-          cpf: inputs.cpf,
-          cep: inputs.cep,
-          logradouro: inputs.endereco,
-          numero: 10,
-          cidade: inputs.cidade,
-          nome: "Sergio",
-          email: email,
-          senha: senha,
-          idTipoUsuario: "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3",
-          foto: "string",
-          dataNascimento: new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString()
-        })
-        console.log("Cadastrado com sucesso");
-      } catch (error) {
-        console.log(error);
-      }
-    }
-
-  } else {
-
-    //função de atualizar os dados do paciente
-    async function updatePatient() {
-      try {
-        await api.put("/Pacientes?idUsuario=" + user.id, {
-          rg: "3123432",
-          cpf: inputs.cpf,
-          logradouro: inputs.endereco,
-          cep: inputs.cep,
-          cidade: inputs.cidade,
-          numero: 10,
-          nome: "Sergio",
-          idTipoUsuario: "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3",
-          foto: "string",
-          dataNascimento: new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString()
-        })
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    //Redirecionar para a tela de login
+    navigation.navigate("Login");
   }
-    async function Logout() {
-      //Remover token do AsyncStorage
-      await AsyncStorage.removeItem("token");
-
-      //Redirecionar para a tela de login
-      navigation.navigate("Login");
-    }
-    console.log(Logout);
+  // console.log(Logout);
 
   useEffect(() => {
     if (cadastro === true) {
@@ -98,13 +56,40 @@ export const Perfil = ({ navigation, route }) => {
     setUser(await userDecodeToken());
     // if (token !== null) {
     //   await /*função que tá chamando o userDecodeToken*/(token);
-    }
-  // }
+  }
+
+  async function updateProfile() {
+
+    const formData = new FormData();
+    
+    formData.append('rg', inputs.rg);
+    formData.append('cpf', inputs.cpf);
+    formData.append('cep', inputs.cep);
+    formData.append('logradouro', inputs.logradouro);
+    formData.append('numero', inputs.numero);
+    formData.append('cidade', inputs.cidade);
+    formData.append('nome', inputs.nome);
+    // formData.append('foto', foto); // Adiciona o arquivo
+    formData.append('idTipoUsuario', "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
+    formData.append('dataNascimento', new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString());
+    
+    await api.put("/Pacientes/BuscarPorId" + user.id, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    // console.log("testers")
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }
 
   return (
     <ContainerScroll>
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
-
       <ContainerSpacing>
         {
 
@@ -112,6 +97,28 @@ export const Perfil = ({ navigation, route }) => {
         <Title text={user.name} />
 
         <Subtitle text={user.email} />
+
+        <Input
+          inputValue={inputs.nome}
+          onChangeText={(text) => setInputs({ ...inputs, nome: text })}
+          border={editMode}
+          label="Nome"
+          placeholder="Sampaio"
+        />
+        <Input
+          inputValue={inputs.cidade}
+          onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
+          border={editMode}
+          label="Cidade"
+          placeholder="São Paulo"
+        />
+        <Input
+          inputValue={inputs.logradouro}
+          onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+          border={editMode}
+          label="Logradouro"
+          placeholder="Rua Itambé"
+        />
         <Input
           inputValue={inputs.dataNascimento}
           onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
@@ -119,23 +126,24 @@ export const Perfil = ({ navigation, route }) => {
           label="Data de nascimento:"
           placeholder="04/05/1999"
         />
+        <Group row={true}>
 
-        <Input
-          inputValue={inputs.cpf}
-          onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
-          border={editMode}
-          label="CPF"
-          placeholder="859********"
-        />
+          <Input
+            inputValue={inputs.cpf}
+            onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
+            border={editMode}
+            label="CPF"
+            placeholder="859********"
+          />
 
-        <Input
-          inputValue={inputs.endereco}
-          onChangeText={(text) => setInputs({ ...inputs, endereco: text })}
-          border={editMode}
-          label="Endereço"
-          placeholder="Rua Vicenso Silva, 987"
-        />
-
+          <Input
+            inputValue={inputs.numero}
+            onChangeText={(text) => setInputs({ ...inputs, numero: text })}
+            border={editMode}
+            label="Número"
+            placeholder="22"
+          />
+        </Group>
         <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
           <Input
             inputValue={inputs.cep}
@@ -146,23 +154,23 @@ export const Perfil = ({ navigation, route }) => {
           />
 
           <Input
-            inputValue={inputs.cidade}
-            onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
+            inputValue={inputs.rg}
+            onChangeText={(text) => setInputs({ ...inputs, rg: text })}
             border={editMode}
-            label="Cidade"
-            placeholder="Moema-SP"
+            label="Rg"
+            placeholder="412487214"
           />
         </Group>
         <Group gap={10}>
           <Button
             onPress={!user ? () => {
-              
+
               fillProfile();
               navigation.navigate("Login")
             } : () => {
 
               setEditMode(!editMode)
-              editMode ? updatePatient() : null
+              editMode ? updateProfile() : null
             }
             }
             text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
@@ -170,9 +178,9 @@ export const Perfil = ({ navigation, route }) => {
           />
 
           <Button
-          onPress={() => Logout()} outlined text="SAIR DA CONTA" />
+            onPress={() => Logout()} outlined text="SAIR DA CONTA" />
         </Group>
       </ContainerSpacing>
     </ContainerScroll>
   );
-};
+}

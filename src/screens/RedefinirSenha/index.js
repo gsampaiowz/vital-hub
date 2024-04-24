@@ -49,18 +49,20 @@ export const RedefinirSenha = ({ navigation, route }) => {
         <Group gap={10}>
 
           <Input placeholder="Nova Senha"
+          inputValue={senha}
             onChangeText={(txt) => setSenha(txt)}
 
           />
 
           <Input placeholder="Confirmar nova senha"
+          inputValue={confirmar}
             onChangeText={(txt) => setConfirmar(txt)}
 
           />
 
         </Group>
-        <Button /*onPress={() => navigation.navigate("Login")} text="Redefinir"*/
-          onPress={() => AlterarSenha()}
+        <Button
+          onPress={() => AlterarSenha()} text="Redefinir"
         />
       </ContainerSpacing>
     </ContainerScroll>

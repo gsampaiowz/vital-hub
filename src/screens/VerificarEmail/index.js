@@ -18,20 +18,20 @@ export const VerificarEmail = ({ navigation, route }) => {
   const [codigo, setCodigo] = useState('')
 
   function focusNextInput(index) {
+    //Verificar se o index é menor do que a quantidade de campos
     if (index < inputs.length - 1) {
       inputs[index + 1].current.focus()
     }
   }
 
   function focusPrevInput(index) {
+    //Verificar se o index é menor do que a quantidade de campos
     if (index > 0) {
       inputs[index - 1].current.focus()
-
     }
   }
 
   async function validarCodigo() {
-    console.log(codigo);
 
     await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
       .then(() => {
@@ -62,81 +62,49 @@ export const VerificarEmail = ({ navigation, route }) => {
                 underline={false}
                 color="#496BBA"
                 text={route.params.emailRecuperacao}
-                // text=" username@email.com"
               />
             </Group>
           }
         />
 
         <Group row justifyContent="space-between">
-          {/* <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          /> */}
 
           {
             [0, 1, 2, 3].map((index) => (
               <Input
-              inputValue={inputs[index]}
+              
+                inputValue={inputs[index]}
                 key={index}
                 ref={inputs[index]}
-
+              maxLength={1}
                 textAlign={"center"}
                 width={60}
                 height={60}
                 fontSize={32}
                 placeholder="0"
-                
+
 
                 onChangeText={(txt) => {
                   //verificar se o campo é vazio
                   if (txt == "") {
 
-                    // focusPrevInput(index)
+                    focusPrevInput(index)
 
                   } else {
                     //verificar se o campo foi preenchido
-                    const codigoInformado = [... codigo]
+                    const codigoInformado = [...codigo]
                     codigoInformado[index] = txt
                     setCodigo(codigoInformado.join(""))
-
-                    // focusNextInput(index)
+                    
+                    focusNextInput(index)
                   }
                 }}
               />
             ))
           }
-
-          {/* <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
-
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
-
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          /> */}
         </Group>
         <Button
           onPress={() => validarCodigo()}
-          // onPress={() => navigation.navigate("RedefinirSenha")}
           text="Continuar"
         />
         <Link color="#344F8F" text="Reenviar código" />

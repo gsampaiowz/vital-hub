@@ -24,7 +24,7 @@ export const CriarConta = ({ navigation }) => {
     email: "pacienteTeste@gmail.com",
     senha: "pacienteTest",
     cidade: "Moema",
-    logradouro: "Moema",
+    logradouro: "Rua Vicenso Silva",
     cpf: "39294770095",
     dataNascimento: "04/05/1999",
     numero: 10,
@@ -43,156 +43,134 @@ export const CriarConta = ({ navigation }) => {
   //   }
   //   navigation.navigate("Perfil", { senha: senha, email: email, nome: nome })
   // }
-  
+
   async function fillProfile() {
-    
+
     const formData = new FormData();
-    
+
     formData.append('rg', inputs.rg);
     formData.append('cpf', inputs.cpf);
     formData.append('cep', inputs.cep);
     formData.append('logradouro', inputs.logradouro);
     formData.append('numero', inputs.numero);
     formData.append('cidade', inputs.cidade);
-    formData.append('nome', inputs.name);
+    formData.append('nome', inputs.nome);
     formData.append('email', inputs.email);
-    formData.append('foto', foto); // Adiciona o arquivo
+    // formData.append('foto', foto); // Adiciona o arquivo
     formData.append('senha', inputs.senha);
     formData.append('idTipoUsuario', "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
     formData.append('dataNascimento', new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString());
-      
-      await api.post("/Pacientes", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+
+    await api.post("/Pacientes", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
       .then(response => {
         console.log(response.data);
       })
       .catch(error => {
         console.error(error);
       });
-      
-      console.log(response.data);
-      
+
+
   }
+  
+return (
+  <ContainerScroll>
+    <ToastManager />
+    <ContainerSpacing>
+      <NavigationButton
+        onPress={() => navigation.navigate("Login")}
+        content={<AntDesign name="close" size={24} color="#34898f" />}
+      />
 
-  // async function updateProfile() {
-  //   try {
-  //     await api.put("/Pacientes" + user.id, {
-  //         rg: "3123432",
-  //         cpf: inputs.cpf,
-  //         logradouro: inputs.endereco,
-  //         cep: inputs.cep,
-  //         cidade: inputs.cidade,
-  //         numero: 10,
-  //         nome: "Sergio",
-  //         idTipoUsuario: "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3",
-  //         foto: "string",
-  //         dataNascimento: new Date(dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString()
-  //     })
+      <Logo source={LogoImage} />
 
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+      <Title text={"Criar Conta"} />
 
+      <Subtitle text="Insira seu endereço de e-mail e senha para realizar seu cadastro." />
 
-  return (
-    <ContainerScroll>
-      <ToastManager />
-      <ContainerSpacing>
-        <NavigationButton
-          onPress={() => navigation.navigate("Login")}
-          content={<AntDesign name="close" size={24} color="#34898f" />}
+      <Group gap={10}>
+        <Input
+          inputValue={inputs.nome}
+          placeholder="Sampaio"
+          label="Nome"
+          onChangeText={(text) => setInputs({ ...inputs, nome: text })}
         />
-
-        <Logo source={LogoImage} />
-
-        <Title text={"Criar Conta"} />
-
-        <Subtitle text="Insira seu endereço de e-mail e senha para realizar seu cadastro." />
-
-        <Group gap={10}>
+        <Input
+          inputValue={inputs.email}
+          placeholder="sampaio@gmail.com"
+          label="E-mail"
+          onChangeText={(text) => setInputs({ ...inputs, email: text })}
+        />
+        <Input
+          inputValue={inputs.senha}
+          label="Senha"
+          placeholder="*******"
+          onChangeText={(text) => setInputs({ ...inputs, senha: text })}
+        />
+        {/* <Input
+          inputValue={inputs.foto}
+          placeholder="Foto De Perfil"
+          label="Foto"
+          onChangeText={(text) => setInputs({ ...inputs, foto: text })}
+        /> */}
+        <Input
+          inputValue={inputs.cidade}
+          label="Cidade"
+          placeholder="São Paulo"
+          onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
+        />
+        <Input
+          inputValue={inputs.logradouro}
+          label="Logradouro"
+          placeholder="Rua Itambé"
+          onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+        />
+        <Input
+          inputValue={inputs.dataNascimento}
+          placeholder="12/03/2000"
+          label="Data de Nascimento"
+          onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
+        />
+        <Group row={true}>
           <Input
-            inputValue={inputs.nome}
-            placeholder="Sampaio"
-            label="Nome"
-            onChangeText={(text) => setInputs({ ...inputs, nome: text })}
+            inputValue={inputs.cpf}
+            placeholder="12345678912"
+            label="Cpf"
+            onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
           />
           <Input
-            inputValue={inputs.email}
-            placeholder="sampaio@gmail.com"
-            label="E-mail"
-            onChangeText={(text) => setInputs({ ...inputs, email: text })}
+            inputValue={inputs.numero}
+            placeholder="22"
+            label="Número"
+            onChangeText={(text) => setInputs({ ...inputs, numero: text })}
           />
-          <Input
-            inputValue={inputs.senha}
-            label="Senha"
-            placeholder="*******"
-            onChangeText={(text) => setInputs({ ...inputs, senha: text })}
-          />
-          <Input
-            inputValue={inputs.foto}
-            placeholder="Foto De Perfil"
-            label="Foto"
-            onChangeText={(text) => setInputs({ ...inputs, foto: text })}
-          />
-          <Input
-            inputValue={inputs.cidade}
-            label="Cidade"
-            placeholder="São Paulo"
-            onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
-          />
-          <Input
-            inputValue={inputs.logradouro}
-            label="Logradouro"
-            placeholder="Rua Itambém"
-            onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
-          />
-          <Input
-            inputValue={inputs.dataNascimento}
-            placeholder="12/03/2000"
-            label="Data de Nascimento"
-            onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
-          />
-          <Group row={true}>
-            <Input
-              inputValue={inputs.cpf}
-              placeholder="12345678912"
-              label="Cpf"
-              onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
-            />
-            <Input
-              inputValue={inputs.numero}
-              placeholder="22"
-              label="Número"
-              onChangeText={(text) => setInputs({ ...inputs, numero: text })}
-            />
-          </Group>
-          <Group row={true}>
-            <Input
-              inputValue={inputs.cep}
-              placeholder="85020250"
-              label="Cep"
-              onChangeText={(text) => setInputs({ ...inputs, cep: text })}
-            />
-            <Input
-              inputValue={inputs.rg}
-              placeholder="412487214"
-              label="Rg"
-              onChangeText={(text) => setInputs({ ...inputs, rg: text })}
-            />
-          </Group>
         </Group>
-        <Button text="Cadastrar" onPress={() => fillProfile()} />
-        <Link
-          doubleColor
-          text2="Já possui uma conta? "
-          text="Faça login"
-          onPress={() => navigation.navigate("Login")}
-        />
-      </ContainerSpacing>
-    </ContainerScroll>
-  );
+        <Group row={true}>
+          <Input
+            inputValue={inputs.cep}
+            placeholder="85020250"
+            label="Cep"
+            onChangeText={(text) => setInputs({ ...inputs, cep: text })}
+          />
+          <Input
+            inputValue={inputs.rg}
+            placeholder="412487214"
+            label="Rg"
+            onChangeText={(text) => setInputs({ ...inputs, rg: text })}
+          />
+        </Group>
+      </Group>
+      <Button text="Cadastrar" onPress={() => fillProfile()} />
+      <Link
+        doubleColor
+        text2="Já possui uma conta? "
+        text="Faça login"
+        onPress={() => navigation.navigate("Login")}
+      />
+    </ContainerSpacing>
+  </ContainerScroll>
+);
 };
