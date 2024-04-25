@@ -18,18 +18,19 @@ export const Perfil = ({ navigation, route }) => {
   const [user, setUser] = useState({});
 
   const [inputs, setInputs] = useState({
-
-    nome: "Daniel",
-    cidade: "Moema",
-    logradouro: "Rua Vicenso Silva",
-    cpf: "39294770095",
-    dataNascimento: "04/05/1999",
-    numero: 10,
-    cep: "06548-909",
-    rg: "351763053",
-    foto: "String"
-
+    nome: "",
+    cidade: "",
+    logradouro: "",
+    cpf: "",
+    dataNascimento: "",
+    numero: "",
+    cep: "",
+    rg: "",
+    foto: "",
+    crm: ""
   });
+
+  const [id, setId] = useState('')
 
   //função de atualizar os dados do paciente
 
@@ -58,10 +59,27 @@ export const Perfil = ({ navigation, route }) => {
     //   await /*função que tá chamando o userDecodeToken*/(token);
   }
 
+  // async function getProfileData(userId) {
+  //   try {
+  //     const response = await api.get(`/Pacientes/BuscarPorId?id=${userId}`);
+  //     console.log(response.data.id);
+  //     setId(userId)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (user && user.id) {
+  //     getProfileData(user.id);
+  //   }
+  //   // Dependência no objeto user para que a função seja chamada novamente se o user.id mudar
+  // }, [user]);
+
   async function updateProfile() {
 
     const formData = new FormData();
-    
+
     formData.append('rg', inputs.rg);
     formData.append('cpf', inputs.cpf);
     formData.append('cep', inputs.cep);
@@ -72,19 +90,50 @@ export const Perfil = ({ navigation, route }) => {
     // formData.append('foto', foto); // Adiciona o arquivo
     formData.append('idTipoUsuario', "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
     formData.append('dataNascimento', new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString());
-    
-    await api.put("/Pacientes/BuscarPorId" + user.id, {
+
+    await api.put(`/Pacientes?idUsuario=${id}` + user.id, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
-    // console.log("testers")
       .then(response => {
         console.log(response.data);
       })
       .catch(error => {
-        console.error(error);
+        console.error(error.respose.data);
       });
+  }
+
+  async function BuscarPorId() {
+    const url = user.role === "paciente" ? "Paciente" : "Medicos";
+    try {
+      const response = await api.get(`/${url}/BuscarPorId?id=${user.id}`);
+      console.log(response.log);
+
+      if (user.role === "paciente") {
+        setInputs({
+          nome: response.data.nome,
+          cidade: response.data.cidade,
+          logradouro: response.data.endereco.logradouro,
+          dataNascimento: response.data.dataNascimento,
+          cpf: response.data.cpf,
+          numero: response.data.endereco.numero,
+          cep: response.data.endereco.cep,
+          rg: response.data.rg,
+        })
+      } else {
+        setInputs({
+          nome: response.data.nome,
+          cep: response.data.endereco.cep,
+          logradouro: response.data.endereco.logradouro,
+          numero: response.data.endereco.numero,
+          cidade: response.data.cidade,
+          crm: response.data.crm,
+        })
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -92,8 +141,16 @@ export const Perfil = ({ navigation, route }) => {
       <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
       <ContainerSpacing>
         {
+          if (user.role === "paciente") {
+            //inputs que aparecem na tela de paciente
 
-        }
+          }else{
+            //inputs que aparecem na tela de medico
+            
+          }
+        }  
+
+        
         <Title text={user.name} />
 
         <Subtitle text={user.email} />
