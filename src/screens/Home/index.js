@@ -54,7 +54,7 @@ export const Home = ({ navigation }) => {
 
   useEffect(() => {
     ProfileLoad();
-  }, []);
+  }, [userDecodeToken()]);
 
   async function ProfileLoad() {
     setUser(await userDecodeToken());
@@ -62,7 +62,7 @@ export const Home = ({ navigation }) => {
 
   return (
     <ContainerSafe style={{ paddingTop: 0 }}>
-      <HeaderConsultas image={require("./../../assets/img/UserImage.jpg")} />
+      <HeaderConsultas image={{uri : user.foto}} />
       <Calendar data={data} setData={setData} />
 
       <ContainerSpacing>

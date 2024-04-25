@@ -12,6 +12,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
 import moment from "moment";
+import api from "../../service/service";
+import { Dimensions } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 const Divider = styled.View`
   width: 100%;
@@ -35,10 +38,15 @@ export const Prescricao = ({ route }) => {
   const [inputs, setInputs] = useState({
     descricao: "",
     diagnostico: "",
-    prescricao: "",
+    medicamento: "",
+    exame: "",
   });
 
   const [inCamera, setInCamera] = useState(false);
+
+  const [consulta, setConsulta] = useState({});
+
+  const [descricaoExame, setDescricaoExame] = useState("");
 
   const [photo, setPhoto] = useState(null);
 
@@ -48,27 +56,72 @@ export const Prescricao = ({ route }) => {
 
   const user = route.params.user;
 
-  const consulta = route.params.consulta;
+  const consultaId = route.params.consulta.id;
 
-  let nome, info, email;
-
-  if (user.role === "paciente") {
-    nome = consulta.medicoClinica.medico.idNavigation.nome;
-    email = consulta.medicoClinica.medico.idNavigation.email;
-    info = consulta.medicoClinica.medico.crm;
-  } else {
-    nome = consulta.paciente.idNavigation.nome;
-    email = consulta.paciente.idNavigation.email;
-    info = moment().diff(new Date(consulta.paciente.dataNascimento), "years");
-  }
+  const [dados, setDados] = useState({
+    nome: "",
+    info: "",
+    email: "",
+    foto: "",
+  });
 
   useEffect(() => {
+    getConsulta();
+    return () => {
+      getConsulta();
+    };
+  }, []);
+
+  useEffect(() => {
+    getConsulta();
     setInputs({
       ...inputs,
-      descricao: consulta.descricao,
-      diagnostico: consulta.diagnostico,
+      exame: descricaoExame,
     });
-  }, []);
+  }, [photo]);
+
+  async function getConsulta() {
+    try {
+      await api
+        .get("Consultas/BuscarPorId?id=" + consultaId)
+        .then((response) => {
+          console.log(consultaId);
+          setInputs({
+            ...inputs,
+            descricao: response.data.descricao,
+            diagnostico: response.data.diagnostico,
+            medicamento: response.data.receita.medicamento,
+          });
+
+          setDados({
+            nome: response.data.paciente.idNavigation.nome,
+            email: response.data.paciente.idNavigation.email,
+            info: moment().diff(
+              new Date(response.data.paciente.dataNascimento),
+              "years"
+            ),
+            foto: response.data.paciente.idNavigation.foto,
+          });
+          setConsulta(response.data);
+          setDescricaoExame(response.data.exames[0].descricao);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateProntuario() {
+    try {
+      await api.put("Consultas/Prontuario", {
+        ConsultaId: consulta.id,
+        diagnostico: inputs.diagnostico,
+        descricao: inputs.descricao,
+        medicamento: inputs.medicamento,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return inCamera ? (
     <MyCamera
@@ -76,16 +129,15 @@ export const Prescricao = ({ route }) => {
       setPhoto={setPhoto}
       setIsPhotoSaved={setIsPhotoSaved}
     />
-  ) : (
+  ) : dados.email !== "" ? (
     <ContainerScroll>
-      <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
-
+      <PacienteImage source={{ uri: dados.foto }} />
       <ContainerSpacing>
-        <Title text={nome} />
+        <Title text={dados.nome} />
 
         <Group row>
-          <Subtitle text={info + " anos"} />
-          <Subtitle bold text={email} />
+          <Subtitle text={dados.info + " anos"} />
+          <Subtitle bold text={dados.email} />
         </Group>
 
         <Input
@@ -107,8 +159,8 @@ export const Prescricao = ({ route }) => {
 
         <Input
           height={100}
-          inputValue={inputs.prescricao}
-          onChange={(text) => setInputs({ ...inputs, prescricao: text })}
+          inputValue={inputs.medicamento}
+          onChange={(text) => setInputs({ ...inputs, medicamento: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"
@@ -137,7 +189,10 @@ export const Prescricao = ({ route }) => {
             />
           )}
           <Button
-            onPress={() => setInCamera(true)}
+            onPress={() => {
+              setInCamera(true);
+              setModalOpen(true);
+            }}
             text={photo != null ? "Trocar" : "Enviar"}
             icon={<Feather name="camera" size={18} color="white" />}
           />
@@ -148,19 +203,24 @@ export const Prescricao = ({ route }) => {
         <Input
           border={false}
           height={100}
+          inputValue={descricaoExame}
           placeholder="Resultado do exame de sangue : tudo normal"
         />
 
         <Group gap={10}>
           <Button
-            onPress={() => setEditMode(!editMode)}
+            onPress={() => {
+              setEditMode(!editMode);
+              editMode && updateProntuario();
+            }}
             text={editMode ? "SALVAR" : "EDITAR"}
           />
 
-          <Button outlined text="Voltar" />
+          <Button outlined text="SAIR DO APP" />
         </Group>
       </ContainerSpacing>
       <CameraModal
+        consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}
         setInCamera={setInCamera}
@@ -169,5 +229,7 @@ export const Prescricao = ({ route }) => {
         photoUri={photo}
       />
     </ContainerScroll>
+  ) : (
+    <ActivityIndicator style={{ height: "100%" }} />
   );
 };

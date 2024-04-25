@@ -72,7 +72,6 @@ export const Prontuario = ({ route }) => {
   }
 
   async function updateProntuario() {
-    const prescricao = inputs.prescricao.split("\n");
     try {
       await api.put("Consultas/Prontuario", {
         ConsultaId: consulta.id,
