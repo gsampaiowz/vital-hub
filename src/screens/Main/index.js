@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "./../Home/index";
-import { Perfil } from "../Perfil/index";
+import { PerfilPaciente } from "../PerfilPaciente/index";
 import { ContentIcon, TextIcon } from "./style";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 
@@ -38,7 +38,7 @@ export const Main = () => {
                     }
                   >
                     <FontAwesome name="user-circle" size={18} color="#4e4b59" />
-                    {focused && <TextIcon>Perfil</TextIcon>}
+                    {focused && <TextIcon>PerfilPaciente</TextIcon>}
                   </ContentIcon>
                 </>
               );
@@ -50,7 +50,7 @@ export const Main = () => {
         name="Home"
         component={Home}
       />
-      <BottomTab.Screen name="Perfil" component={Perfil} />
+      <BottomTab.Screen name="PerfilPaciente" component={PerfilPaciente} />
     </BottomTab.Navigator>
   );
 };

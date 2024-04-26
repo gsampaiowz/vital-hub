@@ -89,7 +89,7 @@ export const Login = ({ navigation }) => {
 
   const [inputs, setInputs] = useState({
     email: "paciente@gmail.com",
-    senha: "paciente123",
+    senha: "paciente12345",
   });
 
   //METODO LOGIN COM API
@@ -102,7 +102,6 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
-        console.log(response.data);
         navigation.navigate("Main");
       })
       .catch((error) => {
@@ -123,12 +122,12 @@ export const Login = ({ navigation }) => {
         <Group gap={10}>
           <Input
             inputValue={inputs.email}
-            onChange={(text) => setInputs({ ...inputs, email: text })}
+            onChangeText={(text) => setInputs({ ...inputs, email: text })}
             placeholder="Usuário ou E-mail"
           />
           <Input
             inputValue={inputs.senha}
-            onChange={(text) => setInputs({ ...inputs, senha: text })}
+            onChangeText={(text) => setInputs({ ...inputs, senha: text })}
             placeholder="Senha"
           />
           <Link

@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
 import { encode, decode } from "base-64";
+import api from "../service/service";
 
 if (!global.atob) {
   global.atob = decode;
@@ -19,11 +20,22 @@ export const userDecodeToken = async () => {
 
   //Decodifica o token recebido
   const decoded = jwtDecode(user);
+
+  let fotoUsuario;
+
+  try {
+    const response = await api.get(`/Usuario/BuscarPorId?id=${decoded.jti}`);
+    fotoUsuario = response.data.foto;
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     id: decoded.jti,
     name: decoded.name,
     role: decoded.role,
     email: decoded.email,
     token: user,
+    foto: fotoUsuario,
   };
 };

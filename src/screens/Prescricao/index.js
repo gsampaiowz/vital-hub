@@ -5,12 +5,16 @@ import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
+import moment from "moment";
+import api from "../../service/service";
+import { Dimensions } from "react-native";
+import { ActivityIndicator } from "react-native";
 
 const Divider = styled.View`
   width: 100%;
@@ -28,10 +32,21 @@ const ImagePress = styled.TouchableOpacity`
   width: 100%;
 `;
 
-export const Prescricao = () => {
+export const Prescricao = ({ route }) => {
   const [editMode, setEditMode] = useState(false);
 
+  const [inputs, setInputs] = useState({
+    descricao: "",
+    diagnostico: "",
+    medicamento: "",
+    exame: "",
+  });
+
   const [inCamera, setInCamera] = useState(false);
+
+  const [consulta, setConsulta] = useState({});
+
+  const [descricaoExame, setDescricaoExame] = useState("");
 
   const [photo, setPhoto] = useState(null);
 
@@ -39,28 +54,104 @@ export const Prescricao = () => {
 
   const [isPhotoSaved, setIsPhotoSaved] = useState(false);
 
-  return inCamera ? (
-    <MyCamera setInCamera={setInCamera} setPhoto={setPhoto} setIsPhotoSaved={setIsPhotoSaved} />
-  ) : (
-    <ContainerScroll>
-      <PacienteImage source={require("./../../assets/img/UserImage.jpg")} />
+  const user = route.params.user;
 
+  const consultaId = route.params.consulta.id;
+
+  const [dados, setDados] = useState({
+    nome: "",
+    info: "",
+    email: "",
+    foto: "",
+  });
+
+  useEffect(() => {
+    getConsulta();
+    return () => {
+      getConsulta();
+    };
+  }, []);
+
+  useEffect(() => {
+    getConsulta();
+    setInputs({
+      ...inputs,
+      exame: descricaoExame,
+    });
+  }, [photo]);
+
+  async function getConsulta() {
+    try {
+      await api
+        .get("Consultas/BuscarPorId?id=" + consultaId)
+        .then((response) => {
+          console.log(consultaId);
+          setInputs({
+            ...inputs,
+            descricao: response.data.descricao,
+            diagnostico: response.data.diagnostico,
+            medicamento: response.data.receita.medicamento,
+          });
+
+          setDados({
+            nome: response.data.paciente.idNavigation.nome,
+            email: response.data.paciente.idNavigation.email,
+            info: moment().diff(
+              new Date(response.data.paciente.dataNascimento),
+              "years"
+            ),
+            foto: response.data.paciente.idNavigation.foto,
+          });
+          setConsulta(response.data);
+          setDescricaoExame(response.data.exames[0].descricao);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateProntuario() {
+    try {
+      await api.put("Consultas/Prontuario", {
+        ConsultaId: consulta.id,
+        diagnostico: inputs.diagnostico,
+        descricao: inputs.descricao,
+        medicamento: inputs.medicamento,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  return inCamera ? (
+    <MyCamera
+      setInCamera={setInCamera}
+      setPhoto={setPhoto}
+      setIsPhotoSaved={setIsPhotoSaved}
+    />
+  ) : dados.email !== "" ? (
+    <ContainerScroll>
+      <PacienteImage source={{ uri: dados.foto }} />
       <ContainerSpacing>
-        <Title text={"Romário"} />
+        <Title text={dados.nome} />
 
         <Group row>
-          <Subtitle text="22 anos" />
-          <Subtitle text="romario@email.com" />
+          <Subtitle text={dados.info + " anos"} />
+          <Subtitle bold text={dados.email} />
         </Group>
 
         <Input
           height={100}
+          inputValue={inputs.descricao}
+          onChange={(text) => setInputs({ ...inputs, descricao: text })}
           border={editMode}
           label="Descrição da consulta:"
           placeholder="Descrição da consulta:"
         />
 
         <Input
+          inputValue={inputs.diagnostico}
+          onChange={(text) => setInputs({ ...inputs, diagnostico: text })}
           border={editMode}
           label="Diagnóstico do paciente:"
           placeholder="Diagnóstico do paciente"
@@ -68,6 +159,8 @@ export const Prescricao = () => {
 
         <Input
           height={100}
+          inputValue={inputs.medicamento}
+          onChange={(text) => setInputs({ ...inputs, medicamento: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"
@@ -96,7 +189,10 @@ export const Prescricao = () => {
             />
           )}
           <Button
-            onPress={() => setInCamera(true)}
+            onPress={() => {
+              setInCamera(true);
+              setModalOpen(true);
+            }}
             text={photo != null ? "Trocar" : "Enviar"}
             icon={<Feather name="camera" size={18} color="white" />}
           />
@@ -107,19 +203,24 @@ export const Prescricao = () => {
         <Input
           border={false}
           height={100}
+          inputValue={descricaoExame}
           placeholder="Resultado do exame de sangue : tudo normal"
         />
 
         <Group gap={10}>
           <Button
-            onPress={() => setEditMode(!editMode)}
+            onPress={() => {
+              setEditMode(!editMode);
+              editMode && updateProntuario();
+            }}
             text={editMode ? "SALVAR" : "EDITAR"}
           />
 
-          <Button outlined text="Voltar" />
+          <Button outlined text="SAIR DO APP" />
         </Group>
       </ContainerSpacing>
       <CameraModal
+        consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}
         setInCamera={setInCamera}
@@ -128,5 +229,7 @@ export const Prescricao = () => {
         photoUri={photo}
       />
     </ContainerScroll>
+  ) : (
+    <ActivityIndicator style={{ height: "100%" }} />
   );
 };
