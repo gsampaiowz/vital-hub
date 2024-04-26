@@ -5,7 +5,7 @@ import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
@@ -32,7 +32,7 @@ const ImagePress = styled.TouchableOpacity`
   width: 100%;
 `;
 
-export const Prescricao = () => {
+export const Prescricao = ({ route }) => {
   const [editMode, setEditMode] = useState(false);
 
   const [inputs, setInputs] = useState({
@@ -136,18 +136,22 @@ export const Prescricao = () => {
         <Title text={dados.nome} />
 
         <Group row>
-          <Subtitle text={info + " anos"} />
-          <Subtitle bold text={email} />
+          <Subtitle text={dados.info + " anos"} />
+          <Subtitle bold text={dados.email} />
         </Group>
 
         <Input
           height={100}
+          inputValue={inputs.descricao}
+          onChange={(text) => setInputs({ ...inputs, descricao: text })}
           border={editMode}
           label="Descrição da consulta:"
           placeholder="Descrição da consulta:"
         />
 
         <Input
+          inputValue={inputs.diagnostico}
+          onChange={(text) => setInputs({ ...inputs, diagnostico: text })}
           border={editMode}
           label="Diagnóstico do paciente:"
           placeholder="Diagnóstico do paciente"
@@ -155,8 +159,8 @@ export const Prescricao = () => {
 
         <Input
           height={100}
-          inputValue={inputs.prescricao}
-          onChange={(text) => setInputs({ ...inputs, prescricao: text })}
+          inputValue={inputs.medicamento}
+          onChange={(text) => setInputs({ ...inputs, medicamento: text })}
           border={editMode}
           label="Prescrição médica:"
           placeholder="Prescrição médica"
