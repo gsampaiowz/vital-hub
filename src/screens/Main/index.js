@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "./../Home/index";
-import { PerfilPaciente } from "../PerfilPaciente/index";
 import { ContentIcon, TextIcon } from "./style";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
+import { Perfil } from "../Perfil";
 
 export const Main = () => {
   const BottomTab = createBottomTabNavigator();
@@ -50,7 +50,7 @@ export const Main = () => {
         name="Home"
         component={Home}
       />
-      <BottomTab.Screen name="PerfilPaciente" component={PerfilPaciente} />
+      <BottomTab.Screen name="Perfil" component={Perfil} />
     </BottomTab.Navigator>
   );
 };

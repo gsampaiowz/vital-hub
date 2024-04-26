@@ -71,7 +71,7 @@ export const MyCamera = ({
 
   const [zoom, setZoom] = useState(0);
 
-  const [isRecording, setIsRecording] = useState(false);
+  // const [isRecording, setIsRecording] = useState(false);
 
   const [type, setType] = useState(CameraType.back);
 
@@ -106,6 +106,7 @@ export const MyCamera = ({
       const { status: mediaStatus } =
         await MediaLibrary.requestPermissionsAsync();
     })();
+    console.log(lastPhoto);
   }, []);
 
   async function CapturePhoto() {
@@ -166,7 +167,10 @@ export const MyCamera = ({
             name="closecircle"
             size={40}
             color="white"
-            onPress={() => setInCamera(false)}
+            onPress={() => {
+              setInCamera(false);
+              setModalOpen(false);
+            }}
           />
           <ToggleCamera
             onPress={() =>

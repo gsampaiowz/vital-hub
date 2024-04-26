@@ -48,32 +48,14 @@ export const ModalAddConsulta = ({
     { label: "Urgência", value: 2 },
   ];
 
-  const [clinicaSelecionada, setClinicaSelecionada] = useState({});
-
-  const [clinicas, setClinicas] = useState([]);
-
-  useEffect(() => {
-    getClinicas();
-  }, []);
-
-  let clinicasArray = [];
-
-  async function getClinicas() {
-    try {
-      const response = await api.get("/Clinica/ListarTodas");
-      setClinicas(response.data);
-      clinicasArray.push()
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const [prioridade, setPrioridade] = useState(undefined);
+  const [prioridade, setPrioridade] = useState(null);
 
   function Continue() {
-    if (prioridade) {
+    if (prioridade != null) {
       setShowModalConsulta(false);
-      navigation.navigate("SelecionarClinica");
+      navigation.navigate("SelecionarClinica", {
+        prioridade: prioridade.value,
+      });
     }
   }
 
@@ -90,22 +72,22 @@ export const ModalAddConsulta = ({
               text="Informe o tipo de consulta"
             />
             <MySelect
-              placeholder={{ label: "Tipo de consulta" }}
+              placeholder={{ label: "Tipo de consulta", value: null }}
               items={tiposConsulta}
               onValueChange={(value) => setPrioridade(value)}
             />
-            <Subtitle
+            {/* <Subtitle
               bold
               fontSize={14}
               color="black"
               text="Informe a localização desejada"
-            />
-            <MySelect
-              placeholder={{ label: "Clínica" }}
+            /> */}
+            {/* <MySelect
+              placeholder={{ label: "Clínica", value: null }}
               items={clinicas}
-              
+              value={clinicaSelecionada}
               onValueChange={(value) => setClinicaSelecionada(value)}
-            />
+            /> */}
             <Group gap={10}>
               <Button onPress={() => Continue()} text="Continuar" />
               <Button

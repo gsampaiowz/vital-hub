@@ -4,7 +4,7 @@ import { Subtitle } from "./../Subtitle/index";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Group } from "./../Group/index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CardStyled = styled.Pressable`
   background-color: #fff;
@@ -52,10 +52,14 @@ export const CardMedClini = ({
 }) => {
   const [cardFocused, setCardFocused] = useState(false);
 
+  useEffect(() => {
+    console.log(cardFocused);
+  }, [cardFocused]);
+
   return (
     <CardStyled
-      onFocus={() => setCardFocused(true)}
-      onBlur={() => setCardFocused(false)}
+      onPress={() => setCardFocused(true)}
+      onPressOut={() => setCardFocused(false)}
       style={{ border: cardFocused ? "2px solid #496BBA" : "2px solid white" }}
     >
       {!clinica && <ImageStyled source={image} />}

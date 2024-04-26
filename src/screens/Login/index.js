@@ -88,8 +88,8 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "paciente@gmail.com",
-    senha: "paciente12345",
+    email: "paciente@email.com",
+    senha: "paciente12",
   });
 
   //METODO LOGIN COM API
@@ -105,11 +105,11 @@ export const Login = ({ navigation }) => {
         console.log(response.data);
         navigation.navigate("Main");
       })
-      .catch((error) => {
+      .catch(() => {
         if (inputs.email === "" || inputs.senha === "") {
           Toast.error("Preencha todos os campos");
         }
-        Toast.error("Email ou senha incorretos: " + error);
+        Toast.error("Email ou senha incorretos");
       });
     setCarregando(false);
   }

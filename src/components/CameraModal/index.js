@@ -20,6 +20,7 @@ const ModalImage = styled.Image`
 `;
 
 export const CameraModal = ({
+  getConsulta,
   photoUri,
   visible,
   setInCamera,
@@ -70,7 +71,7 @@ export const CameraModal = ({
     const formData = new FormData();
     formData.append("ConsultaId", consultaId);
 
-    formData.append("Arquivo", {
+    formData.append("Imagem", {
       uri: photoUri,
       name: `image.${photoUri.split(".").pop()}`,
       type: `image/${photoUri.split(".").pop()}`,
@@ -81,20 +82,20 @@ export const CameraModal = ({
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
 
       setModalOpen(false);
       setLoad(false);
     } catch (error) {
       setLoad(false);
       setModalOpen(false);
-      console.log(error);
+      getConsulta();
     }
   }
 
   useEffect(() => {
-    console.log(consultaId)
-    console.log(photoUri)
+    console.log(consultaId);
+    console.log(photoUri);
   }, []);
 
   return (

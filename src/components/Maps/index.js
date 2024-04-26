@@ -27,7 +27,7 @@ export const Maps = ({ clinica }) => {
     if (granted) {
       const currentPosition = await getCurrentPositionAsync();
 
-      await setInitialPosition(currentPosition);
+      setInitialPosition(currentPosition);
     }
   }
 
@@ -68,7 +68,7 @@ export const Maps = ({ clinica }) => {
         distanceInterval: 1,
       },
       async (response) => {
-        await setInitialPosition(response);
+         setInitialPosition(response);
 
         mapsReference.current.animateCamera({
           pitch: 60,
@@ -76,7 +76,7 @@ export const Maps = ({ clinica }) => {
         });
       }
     );
-  }, [localizacao]);
+  }, [1000]);
 
   useEffect(() => {
     RecarregarVisualizacaoMapa();

@@ -33,7 +33,7 @@ export const VerificarEmail = ({ navigation, route }) => {
 
   async function validarCodigo() {
 
-    await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
+    await api.post(`/RecuperarSenha/Validar?email=${route.params.emailRecuperacao}&codigo=${codigo}`)
       .then(() => {
         navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao });
 
@@ -88,7 +88,7 @@ export const VerificarEmail = ({ navigation, route }) => {
                   //verificar se o campo é vazio
                   if (txt == "") {
 
-                    focusPrevInput(index)
+                    // focusPrevInput(index)
 
                   } else {
                     //verificar se o campo foi preenchido
@@ -96,7 +96,7 @@ export const VerificarEmail = ({ navigation, route }) => {
                     codigoInformado[index] = txt
                     setCodigo(codigoInformado.join(""))
                     
-                    focusNextInput(index)
+                    // focusNextInput(index)
                   }
                 }}
               />

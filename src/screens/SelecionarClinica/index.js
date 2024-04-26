@@ -14,6 +14,8 @@ export const SelecionarClinica = () => {
     getClinicas();
   }, []);
 
+  const [clinicaSelecionada, setClinicaSelecionada] = useState(null);
+
   async function getClinicas() {
     try {
       const response = await api.get("/Clinica/ListarTodas");
