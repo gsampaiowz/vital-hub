@@ -102,7 +102,6 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
-        console.log(response.data);
         navigation.navigate("Main");
       })
       .catch((error) => {

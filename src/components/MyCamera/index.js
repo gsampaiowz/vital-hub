@@ -1,6 +1,6 @@
 import { Camera, CameraType } from "expo-camera";
 import { useEffect, useRef, useState } from "react";
-import { MediaLibrary } from "expo-media-library";
+import * as MediaLibrary from "expo-media-library";
 import styled from "styled-components/native";
 import {
   AntDesign,
@@ -8,10 +8,12 @@ import {
   FontAwesome6,
   FontAwesome,
 } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import {
   GestureHandlerRootView,
   PinchGestureHandler,
 } from "react-native-gesture-handler";
+import { Image } from "react-native";
 
 const CloseCamera = styled(AntDesign)`
   position: absolute;
@@ -41,14 +43,28 @@ const FlashIcon = styled(Ionicons)`
   z-index: 10;
 `;
 
-const TakeVideo = styled(AntDesign)`
+// const TakeVideo = styled(AntDesign)`
+//   position: absolute;
+//   bottom: 10px;
+//   right: 10px;
+//   z-index: 10;
+// `;
+
+const LastPhoto = styled.TouchableOpacity`
   position: absolute;
   bottom: 10px;
   right: 10px;
   z-index: 10;
 `;
 
-export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
+export const MyCamera = ({
+  setIsPhotoSaved = () => {},
+  setPhoto,
+  setInCamera,
+  setModalOpen,
+  inCamera,
+  getMediaLibrary = false,
+}) => {
   const cameraRef = useRef(null);
 
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
@@ -58,6 +74,29 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
   const [isRecording, setIsRecording] = useState(false);
 
   const [type, setType] = useState(CameraType.back);
+
+  const [lastPhoto, setLastPhoto] = useState(null);
+
+  useEffect(() => {
+    setPhoto(null);
+
+    if (getMediaLibrary) {
+      GetLatestPhoto();
+    }
+  }, [inCamera]);
+
+  async function GetLatestPhoto() {
+    const { assets } = await MediaLibrary.getAssetsAsync({
+      sortBy: [[MediaLibrary.SortBy.creationTime, false]],
+      first: 1,
+    });
+
+    if (assets.length > 0) {
+      setLastPhoto(assets[0].uri);
+    }
+
+    console.log(assets);
+  }
 
   useEffect(() => {
     (async () => {
@@ -83,6 +122,19 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
       setInCamera(false);
       setModalOpen(true);
       scrollTo(750, 0);
+    }
+  }
+
+  async function SelectImageGallery() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setPhoto(result.assets[0].uri);
+
+      setInCamera(false);
     }
   }
 
@@ -113,7 +165,7 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
           <CloseCamera
             name="closecircle"
             size={40}
-            color="#49B3BA"
+            color="white"
             onPress={() => setInCamera(false)}
           />
           <ToggleCamera
@@ -123,7 +175,7 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
               )
             }
           >
-            <FontAwesome6 name="camera-rotate" size={40} color="#49B3BA" />
+            <FontAwesome6 name="camera-rotate" size={40} color="white" />
           </ToggleCamera>
           <FlashIcon
             onPress={() =>
@@ -143,7 +195,7 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
                 : "flash"
             }
             size={40}
-            color="#49B3BA"
+            color="white"
           />
           <TakePhoto
             onPress={() => {
@@ -151,9 +203,9 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
               setIsPhotoSaved(false);
             }}
           >
-            <FontAwesome name="camera" size={50} color="#49B3BA" />
+            <FontAwesome name="camera" size={50} color="white" />
           </TakePhoto>
-          <TakeVideo
+          {/* <TakeVideo
             onPress={() =>
               isRecording
                 ? cameraRef.current.stopRecording()
@@ -161,8 +213,18 @@ export const MyCamera = ({ setIsPhotoSaved, setPhoto, setInCamera }) => {
             }
             name="videocamera"
             size={24}
-            color={isRecording ? "red" : "#49B3BA"}
-          />
+            color={isRecording ? "red" : "white"}
+          /> */}
+          {lastPhoto != null ? (
+            <LastPhoto onPress={() => SelectImageGallery()}>
+              <Image
+                borderRadius={5}
+                width={60}
+                height={60}
+                source={{ uri: lastPhoto }}
+              />
+            </LastPhoto>
+          ) : null}
         </Camera>
       </PinchGestureHandler>
     </GestureHandlerRootView>

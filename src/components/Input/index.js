@@ -58,6 +58,7 @@ export const Input = ({
       {label !== "" && <InputLabel>{label}</InputLabel>}
       <InputStyled
         maxLength={maxLength}
+        multiline
         onPressIn={onPress}
         readOnly={!border}
         value={inputValue}

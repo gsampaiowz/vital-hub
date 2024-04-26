@@ -1,9 +1,10 @@
-import { Modal } from "react-native";
+import { ActivityIndicator, Modal } from "react-native";
 import styled from "styled-components/native";
 import { Button } from "../Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import { Toast } from "toastify-react-native";
+import api from "../../service/service";
 
 const ModalContent = styled.View`
   flex: 1;
@@ -22,12 +23,15 @@ export const CameraModal = ({
   photoUri,
   visible,
   setInCamera,
+  consultaId,
   setModalOpen,
   isPhotoSaved,
   setIsPhotoSaved,
   ...rest
 }) => {
   const [fotoGaleria, setFotoGaleria] = useState(null);
+
+  const [load, setLoad] = useState(false);
 
   const handleButtonPress = async () => {
     if (isPhotoSaved) {
@@ -59,6 +63,40 @@ export const CameraModal = ({
     }
   }
 
+  async function InserirExame() {
+    setLoad(true);
+
+    //Mandar a foto via formulário
+    const formData = new FormData();
+    formData.append("ConsultaId", consultaId);
+
+    formData.append("Arquivo", {
+      uri: photoUri,
+      name: `image.${photoUri.split(".").pop()}`,
+      type: `image/${photoUri.split(".").pop()}`,
+    });
+
+    try {
+      await api.post("/Exame/Cadastrar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
+      setModalOpen(false);
+      setLoad(false);
+    } catch (error) {
+      setLoad(false);
+      setModalOpen(false);
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    console.log(consultaId)
+    console.log(photoUri)
+  }, []);
+
   return (
     <Modal
       animationType="slide"
@@ -82,8 +120,8 @@ export const CameraModal = ({
 
         <Button
           width="90%"
-          onPress={() => setModalOpen(false)}
-          text="Confirmar"
+          onPress={() => InserirExame()}
+          text={load ? <ActivityIndicator /> : "Confirmar"}
         />
       </ModalContent>
     </Modal>
