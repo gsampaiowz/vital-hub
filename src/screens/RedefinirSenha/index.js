@@ -8,8 +8,31 @@ import { Title } from "../../components/Title";
 import { NavigationButton } from "../../components/NavigationButton";
 import { Button } from "../../components/Button";
 import { Group } from "../../components/Group/index";
+import { useState } from "react";
+import api from "../../service/service";
 
-export const RedefinirSenha = ({ navigation }) => {
+export const RedefinirSenha = ({ navigation, route }) => {
+
+  const [senha, setSenha] = useState('')
+  const [confirmar, setConfirmar] = useState('')
+  //#endregion
+
+  async function AlterarSenha() {
+    if (senha === confirmar) {
+
+      await api.put(`/Usuario/AlterarSenha?email=${route.params.emailRecuperacao}`, {
+        senhaNova: senha
+      }).then(() => {
+        navigation.replace("Login")
+      }).catch(error => {
+        console.log(error);
+      })
+    } else {
+      alert("Senhas incompátiveis")
+    }
+
+  }
+
   return (
     <ContainerScroll>
       <ContainerSpacing>
@@ -24,10 +47,23 @@ export const RedefinirSenha = ({ navigation }) => {
 
         <Subtitle text="Insira e confirme a sua nova senha" />
         <Group gap={10}>
-          <Input placeholder="Nova Senha" />
-          <Input placeholder="Confirmar nova senha" />
+
+          <Input placeholder="Nova Senha"
+          inputValue={senha}
+            onChangeText={(txt) => setSenha(txt)}
+
+          />
+
+          <Input placeholder="Confirmar nova senha"
+          inputValue={confirmar}
+            onChangeText={(txt) => setConfirmar(txt)}
+
+          />
+
         </Group>
-        <Button onPress={() => navigation.navigate("Login")} text="Redefinir" />
+        <Button
+          onPress={() => AlterarSenha()} text="Redefinir"
+        />
       </ContainerSpacing>
     </ContainerScroll>
   );

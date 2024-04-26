@@ -44,7 +44,7 @@ export const Button = ({
     disabled={disabled}
       style={{
         width: width,
-        paddingVertical: spacing,
+        paddingVertical: spacing - 1,
         paddingHorizontal: spacing / 2,
         borderColor: border ? borderColor : "transparent",
         backgroundColor: outlined

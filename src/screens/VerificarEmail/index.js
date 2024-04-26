@@ -9,8 +9,39 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { Link } from "./../../components/Link/index";
 import { Group } from "../../components/Group";
+import { useRef, useState } from "react";
+import api from "../../service/service";
 
-export const VerificarEmail = ({ navigation }) => {
+export const VerificarEmail = ({ navigation, route }) => {
+
+  const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
+  const [codigo, setCodigo] = useState('')
+
+  function focusNextInput(index) {
+    //Verificar se o index é menor do que a quantidade de campos
+    if (index < inputs.length - 1) {
+      inputs[index + 1].current.focus()
+    }
+  }
+
+  function focusPrevInput(index) {
+    //Verificar se o index é menor do que a quantidade de campos
+    if (index > 0) {
+      inputs[index - 1].current.focus()
+    }
+  }
+
+  async function validarCodigo() {
+
+    await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
+      .then(() => {
+        navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao });
+
+      }).catch(error => {
+        console.log(error);
+      })
+  }
+
   return (
     <ContainerScroll>
       <ContainerSpacing>
@@ -30,47 +61,50 @@ export const VerificarEmail = ({ navigation }) => {
               <Link
                 underline={false}
                 color="#496BBA"
-                text=" username@email.com"
+                text={route.params.emailRecuperacao}
               />
             </Group>
           }
         />
 
         <Group row justifyContent="space-between">
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
 
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
+          {
+            [0, 1, 2, 3].map((index) => (
+              <Input
+              
+                inputValue={inputs[index]}
+                key={index}
+                ref={inputs[index]}
+              maxLength={1}
+                textAlign={"center"}
+                width={60}
+                height={60}
+                fontSize={32}
+                placeholder="0"
 
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
 
-          <Input
-            textAlign={"center"}
-            width={60}
-            height={60}
-            fontSize={32}
-            placeholder="0"
-          />
+                onChangeText={(txt) => {
+                  //verificar se o campo é vazio
+                  if (txt == "") {
+
+                    focusPrevInput(index)
+
+                  } else {
+                    //verificar se o campo foi preenchido
+                    const codigoInformado = [...codigo]
+                    codigoInformado[index] = txt
+                    setCodigo(codigoInformado.join(""))
+                    
+                    focusNextInput(index)
+                  }
+                }}
+              />
+            ))
+          }
         </Group>
         <Button
-          onPress={() => navigation.navigate("RedefinirSenha")}
+          onPress={() => validarCodigo()}
           text="Continuar"
         />
         <Link color="#344F8F" text="Reenviar código" />

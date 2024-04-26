@@ -12,19 +12,13 @@ import MapViewDirections from "react-native-maps-directions";
 import { ActivityIndicator, View } from "react-native";
 import { Title } from "../Title";
 
-export const Maps = ({
-  localizacao
-}) => {
+export const Maps = ({ clinica }) => {
   const mapsReference = useRef(null);
 
   const [initialPosition, setInitialPosition] = useState(null);
   const finalPosition = {
-    // latitude: -23.689007,
-    // longitude: -46.590585,
-
-    // fazer ternario aqui
-    // latitude: localizacao : localizacao.endereco.latitude,
-    longitude: localizacao.endereco.longitude,
+    latitude: clinica.endereco.latitude,
+    longitude: clinica.endereco.longitude,
   };
 
   async function CapturarLocalizacao() {
