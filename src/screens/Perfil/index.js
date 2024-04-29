@@ -82,6 +82,8 @@ export const Perfil = ({ navigation }) => {
     crm: ""
   });
 
+// console.log(inputs.numero);
+
   async function Logout() {
     //Remover token do AsyncStorage
     await AsyncStorage.removeItem("token");
@@ -97,13 +99,13 @@ export const Perfil = ({ navigation }) => {
     try {
       const response = await api.get(`/${url}/BuscarPorId?id=${user.id}`);
       console.log(response.data);
-
+      
       if (user.role === "paciente") {
         setInputs({
-          nome: response.data.nome,
-          cidade: response.data.cidade,
+          nome: response.data.idNavigation.nome,
+          cidade: response.data.endereco.cidade,
           logradouro: response.data.endereco.logradouro,
-          dataNascimento: response.data.dataNascimento,
+          dataNascimento:new Date (response.data.dataNascimento).toLocaleDateString(),
           cpf: response.data.cpf,
           numero: response.data.endereco.numero,
           cep: response.data.endereco.cep,
@@ -111,11 +113,11 @@ export const Perfil = ({ navigation }) => {
         })
       } else {
         setInputs({
-          nome: response.data.nome,
+          nome: response.data.idNavigation.nome,
           cep: response.data.endereco.cep,
           logradouro: response.data.endereco.logradouro,
           numero: response.data.endereco.numero,
-          cidade: response.data.cidade,
+          cidade: response.data.endereco.cidade,
           crm: response.data.crm,
         });
       }
@@ -183,31 +185,21 @@ export const Perfil = ({ navigation }) => {
     }
   }
 
+  // `/Pacientes?idUsuario=${user.id}`
+
+
+//mockei pra testar, mas não deu certo
   async function updateProfile() {
-
-    // const formData = new FormData();
-
-    // formData.append('rg', inputs.rg);
-    // formData.append('cpf', inputs.cpf);
-    // formData.append('cep', inputs.cep);
-    // formData.append('logradouro', inputs.logradouro);
-    // formData.append('numero', inputs.numero);
-    // formData.append('cidade', inputs.cidade);
-    // formData.append('nome', inputs.nome);
-    // // formData.append('foto', foto); // Adiciona o arquivo
-    // formData.append('idTipoUsuario', "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
-    // formData.append('dataNascimento', new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString());
-
-    await api.put(`/Pacientes?idUsuario=${user.id}`, {
+    await api.put(`/Medicos/BuscarPorId?Id=9613B1DB-AE57-4A10-8155-23ADE85DF060`, {
     })
       .then(response => {
 
         if (user.role === "paciente") {
           setInputs({
-            nome: response.data.nome,
-            cidade: response.data.cidade,
+            nome: response.data.idNavigation.nome,
+            cidade: response.data.endereco.cidade,
             logradouro: response.data.endereco.logradouro,
-            dataNascimento: response.data.dataNascimento,
+            dataNascimento:new Date (response.data.dataNascimento).split('/').reverse().join('-').toLocaleString(),
             cpf: response.data.cpf,
             numero: response.data.endereco.numero,
             cep: response.data.endereco.cep,
@@ -215,19 +207,18 @@ export const Perfil = ({ navigation }) => {
           })
         } else {
           setInputs({
-            nome: response.data.nome,
+            nome: response.data.idNavigation.nome,
             cep: response.data.endereco.cep,
             logradouro: response.data.endereco.logradouro,
             numero: response.data.endereco.numero,
-            cidade: response.data.cidade,
+            cidade: response.data.endereco.cidade,
             crm: response.data.crm,
           });
         }
-
-        console.log(response.data);
       })
       .catch(error => {
         console.error(error.respose.data);
+
       });
   }
 
@@ -307,7 +298,7 @@ export const Perfil = ({ navigation }) => {
               />
 
               <Input
-                inputValue={inputs.numero}
+                inputValue={inputs.numero.toString()}
                 onChangeText={(text) => setInputs({ ...inputs, numero: text })}
                 border={editMode}
                 label="Número"
@@ -341,13 +332,13 @@ export const Perfil = ({ navigation }) => {
               label="Nome"
               placeholder="Sampaio"
             />
-            <Input
+            {/* <Input
               inputValue={inputs.cidade}
               onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
               border={editMode}
               label="Cidade"
               placeholder="São Paulo"
-            />
+            /> */}
             <Input
               inputValue={inputs.logradouro}
               onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
@@ -355,16 +346,14 @@ export const Perfil = ({ navigation }) => {
               label="Logradouro"
               placeholder="Rua Itambé"
             />
-            <Group row={true}>
-
               <Input
-                inputValue={inputs.numero}
+                inputValue={inputs.numero.toString()}
                 onChangeText={(text) => setInputs({ ...inputs, numero: text })}
                 border={editMode}
                 label="Número"
                 placeholder="22"
               />
-            </Group>
+              
             <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
               <Input
                 inputValue={inputs.cep}
@@ -383,6 +372,7 @@ export const Perfil = ({ navigation }) => {
             </Group>
           </>
         )}
+
         <Group gap={10}>
           {/* <Button
             onPress={() => setEditMode(!editMode)}
@@ -391,20 +381,22 @@ export const Perfil = ({ navigation }) => {
 
           <Button
             onPress={!user ? () => {
-
+              
               fillProfile();
               navigation.navigate("Login")
             } : () => {
-
+              
               setEditMode(!editMode)
               editMode ? updateProfile() : null
             }
-            }
-            text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
+          }
+          text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
           />
+          
           <Button
             onPress={() => Logout()} outlined text="SAIR DA CONTA" />
         </Group>
+        
       </ContainerSpacing>
     </ContainerScroll>
   );
