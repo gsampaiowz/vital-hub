@@ -7,21 +7,32 @@ import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
 import api from "../../service/service";
 
-export const SelecionarClinica = () => {
+export const SelecionarClinica = ({ route, navigation }) => {
   const [clinicas, setClinicas] = useState([]);
 
   useEffect(() => {
     getClinicas();
   }, []);
 
-  const [clinicaSelecionada, setClinicaSelecionada] = useState(null);
+  const [clinica, setClinica] = useState({
+    clinicaId: "",
+    clinicaLabel: "",
+  });
 
   async function getClinicas() {
     try {
-      const response = await api.get("/Clinica/ListarTodas");
+      const response = await api.get(
+        `/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`
+      );
       setClinicas(response.data);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  function Continue() {
+    if(clinica.clinicaId != "") {
+      navigation.navigate("SelecionarMedico", { agendamento: { ...route.params.agendamento, ...clinica} });
     }
   }
 
@@ -33,11 +44,14 @@ export const SelecionarClinica = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CardMedClini
-            clinica
+            clinica={clinica}
+            isClinica
+            clinicaSelecionada={item}
+            setClinica={setClinica}
             name={item.nomeFantasia}
             desc={item.endereco.cidade}
             aberto={"SEG - SEX"}
-            estrelas={2}
+            estrelas={5}
           />
         )}
         showsVerticalScrollIndicator={false}
@@ -45,9 +59,9 @@ export const SelecionarClinica = () => {
 
       <ContainerSpacing>
         <Group gap={10}>
-          <Button text="Continuar" />
+          <Button text="Continuar" onPress={() => Continue()}/>
 
-          <Button outlined text="Cancelar" />
+          <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>
       </ContainerSpacing>
     </ContainerScroll>

@@ -42,19 +42,19 @@ export const ModalAddConsulta = ({
   visible = false,
   ...rest
 }) => {
-  const tiposConsulta = [
-    { label: "Exame", value: 0 },
-    { label: "Rotina", value: 1 },
-    { label: "Urgência", value: 2 },
+  const prioridades = [
+    { label: "Exame", value: "43FFA829-7896-4BF2-9DBF-C28249726DE6" },
+    { label: "Rotina", value: "299A8E90-4459-4F59-BCC5-F0F5CE876FA5" },
+    { label: "Urgência", value: "4397D79A-2B8D-4A53-9F07-0ECEA4A6A138" },
   ];
 
-  const [prioridade, setPrioridade] = useState(null);
+  const [agendamento, setAgendamento] = useState({ localizacao: "Rio de Janeiro" });
 
-  function Continue() {
-    if (prioridade != null) {
-      setShowModalConsulta(false);
+  async function Continue() {
+    if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
+      await setShowModalConsulta(false);
       navigation.navigate("SelecionarClinica", {
-        prioridade: prioridade.value,
+        agendamento: agendamento,
       });
     }
   }
@@ -69,25 +69,37 @@ export const ModalAddConsulta = ({
               bold
               fontSize={14}
               color="black"
-              text="Informe o tipo de consulta"
+              text="Informe a prioridade da consulta"
             />
             <MySelect
-              placeholder={{ label: "Tipo de consulta", value: null }}
-              items={tiposConsulta}
-              onValueChange={(value) => setPrioridade(value)}
+              placeholder={{ label: "Prioridade da consulta", value: null }}
+              items={prioridades}
+              onValueChange={(value) =>
+                setAgendamento({
+                  ...agendamento,
+                  prioridadeId: value,
+                  prioridadeLabel: prioridades.find(
+                    (item) => item.value === value
+                  ).label,
+                })
+              }
             />
-            {/* <Subtitle
+            <Subtitle
               bold
               fontSize={14}
               color="black"
               text="Informe a localização desejada"
-            /> */}
-            {/* <MySelect
-              placeholder={{ label: "Clínica", value: null }}
-              items={clinicas}
-              value={clinicaSelecionada}
-              onValueChange={(value) => setClinicaSelecionada(value)}
-            /> */}
+            />
+            <Input
+              placeholder="Informe a localização"
+              inputValue={agendamento ? agendamento.localizacao : null}
+              onChangeText={(txt) =>
+                setAgendamento({
+                  ...agendamento,
+                  localizacao: txt,
+                })
+              }
+            />
             <Group gap={10}>
               <Button onPress={() => Continue()} text="Continuar" />
               <Button
