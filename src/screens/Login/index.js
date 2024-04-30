@@ -1,5 +1,5 @@
 import { Logo } from "../../components/Logo";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import LogoImage from "../../assets/img/Logo.png";
 import { Title } from "./../../components/Title/index";
 import { Input } from "../../components/Input";
@@ -115,7 +115,7 @@ export const Login = ({ navigation }) => {
   }
 
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <Logo source={LogoImage} />
@@ -175,6 +175,6 @@ export const Login = ({ navigation }) => {
           </Group>
         ) : null}
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

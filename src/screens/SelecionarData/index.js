@@ -9,7 +9,42 @@ import { Button } from "../../components/Button";
 import { ModalResumoConsulta } from "../../components/ModalResumoConsulta";
 import { useEffect, useState } from "react";
 import moment from "moment/moment";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, StyleSheet } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
+
+const style = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "#60BFC5",
+    borderRadius: 5,
+    color: "#34898F",
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    fontFamily: "MontserratAlternates_600SemiBold",
+  },
+  inputAndroid: {
+    fontSize: 16,
+    padding: 16,
+    borderWidth: 2,
+    borderColor: "#60BFC5",
+    borderRadius: 5,
+    color: "#34898F",
+    alignItems: "center",
+    justifyContent: "center",
+
+    fontFamily: "MontserratAlternates_600SemiBold",
+  },
+  iconContainer: {
+    top: "25%",
+    marginRight: 10,
+  },
+  placeholder: {
+    color: "#34898F",
+  },
+});
 
 const SelectHorario = styled(RNPickerSelect)`
   width: 90%;
@@ -24,23 +59,6 @@ export const SelecionarData = ({ route, navigation }) => {
   const [agendamento, setAgendamento] = useState();
 
   const [arrayOptions, setArrayOptions] = useState(null);
-
-  const currentDate = new Date();
-  const startingDate = new Date(
-    currentDate.getFullYear(),
-    currentDate.getMonth(),
-    currentDate.getDate()
-  );
-
-  const [data, setData] = useState(startingDate);
-
-  const [selected, setSelected] = useState(
-    data.toLocaleDateString().split("/").reverse().join("-")
-  );
-
-  useEffect(() => {
-    console.log(dataSelecionada);
-  }, [dataSelecionada]);
 
   async function loadOptions() {
     //CAPTURAR A QUANTIDADE DE HORAS QUE FALTAM PARA AS 24H
@@ -71,15 +89,26 @@ export const SelecionarData = ({ route, navigation }) => {
     loadOptions();
   }, []);
 
+  function Continue() {
+    if (horarioSelecionado != "") {
+      setAgendamento({
+        ...route.params.agendamento,
+        dataConsulta: `${dataSelecionada} ${horarioSelecionado}`,
+      });
+      setShowResumoModal(true);
+    }
+  }
+
+  useEffect(() => {
+    console.log(agendamento);
+  }, [agendamento]);
+
   return (
     <ContainerScroll contentContainerStyle={{ paddingTop: 20 }}>
       <Title text="Selecionar data" />
       <CalendarComponent
         setDataSelecionada={setDataSelecionada}
         dataSelecionada={dataSelecionada}
-        setSelected={setSelected}
-        selected={selected}
-        data={data}
       />
       <Subtitle
         bold
@@ -98,12 +127,14 @@ export const SelecionarData = ({ route, navigation }) => {
           <ActivityIndicator />
         )}
         <Group gap={10}>
-          <Button onPress={() => setShowResumoModal(true)} text="Continuar" />
+          <Button onPress={() => Continue()} text="Continuar" />
           <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>
       </ContainerSpacing>
       {showResumoModal && (
         <ModalResumoConsulta
+        navigation={navigation}
+          resumo={agendamento}
           visible={showResumoModal}
           setShowResumoModal={setShowResumoModal}
         />

@@ -1,11 +1,7 @@
-import { useState } from "react";
-
+import { Dimensions } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 
 const CalendarComponent = ({
-  data,
-  selected,
-  setSelected,
   setDataSelecionada,
   dataSelecionada,
 }) => {
@@ -54,19 +50,19 @@ const CalendarComponent = ({
   return (
     <Calendar
       style={{
-        width: "100%",
+        width: Dimensions.get("window").width,
         alignSelf: "center",
         backgroundColor: "#FAFAFA",
       }}
       onDayPress={(date) => setDataSelecionada(date.dateString)}
-      current={data.toString()}
+      current={dataSelecionada.toString()}
       markedDates={{
         [dataSelecionada]: {
           selected: true,
           disableTouchEvent: true,
         },
       }}
-      minDate={data.toString()}
+      minDate={dataSelecionada.toString()}
       theme={{
         calendarBackground: "#FAFAFA",
         arrowColor: "#49B3BA",

@@ -27,15 +27,18 @@ export const SelecionarMedico = ({ route, navigation }) => {
   }
 
   const [medico, setMedico] = useState({
-    medicoId: "",
+    medicoClinicaId: "",
     medicoLabel: "",
     medicoEspecialidade: "",
   });
 
   function Continue() {
-    if(medico.medicoId != "") {
+    if(medico.medicoClinicaId != "") {
       navigation.navigate("SelecionarData", { agendamento: { ...route.params.agendamento, ...medico} });
+    }else{
+      alert("Selecione um medico")
     }
+    
   }
 
   return (

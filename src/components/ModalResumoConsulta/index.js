@@ -4,6 +4,9 @@ import { Title } from "../Title";
 import { Subtitle } from "../Subtitle/index";
 import { Button } from "../Button";
 import { Group } from "../Group";
+import moment from "moment";
+import api from "./../../service/service";
+import { userDecodeToken } from "../../utils/Auth";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -26,7 +29,28 @@ const ModalContent = styled.View`
   align-items: center;
 `;
 
-export const ModalResumoConsulta = ({ setShowResumoModal, visible = false, ...rest }) => {
+export const ModalResumoConsulta = ({
+  resumo,
+  navigation,
+  setShowResumoModal,
+  visible = false,
+  ...rest
+}) => {
+  async function CadastrarConsulta() {
+    const user = await userDecodeToken();
+    try {
+      await api.post("/Consultas/Cadastrar", {
+        ...resumo,
+        situacaoId: "8240E2BC-531C-46A4-9361-36D3BCEF2B6D",
+        pacienteId: user.id,
+      });
+      setShowResumoModal(false);
+      navigation.navigate("Main");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -38,23 +62,25 @@ export const ModalResumoConsulta = ({ setShowResumoModal, visible = false, ...re
           />
           <Group>
             <Subtitle color="black" bold text="Data da consulta" />
-            <Subtitle text="10 de Março de 2024" />
+            <Subtitle
+              text={moment(resumo.dataConsulta).format("DD/MM/YYYY HH:mm")}
+            />
           </Group>
           <Group>
             <Subtitle color="black" bold text="Médico(a) da consulta" />
-            <Subtitle text="Dra Alessandra" />
-            <Subtitle text="Demartologa, Esteticista" />
+            <Subtitle text={resumo.medicoLabel} />
+            <Subtitle text={resumo.medicoEspecialidade.especialidade1} />
           </Group>
           <Group>
             <Subtitle color="black" bold text="Local da consulta" />
-            <Subtitle text="São Paulo, SP" />
+            <Subtitle text={resumo.localizacao} />
           </Group>
           <Group>
             <Subtitle color="black" bold text="Tipo da consulta" />
-            <Subtitle text="Rotina" />
+            <Subtitle text={resumo.prioridadeLabel} />
           </Group>
           <Group gap={10}>
-            <Button text="Continuar" />
+            <Button text="Continuar" onPress={() => CadastrarConsulta()} />
             <Button
               onPress={() => setShowResumoModal(false)}
               outlined

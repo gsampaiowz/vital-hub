@@ -49,7 +49,7 @@ export const CardMedClini = ({
     border-width: 2px;
     border-color: ${isClinica ? clinicaSelecionada.id == clinica.clinicaId 
       ? "#496bba"
-      : "#fff" : medicoSelecionado.id == medico.medicoId ? "#496bba" : "#fff"};
+      : "#fff" : medicoSelecionado.id == medico.medicoClinicaId ? "#496bba" : "#fff"};
     gap: 10px;
     margin: 0 auto;
     margin-bottom: 10px;
@@ -69,7 +69,7 @@ export const CardMedClini = ({
               clinicaLabel: clinicaSelecionada.nomeFantasia,
             })
           : setMedico({
-              medicoId: medicoSelecionado.id,
+              medicoClinicaId: medicoSelecionado.id,
               medicoLabel: medicoSelecionado.idNavigation.nome,
               medicoEspecialidade: medicoSelecionado.especialidade,
             });
