@@ -20,17 +20,17 @@ export const CriarConta = ({ navigation }) => {
 
   const [inputs, setInputs] = useState({
 
-    nome: "Daniel",
-    email: "pacienteTeste@gmail.com",
-    senha: "pacienteTest",
-    cidade: "Moema",
-    logradouro: "Rua Vicenso Silva",
-    cpf: "39294770095",
-    dataNascimento: "04/05/1999",
+    nome: "",
+    email: "",
+    senha: "",
+    cidade: "",
+    logradouro: "",
+    cpf: "",
+    dataNascimento: "",
     numero: 10,
-    cep: "06548-909",
-    rg: "351763053",
-    foto: "String"
+    cep: "",
+    rg: "",
+    foto: ""
 
   });
 
@@ -94,13 +94,13 @@ return (
       <Group gap={10}>
         <Input
           inputValue={inputs.nome}
-          placeholder="Sampaio"
+          placeholder="Seu nome completo"
           label="Nome"
           onChangeText={(text) => setInputs({ ...inputs, nome: text })}
         />
         <Input
           inputValue={inputs.email}
-          placeholder="sampaio@gmail.com"
+          placeholder="E-mail"
           label="E-mail"
           onChangeText={(text) => setInputs({ ...inputs, email: text })}
         />
@@ -110,40 +110,34 @@ return (
           placeholder="*******"
           onChangeText={(text) => setInputs({ ...inputs, senha: text })}
         />
-        {/* <Input
-          inputValue={inputs.foto}
-          placeholder="Foto De Perfil"
-          label="Foto"
-          onChangeText={(text) => setInputs({ ...inputs, foto: text })}
-        /> */}
         <Input
           inputValue={inputs.cidade}
           label="Cidade"
-          placeholder="São Paulo"
+          placeholder="Cidade"
           onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
         />
         <Input
           inputValue={inputs.logradouro}
           label="Logradouro"
-          placeholder="Rua Itambé"
+          placeholder="Logradouro"
           onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
         />
         <Input
           inputValue={inputs.dataNascimento}
-          placeholder="12/03/2000"
           label="Data de Nascimento"
+          placeholder="_ / _ / _"
           onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
         />
         <Group row={true}>
           <Input
             inputValue={inputs.cpf}
-            placeholder="12345678912"
+            placeholder="CPF"
             label="Cpf"
             onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
           />
           <Input
             inputValue={inputs.numero}
-            placeholder="22"
+            placeholder="Nº"
             label="Número"
             onChangeText={(text) => setInputs({ ...inputs, numero: text })}
           />
@@ -151,13 +145,13 @@ return (
         <Group row={true}>
           <Input
             inputValue={inputs.cep}
-            placeholder="85020250"
+            placeholder="CEP"
             label="Cep"
             onChangeText={(text) => setInputs({ ...inputs, cep: text })}
           />
           <Input
             inputValue={inputs.rg}
-            placeholder="412487214"
+            placeholder="RG"
             label="Rg"
             onChangeText={(text) => setInputs({ ...inputs, rg: text })}
           />
