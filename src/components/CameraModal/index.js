@@ -16,12 +16,13 @@ const ModalContent = styled.View`
 
 const ModalImage = styled.Image`
   width: 100%;
-  height: 500px;
+  height: 350px;
 `;
 
 export const CameraModal = ({
   getConsulta,
   photoUri,
+  setDescricaoExame,
   visible,
   setInCamera,
   consultaId,
@@ -78,7 +79,7 @@ export const CameraModal = ({
     });
 
     try {
-      await api.post("/Exame/Cadastrar", formData, {
+      const response = await api.post("/Exame/Cadastrar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -86,17 +87,13 @@ export const CameraModal = ({
 
       setModalOpen(false);
       setLoad(false);
+      setDescricaoExame(response.data);
+      getConsulta();
     } catch (error) {
       setLoad(false);
       setModalOpen(false);
-      getConsulta();
     }
   }
-
-  useEffect(() => {
-    console.log(consultaId);
-    console.log(photoUri);
-  }, []);
 
   return (
     <Modal

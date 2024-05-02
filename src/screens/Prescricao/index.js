@@ -84,8 +84,6 @@ export const Prescricao = ({ route }) => {
       await api
         .get("Consultas/BuscarPorId?id=" + consultaId)
         .then((response) => {
-          console.log(response.data.exames);
-          console.log(consultaId);
           setInputs({
             ...inputs,
             descricao: response.data.descricao,
@@ -104,7 +102,7 @@ export const Prescricao = ({ route }) => {
             foto: response.data.paciente.idNavigation.foto,
           });
           setConsulta(response.data);
-          setDescricaoExame(response.data.exames[0].descricao);
+          // setDescricaoExame(response.data.exames[0].descricao);
         });
     } catch (error) {
       console.log(error);
@@ -207,7 +205,7 @@ export const Prescricao = ({ route }) => {
 
         <Input
           border={false}
-          height={100}
+          height={200}
           inputValue={descricaoExame}
           placeholder="Resultado do exame de sangue : tudo normal"
         />

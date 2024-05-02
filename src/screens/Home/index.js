@@ -62,7 +62,7 @@ export const Home = ({ navigation }) => {
 
   return (
     <ContainerSafe style={{ paddingTop: 0 }}>
-      <HeaderConsultas image={{uri : user.foto}} />
+      <HeaderConsultas image={{ uri: user.foto }} />
       <Calendar data={data} setData={setData} />
 
       <ContainerSpacing>
@@ -127,7 +127,10 @@ export const Home = ({ navigation }) => {
       />
 
       <MyModal
+        item={consultaSelecionada}
         cancel
+        getConsultas={getConsultas}
+        user={user}
         setShowModal={setShowModalCancel}
         visible={showModalCancel}
       />
@@ -146,6 +149,7 @@ export const Home = ({ navigation }) => {
       )}
       {showModalConsulta && (
         <ModalAddConsulta
+        getConsultas={getConsultas}
           navigation={navigation}
           setShowModalConsulta={setShowModalConsulta}
           visible={showModalConsulta}

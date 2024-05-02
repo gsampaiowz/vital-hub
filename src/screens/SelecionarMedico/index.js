@@ -18,7 +18,9 @@ export const SelecionarMedico = ({ route, navigation }) => {
     //Instanciar a nossa conexão da API
 
     await api
-      .get("/Medicos/BuscarPorIdClinica?id=" + route.params.agendamento.clinicaId)
+      .get(
+        "/Medicos/BuscarPorIdClinica?id=" + route.params.agendamento.clinicaId
+      )
       .then((response) => {
         console.log(response.data);
         setMedicoLista(response.data);
@@ -33,12 +35,17 @@ export const SelecionarMedico = ({ route, navigation }) => {
   });
 
   function Continue() {
-    if(medico.medicoClinicaId != "") {
-      navigation.navigate("SelecionarData", { agendamento: { ...route.params.agendamento, ...medico} });
-    }else{
-      alert("Selecione um medico")
+    if (medico.medicoClinicaId != "") {
+      navigation.navigate("SelecionarData", {
+        agendamento: {
+          ...route.params.agendamento,
+          ...medico,
+          getConsultas: route.params.getConsultas,
+        },
+      });
+    } else {
+      alert("Selecione um medico");
     }
-    
   }
 
   return (
@@ -62,7 +69,7 @@ export const SelecionarMedico = ({ route, navigation }) => {
 
       <ContainerSpacing>
         <Group gap={10}>
-          <Button text="Continuar" onPress={() => Continue()}    />
+          <Button text="Continuar" onPress={() => Continue()} />
 
           <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>

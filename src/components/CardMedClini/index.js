@@ -47,9 +47,6 @@ export const CardMedClini = ({
     width: 90%;
     align-items: center;
     border-width: 2px;
-    border-color: ${isClinica ? clinicaSelecionada.id == clinica.clinicaId 
-      ? "#496bba"
-      : "#fff" : medicoSelecionado.id == medico.medicoClinicaId ? "#496bba" : "#fff"};
     gap: 10px;
     margin: 0 auto;
     margin-bottom: 10px;
@@ -62,6 +59,15 @@ export const CardMedClini = ({
 
   return (
     <CardStyled
+      style={{
+        borderColor: isClinica
+          ? clinicaSelecionada.id == clinica.clinicaId
+            ? "#496bba"
+            : "#fff"
+          : medicoSelecionado.id == medico.medicoClinicaId
+          ? "#496bba"
+          : "#fff",
+      }}
       onPress={() => {
         isClinica
           ? setClinica({

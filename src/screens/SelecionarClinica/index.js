@@ -24,6 +24,7 @@ export const SelecionarClinica = ({ route, navigation }) => {
       const response = await api.get(
         `/Clinica/BuscarPorCidade?cidade=${route.params.agendamento.localizacao}`
       );
+
       setClinicas(response.data);
     } catch (error) {
       console.log(error);
@@ -31,8 +32,14 @@ export const SelecionarClinica = ({ route, navigation }) => {
   }
 
   function Continue() {
-    if(clinica.clinicaId != "") {
-      navigation.navigate("SelecionarMedico", { agendamento: { ...route.params.agendamento, ...clinica} });
+    if (clinica.clinicaId != "") {
+      navigation.navigate("SelecionarMedico", {
+        agendamento: {
+          ...route.params.agendamento,
+          ...clinica,
+          getConsultas: route.params.getConsultas,
+        },
+      });
     }
   }
 
@@ -59,7 +66,7 @@ export const SelecionarClinica = ({ route, navigation }) => {
 
       <ContainerSpacing>
         <Group gap={10}>
-          <Button text="Continuar" onPress={() => Continue()}/>
+          <Button text="Continuar" onPress={() => Continue()} />
 
           <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>

@@ -32,6 +32,7 @@ const ModalContent = styled.View`
 export const ModalResumoConsulta = ({
   resumo,
   navigation,
+  getConsultas,
   setShowResumoModal,
   visible = false,
   ...rest
@@ -45,6 +46,7 @@ export const ModalResumoConsulta = ({
         pacienteId: user.id,
       });
       setShowResumoModal(false);
+      await getConsultas();
       navigation.navigate("Main");
     } catch (error) {
       console.log(error);

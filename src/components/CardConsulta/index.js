@@ -6,7 +6,6 @@ import { Button } from "./../Button/index";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import { ModalVerLocal } from "../ModalVerLocal";
-import api from "../../service/service";
 
 const CardConsultaStyled = styled.Pressable`
   width: 90%;

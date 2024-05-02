@@ -12,6 +12,7 @@ import * as Notifications from "expo-notifications";
 import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
 import moment from "moment";
+import api from "../../service/service";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -46,6 +47,7 @@ export const MyModal = ({
   setShowModal,
   image,
   item,
+  getConsultas,
   navigation,
   user,
   ...rest
@@ -87,7 +89,9 @@ export const MyModal = ({
     await Notifications.scheduleNotificationAsync({
       content: {
         title: "Consulta cancelada!",
-        body: "Sua consulta foi cancelada com sucesso!",
+        body: `Sua consulta do dia ${moment(item.dataConsulta).format(
+          "DD/MM"
+        )} foi cancelada com sucesso!`,
       },
       trigger: null,
     });
@@ -107,6 +111,19 @@ export const MyModal = ({
     }
   }
 
+  async function CancelarConsulta() {
+    try {
+      await api.put(
+        `/Consultas/Status?idConsulta=${item.id}&status=canceladas`
+      );
+      await getConsultas();
+      HandleCallNotifications();
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -115,10 +132,7 @@ export const MyModal = ({
             <>
               <Title text="Cancelar consulta" />
               <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
-              <Button
-                onPress={() => HandleCallNotifications()}
-                text="CONFIRMAR"
-              />
+              <Button onPress={() => CancelarConsulta()} text="CONFIRMAR" />
             </>
           ) : (
             <>
@@ -138,7 +152,6 @@ export const MyModal = ({
                   setShowModal(false);
                   navigation.navigate("Prontuario", {
                     consultaId: item.id,
-                    user: user,
                   });
                 }}
                 text="INSERIR PRONTUÁRIO"

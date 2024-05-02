@@ -9,7 +9,7 @@ import { Modal } from "react-native";
 import { useEffect, useState } from "react";
 import api from "../../service/service";
 
-const PatientModal = styled.View`
+const PatientModal = styled.Pressable`
   flex: 1;
   height: 100%;
   width: 100%;
@@ -38,6 +38,7 @@ const MySelect = styled(RNPickerSelect)`
 
 export const ModalAddConsulta = ({
   navigation,
+  getConsultas,
   setShowModalConsulta,
   visible = false,
   ...rest
@@ -48,20 +49,46 @@ export const ModalAddConsulta = ({
     { label: "Urgência", value: "4397D79A-2B8D-4A53-9F07-0ECEA4A6A138" },
   ];
 
-  const [agendamento, setAgendamento] = useState({ localizacao: "Rio de Janeiro" });
+  const [agendamento, setAgendamento] = useState({
+    localizacao: "Rio de Janeiro",
+  });
+
+  const [cidades, setCidades] = useState([]);
 
   async function Continue() {
     if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
       await setShowModalConsulta(false);
       navigation.navigate("SelecionarClinica", {
         agendamento: agendamento,
+        getConsultas: getConsultas,
       });
     }
   }
 
+  async function getCidades() {
+    try {
+      const response = await api.get(`/Clinica/ListarTodas`);
+      const cities = new Set();
+      response.data.forEach((clinica) => {
+        if (cities.has(clinica.endereco.cidade.toLowerCase())) return;
+        cities.add(clinica.endereco.cidade.toLowerCase());
+        setCidades((prevState) => [
+          ...prevState,
+          { label: clinica.endereco.cidade, value: clinica.endereco.cidade },
+        ]);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getCidades();
+  }, []);
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
-      <PatientModal>
+      <PatientModal onPress={() => setShowModalConsulta(false)}>
         <ModalContent>
           <Group gap={20}>
             <Title text="Agendar Consulta" />
@@ -90,13 +117,14 @@ export const ModalAddConsulta = ({
               color="black"
               text="Informe a localização desejada"
             />
-            <Input
-              placeholder="Informe a localização"
+            <MySelect
+              placeholder={{ label: "Localização", value: null }}
+              items={cidades}
               inputValue={agendamento ? agendamento.localizacao : null}
-              onChangeText={(txt) =>
+              onValueChange={(value) =>
                 setAgendamento({
                   ...agendamento,
-                  localizacao: txt,
+                  localizacao: value,
                 })
               }
             />

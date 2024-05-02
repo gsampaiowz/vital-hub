@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import moment from "moment/moment";
 import { ActivityIndicator, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { userDecodeToken } from "../../utils/Auth";
 
 const style = StyleSheet.create({
   inputIOS: {
@@ -99,10 +100,6 @@ export const SelecionarData = ({ route, navigation }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(agendamento);
-  }, [agendamento]);
-
   return (
     <ContainerScroll contentContainerStyle={{ paddingTop: 20 }}>
       <Title text="Selecionar data" />
@@ -133,7 +130,8 @@ export const SelecionarData = ({ route, navigation }) => {
       </ContainerSpacing>
       {showResumoModal && (
         <ModalResumoConsulta
-        navigation={navigation}
+          getConsultas={route.params.getConsultas}
+          navigation={navigation}
           resumo={agendamento}
           visible={showResumoModal}
           setShowResumoModal={setShowResumoModal}
