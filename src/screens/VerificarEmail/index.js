@@ -14,25 +14,28 @@ import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 
 export const VerificarEmail = ({ navigation, route }) => {
-
+ 
   const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
   const [codigo, setCodigo] = useState('')
   const [carregando, setCarregando] = useState(false);
- 
+  const handleInputRef = (ref, index) => {
+    inputs[index] = ref;
+  };
   function focusNextInput(index) {
-    //Verificar se o index é menor do que a quantidade de campos
+    // Verificar se o index é menor do que a quantidade de campos
     if (index < inputs.length - 1) {
-      inputs[index + 1].current.focus()
+      inputs[index + 1].current?.focus()
     }
   }
 
   function focusPrevInput(index) {
-    //Verificar se o index é menor do que a quantidade de campos
+    // Verificar se o index é menor do que a quantidade de campos
     if (index > 0) {
-      inputs[index - 1].current.focus()
+      inputs[index - 1].current?.focus()
     }
   }
 
+  // Requisição para validação do código de recuperação de email
   async function validarCodigo() {
     setCarregando(true)
     await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
@@ -76,10 +79,9 @@ export const VerificarEmail = ({ navigation, route }) => {
           {
             [0, 1, 2, 3].map((index) => (
               <Input
-
                 inputValue={inputs[index]}
                 key={index}
-                ref={inputs[index]}
+                ref={(ref) => handleInputRef(ref, index)}
                 maxLength={1}
                 textAlign={"center"}
                 width={60}
@@ -90,17 +92,15 @@ export const VerificarEmail = ({ navigation, route }) => {
                 onChangeText={(txt) => {
                   //verificar se o campo é vazio
                   if (txt == "") {
-
-
-                    focusPrevInput(index)
-
+                    focusNextInput(index)
+                    
                   } else {
                     //verificar se o campo foi preenchido
                     const codigoInformado = [...codigo]
                     codigoInformado[index] = txt
                     setCodigo(codigoInformado.join(""))
-
-                    focusNextInput(index)
+                    
+                    focusPrevInput(index)
                   }
                 }}
               />

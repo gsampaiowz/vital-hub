@@ -13,13 +13,14 @@ import { useEffect, useState } from "react";
 import ToastManager, { Toast } from "toastify-react-native";
 import { userDecodeToken } from "../../utils/Auth";
 import api from "../../service/service";
+import { ActivityIndicator } from "react-native";
 
 export const CriarConta = ({ navigation }) => {
 
   const [confirmarSenha, setConfirmarSenha] = useState('pacienteTeste')
 
+  // Const com os campos de criação de conta
   const [inputs, setInputs] = useState({
-
     nome: "",
     email: "",
     senha: "",
@@ -35,17 +36,13 @@ export const CriarConta = ({ navigation }) => {
   });
 
   const [user, setUser] = useState({})
+  const [carregando, setCarregando] = useState(false);
 
-  // function criarConta() {
-  //   if (senha !== confirmarSenha) {
-  //     Toast.error("As senha não são iguais")
-  //     return;
-  //   }
-  //   navigation.navigate("Perfil", { senha: senha, email: email, nome: nome })
-  // }
-
+  // Requisição para Cadastrar um Usuário novo
   async function fillProfile() {
+    setCarregando(true)
 
+    // Instanciando um new Form
     const formData = new FormData();
 
     formData.append('rg', inputs.rg);
@@ -72,99 +69,98 @@ export const CriarConta = ({ navigation }) => {
       .catch(error => {
         console.error(error);
       });
-
-
+    setCarregando(false)
   }
-  
-return (
-  <ContainerScroll>
-    <ToastManager />
-    <ContainerSpacing>
-      <NavigationButton
-        onPress={() => navigation.navigate("Login")}
-        content={<AntDesign name="close" size={24} color="#34898f" />}
-      />
 
-      <Logo source={LogoImage} />
+  return (
+    <ContainerScroll>
+      <ToastManager />
+      <ContainerSpacing>
+        <NavigationButton
+          onPress={() => navigation.navigate("Login")}
+          content={<AntDesign name="close" size={24} color="#34898f" />}
+        />
 
-      <Title text={"Criar Conta"} />
+        <Logo source={LogoImage} />
 
-      <Subtitle text="Insira seu endereço de e-mail e senha para realizar seu cadastro." />
+        <Title text={"Criar Conta"} />
 
-      <Group gap={10}>
-        <Input
-          inputValue={inputs.nome}
-          placeholder="Seu nome completo"
-          label="Nome"
-          onChangeText={(text) => setInputs({ ...inputs, nome: text })}
-        />
-        <Input
-          inputValue={inputs.email}
-          placeholder="E-mail"
-          label="E-mail"
-          onChangeText={(text) => setInputs({ ...inputs, email: text })}
-        />
-        <Input
-          inputValue={inputs.senha}
-          label="Senha"
-          placeholder="*******"
-          onChangeText={(text) => setInputs({ ...inputs, senha: text })}
-        />
-        <Input
-          inputValue={inputs.cidade}
-          label="Cidade"
-          placeholder="Cidade"
-          onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
-        />
-        <Input
-          inputValue={inputs.logradouro}
-          label="Logradouro"
-          placeholder="Logradouro"
-          onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
-        />
-        <Input
-          inputValue={inputs.dataNascimento}
-          label="Data de Nascimento"
-          placeholder="_ / _ / _"
-          onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
-        />
-        <Group row={true}>
+        <Subtitle text="Insira seu endereço de e-mail e senha para realizar seu cadastro." />
+
+        <Group gap={10}>
           <Input
-            inputValue={inputs.cpf}
-            placeholder="CPF"
-            label="Cpf"
-            onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
+            inputValue={inputs.nome}
+            placeholder="Seu nome completo"
+            label="Nome"
+            onChangeText={(text) => setInputs({ ...inputs, nome: text })}
           />
           <Input
-            inputValue={inputs.numero}
-            placeholder="Nº"
-            label="Número"
-            onChangeText={(text) => setInputs({ ...inputs, numero: text })}
+            inputValue={inputs.email}
+            placeholder="E-mail"
+            label="E-mail"
+            onChangeText={(text) => setInputs({ ...inputs, email: text })}
           />
+          <Input
+            inputValue={inputs.senha}
+            label="Senha"
+            placeholder="*******"
+            onChangeText={(text) => setInputs({ ...inputs, senha: text })}
+          />
+          <Input
+            inputValue={inputs.cidade}
+            label="Cidade"
+            placeholder="Cidade"
+            onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
+          />
+          <Input
+            inputValue={inputs.logradouro}
+            label="Logradouro"
+            placeholder="Logradouro"
+            onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+          />
+          <Input
+            inputValue={inputs.dataNascimento}
+            label="Data de Nascimento"
+            placeholder="_ / _ / _"
+            onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
+          />
+          <Group row={true}>
+            <Input
+              inputValue={inputs.cpf}
+              label="Cpf"
+              placeholder="000.000.000-00"
+              onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
+            />
+            <Input
+              inputValue={inputs.numero}
+              placeholder="Nº"
+              label="Número"
+              onChangeText={(text) => setInputs({ ...inputs, numero: text })}
+            />
+          </Group>
+          <Group row={true}>
+            <Input
+              inputValue={inputs.cep}
+              label="Cep"
+              placeholder="00000-000"
+              onChangeText={(text) => setInputs({ ...inputs, cep: text })}
+            />
+            <Input
+              inputValue={inputs.rg}
+              label="Rg"
+              placeholder="00.000.000-0"
+              onChangeText={(text) => setInputs({ ...inputs, rg: text })}
+            />
+          </Group>
         </Group>
-        <Group row={true}>
-          <Input
-            inputValue={inputs.cep}
-            placeholder="CEP"
-            label="Cep"
-            onChangeText={(text) => setInputs({ ...inputs, cep: text })}
-          />
-          <Input
-            inputValue={inputs.rg}
-            placeholder="RG"
-            label="Rg"
-            onChangeText={(text) => setInputs({ ...inputs, rg: text })}
-          />
-        </Group>
-      </Group>
-      <Button text="Cadastrar" onPress={() => fillProfile()} />
-      <Link
-        doubleColor
-        text2="Já possui uma conta? "
-        text="Faça login"
-        onPress={() => navigation.navigate("Login")}
-      />
-    </ContainerSpacing>
-  </ContainerScroll>
-);
+        <Button text={carregando ? <ActivityIndicator /> : "Cadastrar"} onPress={() => fillProfile()} />
+        <Link
+          doubleColor
+          text2="Já possui uma conta? "
+          text="Faça login"
+          onPress={() => navigation.navigate("Login")}
+        />
+      </ContainerSpacing>
+    </ContainerScroll>
+  );
 };

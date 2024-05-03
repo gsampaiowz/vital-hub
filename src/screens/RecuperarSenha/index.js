@@ -17,6 +17,7 @@ export const RecuperarSenha = ({ navigation }) => {
   
   const [carregando, setCarregando] = useState(false);
 
+  // Requisição para recuperar senha 
   async function EnviarEmail() {
     setCarregando(true)
     await api.post(`/RecuperarSenha?email=${email}`)

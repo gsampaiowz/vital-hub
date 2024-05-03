@@ -38,6 +38,7 @@ export const Input = ({
   onChange = () => { },
   inputValue = "",
   icon = null,
+  
 
   onChangeText = () => { },
   maxWidth = "100%",
