@@ -9,7 +9,7 @@ import { Modal } from "react-native";
 import { useEffect, useState } from "react";
 import api from "../../service/service";
 
-const PatientModal = styled.Pressable`
+const PatientModal = styled.View`
   flex: 1;
   height: 100%;
   width: 100%;
@@ -88,7 +88,7 @@ export const ModalAddConsulta = ({
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
-      <PatientModal onPress={() => setShowModalConsulta(false)}>
+      <PatientModal>
         <ModalContent>
           <Group gap={20}>
             <Title text="Agendar Consulta" />

@@ -29,17 +29,17 @@ const Icon = styled.View`
 
 export const Input = ({
   fontSize = 14,
-  onPress = () => { },
+  onPress = () => {},
   placeholder = "",
   maxLength,
   label = "",
   border = true,
   color = "#34898f",
-  onChange = () => { },
+  onChange = () => {},
   inputValue = "",
   icon = null,
 
-  onChangeText = () => { },
+  onChangeText = () => {},
   maxWidth = "100%",
   height = 53,
   textAlign = "left",
@@ -59,6 +59,7 @@ export const Input = ({
       <InputStyled
         maxLength={maxLength}
         multiline
+        editable={false}
         onPressIn={onPress}
         readOnly={!border}
         value={inputValue}
@@ -68,7 +69,7 @@ export const Input = ({
         }
         onChange={() => {
           setColorState(inputValue.length < 1 ? "transparent" : "#34898f");
-          onChange
+          onChange;
         }}
         onChangeText={onChangeText}
         onBlur={() => border && setColorState("#34898f")}

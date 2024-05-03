@@ -40,7 +40,6 @@ export const SelecionarMedico = ({ route, navigation }) => {
         agendamento: {
           ...route.params.agendamento,
           ...medico,
-          getConsultas: route.params.getConsultas,
         },
       });
     } else {

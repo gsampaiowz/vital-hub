@@ -37,7 +37,6 @@ export const SelecionarClinica = ({ route, navigation }) => {
         agendamento: {
           ...route.params.agendamento,
           ...clinica,
-          getConsultas: route.params.getConsultas,
         },
       });
     }

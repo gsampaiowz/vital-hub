@@ -9,43 +9,8 @@ import { Button } from "../../components/Button";
 import { ModalResumoConsulta } from "../../components/ModalResumoConsulta";
 import { useEffect, useState } from "react";
 import moment from "moment/moment";
-import { ActivityIndicator, StyleSheet } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
-import { userDecodeToken } from "../../utils/Auth";
-
-const style = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: "#60BFC5",
-    borderRadius: 5,
-    color: "#34898F",
-    alignContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    fontFamily: "MontserratAlternates_600SemiBold",
-  },
-  inputAndroid: {
-    fontSize: 16,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: "#60BFC5",
-    borderRadius: 5,
-    color: "#34898F",
-    alignItems: "center",
-    justifyContent: "center",
-
-    fontFamily: "MontserratAlternates_600SemiBold",
-  },
-  iconContainer: {
-    top: "25%",
-    marginRight: 10,
-  },
-  placeholder: {
-    color: "#34898F",
-  },
-});
+import { ActivityIndicator } from "react-native";
+import api from "../../service/service";
 
 const SelectHorario = styled(RNPickerSelect)`
   width: 90%;
@@ -59,9 +24,11 @@ export const SelecionarData = ({ route, navigation }) => {
   const [horarioSelecionado, setHorarioSelecionado] = useState("");
   const [agendamento, setAgendamento] = useState();
 
+  const horariosSemRepetir = new Set();
   const [arrayOptions, setArrayOptions] = useState(null);
 
   async function loadOptions() {
+    await getHorarios();
     //CAPTURAR A QUANTIDADE DE HORAS QUE FALTAM PARA AS 24H
     const horasRestantes = moment(dataAtual)
       .add(21, "hours")
@@ -76,27 +43,50 @@ export const SelecionarData = ({ route, navigation }) => {
         let valor = new Date().getHours() + (index + 1);
 
         //PRA CADA HORA SERÁ UMA NOVA OPTION
+        if (
+          horariosSemRepetir.has(
+            `${dataSelecionada.split("-").reverse().join("/")} ${valor}:00`
+          )
+        )
+          return {
+            label: "",
+            value: "",
+          };
         return {
           label: `${valor}:00`,
-          value: `${valor}:00`,
+          value: `${dataSelecionada} ${valor}:00`,
         };
       }
     );
 
-    setArrayOptions(options);
+    setArrayOptions(options.filter((option) => option.value !== ""));
   }
 
   useEffect(() => {
     loadOptions();
-  }, []);
+  }, [dataSelecionada]);
 
   function Continue() {
     if (horarioSelecionado != "") {
       setAgendamento({
         ...route.params.agendamento,
-        dataConsulta: `${dataSelecionada} ${horarioSelecionado}`,
+        dataConsulta: `${horarioSelecionado}`,
       });
       setShowResumoModal(true);
+    }
+  }
+
+  async function getHorarios() {
+    try {
+      const response = await api.get("/Consultas/ListarTodos");
+      response.data.forEach((consulta) => {
+        horariosSemRepetir.add(
+          moment(consulta.dataConsulta).format("DD/MM/YYYY HH:mm")
+        );
+      });
+      console.log(horariosSemRepetir);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -130,7 +120,6 @@ export const SelecionarData = ({ route, navigation }) => {
       </ContainerSpacing>
       {showResumoModal && (
         <ModalResumoConsulta
-          getConsultas={route.params.getConsultas}
           navigation={navigation}
           resumo={agendamento}
           visible={showResumoModal}

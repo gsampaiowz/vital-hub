@@ -62,7 +62,7 @@ const CalendarComponent = ({
           disableTouchEvent: true,
         },
       }}
-      minDate={dataSelecionada.toString()}
+      minDate={new Date().toString()}
       theme={{
         calendarBackground: "#FAFAFA",
         arrowColor: "#49B3BA",

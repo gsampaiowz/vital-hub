@@ -2,8 +2,9 @@ import { ContainerSafe, ContainerSpacing } from "../../components/Container";
 import { HeaderConsultas } from "../../components/HeaderConsultas/index";
 import { Calendar } from "../../components/Calendar/index";
 import { Button } from "../../components/Button/index";
+import { useFocusEffect } from "@react-navigation/native";
 import { Group } from "../../components/Group/index";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
 import { MyModal } from "../../components/Modal/index";
@@ -32,15 +33,15 @@ export const Home = ({ navigation }) => {
   const [user, setUser] = useState({});
 
   async function getConsultas() {
-    const url = user.role === "paciente" ? "Pacientes" : "Medicos";
-
     try {
+      const responseUser = await userDecodeToken();
+      const url = responseUser.role === "paciente" ? "Pacientes" : "Medicos";
       const response = await api.get(
         `/${url}/BuscarPorData?data=${new Date(data)
           .toLocaleDateString()
           .split("/")
           .reverse()
-          .join("-")}&id=${user.id}`
+          .join("-")}&id=${responseUser.id}`
       );
       setConsultas(response.data);
     } catch (error) {
@@ -52,13 +53,19 @@ export const Home = ({ navigation }) => {
     getConsultas();
   }, [data]);
 
-  useEffect(() => {
-    ProfileLoad();
-  }, [userDecodeToken()]);
+  useFocusEffect(
+    useCallback(() => {
+      getConsultas();
+    }, [])
+  );
 
   async function ProfileLoad() {
     setUser(await userDecodeToken());
   }
+
+  useEffect(() => {
+    ProfileLoad();
+  }, []);
 
   return (
     <ContainerSafe style={{ paddingTop: 0 }}>
@@ -149,7 +156,7 @@ export const Home = ({ navigation }) => {
       )}
       {showModalConsulta && (
         <ModalAddConsulta
-        getConsultas={getConsultas}
+          getConsultas={getConsultas}
           navigation={navigation}
           setShowModalConsulta={setShowModalConsulta}
           visible={showModalConsulta}

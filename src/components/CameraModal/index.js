@@ -20,7 +20,6 @@ const ModalImage = styled.Image`
 `;
 
 export const CameraModal = ({
-  getConsulta,
   photoUri,
   setDescricaoExame,
   visible,
@@ -85,10 +84,9 @@ export const CameraModal = ({
         },
       });
 
+      await setDescricaoExame(response.data.descricao);
       setModalOpen(false);
       setLoad(false);
-      setDescricaoExame(response.data);
-      getConsulta();
     } catch (error) {
       setLoad(false);
       setModalOpen(false);
@@ -119,7 +117,7 @@ export const CameraModal = ({
         <Button
           width="90%"
           onPress={() => InserirExame()}
-          text={load ? <ActivityIndicator /> : "Confirmar"}
+          text={load ? <ActivityIndicator  /> : "Confirmar"}
         />
       </ModalContent>
     </Modal>
