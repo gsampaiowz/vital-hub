@@ -29,15 +29,12 @@ import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { Home } from "./src/screens/Home";
 import { SelecionarData } from "./src/screens/SelecionarData";
 import { Main } from "./src/screens/Main";
-import { Prontuario } from "./src/screens/Prontuario";
 import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
 import { LogBox } from "react-native";
 //IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 
 import * as Notifications from "expo-notifications";
-import { MediaLibrary } from "expo-media-library";
-import { ImagePicker } from "expo-image-picker";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
@@ -140,11 +137,6 @@ export default function App() {
             name="SelecionarData"
             component={SelecionarData}
             options={{ title: "Selecionar Data" }}
-          />
-          <Stack.Screen
-            name="Prontuario"
-            component={Prontuario}
-            options={{ title: "Prontuario" }}
           />
           <Stack.Screen
             name="Prescricao"

@@ -150,15 +150,6 @@ export const MyModal = ({
               <Button
                 onPress={() => {
                   setShowModal(false);
-                  navigation.navigate("Prontuario", {
-                    consultaId: item.id,
-                  });
-                }}
-                text="INSERIR PRONTUÁRIO"
-              />
-              <Button
-                onPress={() => {
-                  setShowModal(false);
                   navigation.navigate("Prescricao", {
                     consulta: item,
                     user: user,

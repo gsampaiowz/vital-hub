@@ -30,28 +30,28 @@ export const SelecionarData = ({ route, navigation }) => {
   async function loadOptions() {
     await getHorarios();
     //CAPTURAR A QUANTIDADE DE HORAS QUE FALTAM PARA AS 24H
-    const horasRestantes = moment(dataAtual)
-      .add(21, "hours")
-      .diff(moment(), "hours");
 
+    const horasRestantes = 13
+    
     //CRIAR LAÇO QUE RODE A QUANTIDADE DE HORAS QUE FALTAM
     const options = Array.from(
       {
         length: horasRestantes,
       },
       (_, index) => {
-        let valor = new Date().getHours() + (index + 1);
+        let valor = 7 + (index + 1);
 
         //PRA CADA HORA SERÁ UMA NOVA OPTION
         if (
           horariosSemRepetir.has(
             `${dataSelecionada.split("-").reverse().join("/")} ${valor}:00`
-          )
-        )
+          ) || (valor < new Date().getHours() + 1 && dataSelecionada == dataAtual)
+        ) {
           return {
             label: "",
             value: "",
           };
+        }
         return {
           label: `${valor}:00`,
           value: `${dataSelecionada} ${valor}:00`,
@@ -64,6 +64,8 @@ export const SelecionarData = ({ route, navigation }) => {
 
   useEffect(() => {
     loadOptions();
+    console.log("Data selecionada: ", dataSelecionada);
+    console.log("Data atual: ", dataAtual);
   }, [dataSelecionada]);
 
   function Continue() {
