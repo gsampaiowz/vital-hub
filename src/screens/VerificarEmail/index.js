@@ -28,7 +28,7 @@ export const VerificarEmail = ({ navigation, route }) => {
     }
   }
 
-  function focusPrevInput(index) {
+  function focusPrevInput(index) { 
     // Verificar se o index é menor do que a quantidade de campos
     if (index > 0) {
       inputs[index - 1].current?.focus()
@@ -77,6 +77,7 @@ export const VerificarEmail = ({ navigation, route }) => {
         <Group row justifyContent="space-between">
 
           {
+          // Busca o indece do codigos de recuperar senha
             [0, 1, 2, 3].map((index) => (
               <Input
                 inputValue={inputs[index]}
@@ -92,7 +93,7 @@ export const VerificarEmail = ({ navigation, route }) => {
                 onChangeText={(txt) => {
                   //verificar se o campo é vazio
                   if (txt == "") {
-                    focusNextInput(index)
+                    focusPrevInput(index)
                     
                   } else {
                     //verificar se o campo foi preenchido
@@ -100,7 +101,7 @@ export const VerificarEmail = ({ navigation, route }) => {
                     codigoInformado[index] = txt
                     setCodigo(codigoInformado.join(""))
                     
-                    focusPrevInput(index)
+                    focusNextInput(index)
                   }
                 }}
               />
