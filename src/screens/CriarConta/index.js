@@ -153,7 +153,7 @@ export const CriarConta = ({ navigation }) => {
             />
           </Group>
         </Group>
-        <Button text={carregando ? <ActivityIndicator /> : "Cadastrar"} onPress={() => fillProfile()} />
+        <Button text={carregando ? <ActivityIndicator /> : "Cadastrar"} onPress={() => fillProfile() && navigation.navigate("Login")} />
         <Link
           doubleColor
           text2="Já possui uma conta? "

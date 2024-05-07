@@ -88,8 +88,8 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "sampaio@gmail.com",
-    senha: "sampaio123",
+    email: "thiagoPaciente@gmail.com ",
+    senha: "thiago123",
   });
 
   //METODO LOGIN COM API

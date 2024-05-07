@@ -100,7 +100,7 @@ export const Perfil = ({ navigation }) => {
     const url = user.role === "paciente" ? "Pacientes" : "Medicos";
     try {
       const response = await api.get(`/${url}/BuscarPorId?id=${user.id}`);
-      console.log(response.data);
+      // console.log(response.data);
 
       if (user.role === "paciente") {
         setInputs({
@@ -190,54 +190,55 @@ export const Perfil = ({ navigation }) => {
     }
   }
 
-
-  // id mockado
   async function updateProfile() {
     const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
+    console.log(inputs);
     console.log("comecou");
-    await api.put(`/${url}?idUsuario=${user.id}`,)
-    console.log("passou");
-    if (user.role === "paciente") {
+    try {
+      const response = await api.put(`/${url}?idUsuario=${user.id}`, inputs, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log(response.data);
+      console.log("passou");
+      if (user.role === "paciente") {
 
-      setInputs({
+        setInputs({
 
-        rg: inputs.rg,
-        cpf: inputs.cpf,
-        dataNascimento: new Date(inputs.dataNascimento.split("/").reverse().join("-")),
-        cep: inputs.cep,
-        logradouro: inputs.logradouro,
-        numero: parseInt(inputs.numero),
-        cidade: inputs.cidade,
-        nome: inputs.nome,
+          rg: inputs.rg,
+          cpf: inputs.cpf,
+          dataNascimento: new Date(inputs.dataNascimento.split("/").reverse().join("-")),
+          cep: inputs.cep,
+          logradouro: inputs.logradouro,
+          numero: parseInt(inputs.numero),
+          cidade: inputs.cidade,
+          nome: inputs.nome,
 
-      })
-    } else {
+          // arrumar aqui está faltando o foto eu acho, dando um log no inputs ele devolve foto também, tentei colocar aqui mas não rodou
+          // foto: inputs.foto
 
-      setInputs({
+        })
+      } else {
 
-        nome: inputs.nome,
-        logradouro: inputs.logradouro,
-        numero: parseInt(inputs.numero),
-        cep: inputs.cep,
-        crm: inputs.crm,
+        setInputs({
 
-      })
-      BuscarPorId()
+          nome: inputs.nome,
+          logradouro: inputs.logradouro,
+          numero: parseInt(inputs.numero),
+          cep: inputs.cep,
+          crm: inputs.crm,
 
-      console.log("deu certo");
+        })
+        BuscarPorId()
+        console.log("deu certo");
+      }
+
+    } catch (error) {
+      console.log(error);
     }
   }
-  //   .then(() => {
-  //     console.log("passou");
-
-  //     BuscarPorId()
-
-  //     console.log("deu certo");
-  //   })
-  // .catch(error => {
-  //   console.error(error.respose.data);
-
-  // });
 
   return showCamera ? (
     <MyCamera
@@ -349,13 +350,6 @@ export const Perfil = ({ navigation }) => {
               label="Nome"
               placeholder="Sampaio"
             />
-            {/* <Input
-              inputValue={inputs.cidade}
-              onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
-              border={editMode}
-              label="Cidade"
-              placeholder="São Paulo"
-            /> */}
             <Input
               inputValue={inputs.logradouro}
               onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
