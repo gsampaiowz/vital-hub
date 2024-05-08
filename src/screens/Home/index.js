@@ -74,16 +74,23 @@ export const Home = ({ navigation }) => {
   //FUNÇÃO QUE ATUALIZA AS CONSULTAS AGENDADAS PARA REALIZADAS AO EXPIRAR A DATA DA CONSULTA
   async function ExpirarConsultas() {
     try {
+      //BUSCA AS CONSULTAS
       await getConsultas();
+      //PERCORRE AS CONSULTAS E VERIFICA SE A DATA DA CONSULTA E MENOR QUE A DATA ATUAL
       consultas.forEach(async (consulta) => {
         if (
           new Date(consulta.dataConsulta) < new Date() &&
           consulta.situacaoId == "8240e2bc-531c-46a4-9361-36d3bcef2b6d"
         ) {
-          await api.put(
-            `/Consultas/Status?idConsulta=${consulta.id}&status=realizadas`
-          );
-          getConsultas();
+          //ATUALIZA A CONSULTA PARA STATUS REALIZADAS
+          await api
+            .put(
+              `/Consultas/Status?idConsulta=${consulta.id}&status=realizadas`
+            )
+            .then(async () => {
+              //BUSCA NOVAMENTE AS CONSULTAS
+              await getConsultas();
+            });
         }
       });
     } catch (error) {
