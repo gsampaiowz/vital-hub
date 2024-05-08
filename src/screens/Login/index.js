@@ -1,5 +1,5 @@
 import { Logo } from "../../components/Logo";
-import { ContainerSafe, ContainerSpacing } from "../../components/Container";
+import { ContainerScroll, ContainerSpacing } from "../../components/Container";
 import LogoImage from "../../assets/img/Logo.png";
 import { Title } from "./../../components/Title/index";
 import { Input } from "../../components/Input";
@@ -102,19 +102,20 @@ export const Login = ({ navigation }) => {
       })
       .then(async (response) => {
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
+        console.log(response.data);
         navigation.navigate("Main");
       })
-      .catch((error) => {
+      .catch(() => {
         if (inputs.email === "" || inputs.senha === "") {
           Toast.error("Preencha todos os campos");
         }
-        Toast.error("Email ou senha incorretos: " + error);
+        Toast.error("Email ou senha incorretos");
       });
     setCarregando(false);
   }
 
   return (
-    <ContainerSafe>
+    <ContainerScroll>
       <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <Logo source={LogoImage} />
@@ -174,6 +175,6 @@ export const Login = ({ navigation }) => {
           </Group>
         ) : null}
       </ContainerSpacing>
-    </ContainerSafe>
+    </ContainerScroll>
   );
 };

@@ -13,8 +13,7 @@ import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
 import moment from "moment";
 import api from "../../service/service";
-import { Dimensions } from "react-native";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, FlatList } from "react-native";
 
 const Divider = styled.View`
   width: 100%;
@@ -39,7 +38,6 @@ export const Prescricao = ({ route }) => {
     descricao: "",
     diagnostico: "",
     medicamento: "",
-    exame: "",
   });
 
   const [inCamera, setInCamera] = useState(false);
@@ -53,8 +51,6 @@ export const Prescricao = ({ route }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [isPhotoSaved, setIsPhotoSaved] = useState(false);
-
-  const user = route.params.user;
 
   const consultaId = route.params.consulta.id;
 
@@ -85,7 +81,6 @@ export const Prescricao = ({ route }) => {
       await api
         .get("Consultas/BuscarPorId?id=" + consultaId)
         .then((response) => {
-          console.log(consultaId);
           setInputs({
             ...inputs,
             descricao: response.data.descricao,
@@ -103,7 +98,6 @@ export const Prescricao = ({ route }) => {
             foto: response.data.paciente.idNavigation.foto,
           });
           setConsulta(response.data);
-          setDescricaoExame(response.data.exames[0].descricao);
         });
     } catch (error) {
       console.log(error);
@@ -125,6 +119,8 @@ export const Prescricao = ({ route }) => {
 
   return inCamera ? (
     <MyCamera
+      getMediaLibrary={true}
+      setModalOpen={setModalOpen}
       setInCamera={setInCamera}
       setPhoto={setPhoto}
       setIsPhotoSaved={setIsPhotoSaved}
@@ -179,13 +175,19 @@ export const Prescricao = ({ route }) => {
               border={editMode}
               label="Exames médicos:"
               icon={
-                <AntDesign
-                  name="exclamationcircleo"
-                  size={24}
-                  color="#4E4B59"
-                />
+                descricaoExame == "" ? (
+                  <AntDesign
+                    name="exclamationcircleo"
+                    size={24}
+                    color="#4E4B59"
+                  />
+                ) : null
               }
-              placeholder={"Nenhuma foto informada"}
+              placeholder={
+                descricaoExame == ""
+                  ? "Nenhuma foto informada"
+                  : "Exame já informado!"
+              }
             />
           )}
           <Button
@@ -200,12 +202,15 @@ export const Prescricao = ({ route }) => {
 
         <Divider />
 
-        <Input
-          border={false}
-          height={100}
-          inputValue={descricaoExame}
-          placeholder="Resultado do exame de sangue : tudo normal"
-        />
+        <Subtitle bold text="Resultado do exame:" />
+          <Subtitle
+          
+            text={
+              descricaoExame != ""
+                ? descricaoExame
+                : "Nenhum exame informado ainda."
+            }
+          />
 
         <Group gap={10}>
           <Button
@@ -220,6 +225,7 @@ export const Prescricao = ({ route }) => {
         </Group>
       </ContainerSpacing>
       <CameraModal
+        setDescricaoExame={setDescricaoExame}
         consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}

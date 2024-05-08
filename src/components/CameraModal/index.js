@@ -16,11 +16,12 @@ const ModalContent = styled.View`
 
 const ModalImage = styled.Image`
   width: 100%;
-  height: 500px;
+  height: 350px;
 `;
 
 export const CameraModal = ({
   photoUri,
+  setDescricaoExame,
   visible,
   setInCamera,
   consultaId,
@@ -70,32 +71,27 @@ export const CameraModal = ({
     const formData = new FormData();
     formData.append("ConsultaId", consultaId);
 
-    formData.append("Arquivo", {
+    formData.append("Imagem", {
       uri: photoUri,
       name: `image.${photoUri.split(".").pop()}`,
       type: `image/${photoUri.split(".").pop()}`,
     });
 
     try {
-      await api.post("/Exame/Cadastrar", formData, {
+      const response = await api.post("/Exame/Cadastrar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      })
+      });
 
+      await setDescricaoExame(response.data.descricao);
       setModalOpen(false);
       setLoad(false);
     } catch (error) {
       setLoad(false);
       setModalOpen(false);
-      console.log(error);
     }
   }
-
-  useEffect(() => {
-    console.log(consultaId)
-    console.log(photoUri)
-  }, []);
 
   return (
     <Modal
@@ -121,7 +117,7 @@ export const CameraModal = ({
         <Button
           width="90%"
           onPress={() => InserirExame()}
-          text={load ? <ActivityIndicator /> : "Confirmar"}
+          text={load ? <ActivityIndicator  /> : "Confirmar"}
         />
       </ModalContent>
     </Modal>

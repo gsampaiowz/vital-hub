@@ -1,5 +1,4 @@
-// import * as SplashScreen from "expo-splash-screen";
-
+//IMPORTS DAS FONTES
 import {
   useFonts,
   MontserratAlternates_700Bold,
@@ -12,10 +11,11 @@ import {
   Quicksand_600SemiBold,
 } from "@expo-google-fonts/quicksand";
 
+//NAVEGACAO
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import { NavigationContainer } from "@react-navigation/native";
 
+//TELAS
 import { Navigation } from "./src/screens/Navigation";
 import { Login } from "./src/screens/Login";
 import { RecuperarSenha } from "./src/screens/RecuperarSenha";
@@ -29,23 +29,21 @@ import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { Home } from "./src/screens/Home";
 import { SelecionarData } from "./src/screens/SelecionarData";
 import { Main } from "./src/screens/Main";
-import { Prontuario } from "./src/screens/Prontuario";
 import { LocalConsulta } from "./src/screens/LocalConsulta/index";
 import { Prescricao } from "./src/screens/Prescricao";
-import { LogBox } from "react-native";
-//IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 
+//IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 import * as Notifications from "expo-notifications";
-import { MediaLibrary } from "expo-media-library";
-import { ImagePicker } from "expo-image-picker";
+
+//IGNORA WARNINGS (AVISOS)
+import { LogBox } from "react-native";
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 
-// SplashScreen.preventAutoHideAsync();
-
 export default function App() {
+  //CARREGA AS FONTES
   const [fontsLoaded] = useFonts({
     MontserratAlternates_700Bold,
     MontserratAlternates_500Medium,
@@ -68,6 +66,7 @@ export default function App() {
     }),
   });
 
+  //VERIFICA SE AS FONTES FORAM CARREGADAS
   if (!fontsLoaded) {
     return null;
   } else {
@@ -140,11 +139,6 @@ export default function App() {
             name="SelecionarData"
             component={SelecionarData}
             options={{ title: "Selecionar Data" }}
-          />
-          <Stack.Screen
-            name="Prontuario"
-            component={Prontuario}
-            options={{ title: "Prontuario" }}
           />
           <Stack.Screen
             name="Prescricao"

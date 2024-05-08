@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "./../Home/index";
-import { PerfilPaciente } from "../Perfil/index";
 import { ContentIcon, TextIcon } from "./style";
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Perfil } from "../Perfil";

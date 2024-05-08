@@ -7,7 +7,7 @@ import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
 import api from "../../service/service";
 
-export const SelecionarMedico = () => {
+export const SelecionarMedico = ({ route, navigation }) => {
   const [medicoLista, setMedicoLista] = useState([]);
 
   useEffect(() => {
@@ -18,12 +18,33 @@ export const SelecionarMedico = () => {
     //Instanciar a nossa conexão da API
 
     await api
-      .get("/Medicos")
+      .get(
+        "/Medicos/BuscarPorIdClinica?id=" + route.params.agendamento.clinicaId
+      )
       .then((response) => {
+        console.log(response.data);
         setMedicoLista(response.data);
       })
       .catch((error) => console.log(error));
+  }
 
+  const [medico, setMedico] = useState({
+    medicoClinicaId: "",
+    medicoLabel: "",
+    medicoEspecialidade: "",
+  });
+
+  function Continue() {
+    if (medico.medicoClinicaId != "") {
+      navigation.navigate("SelecionarData", {
+        agendamento: {
+          ...route.params.agendamento,
+          ...medico,
+        },
+      });
+    } else {
+      alert("Selecione um medico");
+    }
   }
 
   return (
@@ -34,6 +55,9 @@ export const SelecionarMedico = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <CardMedClini
+            medico={medico}
+            setMedico={setMedico}
+            medicoSelecionado={item}
             name={item.idNavigation.nome}
             desc={item.especialidade.especialidade1}
             image={require("./../../assets/img/UserImage.jpg")}
@@ -44,9 +68,9 @@ export const SelecionarMedico = () => {
 
       <ContainerSpacing>
         <Group gap={10}>
-          <Button text="Continuar" />
+          <Button text="Continuar" onPress={() => Continue()} />
 
-          <Button outlined text="Cancelar" />
+          <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>
       </ContainerSpacing>
     </ContainerSafe>

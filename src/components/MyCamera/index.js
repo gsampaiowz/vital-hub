@@ -1,6 +1,9 @@
-import { Camera, CameraType } from "expo-camera/legacy";
+import { CameraType, Camera } from "expo-camera/legacy";
+
 import { useEffect, useRef, useState } from "react";
+
 import * as MediaLibrary from "expo-media-library";
+import * as ImagePicker from "expo-image-picker";
 import styled from "styled-components/native";
 import {
   AntDesign,
@@ -8,7 +11,6 @@ import {
   FontAwesome6,
   FontAwesome,
 } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import {
   GestureHandlerRootView,
   PinchGestureHandler,
@@ -43,13 +45,6 @@ const FlashIcon = styled(Ionicons)`
   z-index: 10;
 `;
 
-// const TakeVideo = styled(AntDesign)`
-//   position: absolute;
-//   bottom: 10px;
-//   right: 10px;
-//   z-index: 10;
-// `;
-
 const LastPhoto = styled.TouchableOpacity`
   position: absolute;
   bottom: 10px;
@@ -70,8 +65,6 @@ export const MyCamera = ({
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
 
   const [zoom, setZoom] = useState(0);
-
-  const [isRecording, setIsRecording] = useState(false);
 
   const [type, setType] = useState(CameraType.back);
 
@@ -106,6 +99,7 @@ export const MyCamera = ({
       const { status: mediaStatus } =
         await MediaLibrary.requestPermissionsAsync();
     })();
+    console.log(lastPhoto);
   }, []);
 
   async function CapturePhoto() {
@@ -166,7 +160,10 @@ export const MyCamera = ({
             name="closecircle"
             size={40}
             color="white"
-            onPress={() => setInCamera(false)}
+            onPress={() => {
+              setInCamera(false);
+              setModalOpen(false);
+            }}
           />
           <ToggleCamera
             onPress={() =>
@@ -205,16 +202,6 @@ export const MyCamera = ({
           >
             <FontAwesome name="camera" size={50} color="white" />
           </TakePhoto>
-          {/* <TakeVideo
-            onPress={() =>
-              isRecording
-                ? cameraRef.current.stopRecording()
-                : cameraRef.current.recordAsync()
-            }
-            name="videocamera"
-            size={24}
-            color={isRecording ? "red" : "white"}
-          /> */}
           {lastPhoto != null ? (
             <LastPhoto onPress={() => SelectImageGallery()}>
               <Image

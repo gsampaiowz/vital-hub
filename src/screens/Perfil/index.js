@@ -63,16 +63,12 @@ export const Perfil = ({ navigation }) => {
 
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [, setModalOpen] = useState(false);
 
   const [photo, setPhoto] = useState(null);
 
-  const [id, setId] = useState('')
-
   const [inputs, setInputs] = useState({
     nome: "",
-    email: "",
-    senha: "",
     cidade: "",
     logradouro: "",
     cpf: "",
@@ -367,10 +363,6 @@ export const Perfil = ({ navigation }) => {
         )}
 
         <Group gap={10}>
-          {/* <Button
-            onPress={() => setEditMode(!editMode)}
-            text={editMode ? "SALVAR" : "EDITAR"}
-          /> */}
 
           <Button
             onPress={!user ? () => {

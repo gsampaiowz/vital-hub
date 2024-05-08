@@ -4,24 +4,7 @@ import { Subtitle } from "./../Subtitle/index";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Group } from "./../Group/index";
-import { useState } from "react";
-
-const CardStyled = styled.Pressable`
-  background-color: #fff;
-  border-radius: 5px;
-  flex-direction: row;
-  padding: 10px;
-  width: 90%;
-  align-items: center;
-  gap: 10px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  shadow-color: #000;
-  shadow-opacity: 0.08;
-  shadow-offset: -2px 4px;
-  shadow-radius: 25px;
-  elevation: 5;
-`;
+import { useEffect, useState } from "react";
 
 const ImageStyled = styled.Image`
   width: 80px;
@@ -43,32 +26,74 @@ const SubtitleAberto = styled.Text`
 `;
 
 export const CardMedClini = ({
-  clinica = false,
+  isClinica = false,
   image = "",
   name,
+  clinicaSelecionada,
+  setClinica,
+  clinica,
+  medico,
+  medicoSelecionado,
+  setMedico,
   desc,
   aberto,
   estrelas,
 }) => {
-  const [cardFocused, setCardFocused] = useState(false);
+  const CardStyled = styled.Pressable`
+    background-color: #fff;
+    border-radius: 5px;
+    flex-direction: row;
+    padding: 10px;
+    width: 90%;
+    align-items: center;
+    border-width: 2px;
+    gap: 10px;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    shadow-color: #000;
+    shadow-opacity: 0.08;
+    shadow-offset: -2px 4px;
+    shadow-radius: 25px;
+    elevation: 5;
+  `;
 
   return (
     <CardStyled
-      onFocus={() => setCardFocused(true)}
-      onBlur={() => setCardFocused(false)}
-      style={{ border: cardFocused ? "2px solid #496BBA" : "2px solid white" }}
+      style={{
+        borderColor: isClinica
+          ? clinicaSelecionada.id == clinica.clinicaId
+            ? "#496bba"
+            : "#fff"
+          : medicoSelecionado.id == medico.medicoClinicaId
+          ? "#496bba"
+          : "#fff",
+      }}
+      onPress={() => {
+        isClinica
+          ? setClinica({
+              clinicaId: clinicaSelecionada.id,
+              clinicaLabel: clinicaSelecionada.nomeFantasia,
+            })
+          : setMedico({
+              medicoClinicaId: medicoSelecionado.id,
+              medicoLabel: medicoSelecionado.idNavigation.nome,
+              medicoEspecialidade: medicoSelecionado.especialidade,
+            });
+      }}
     >
-      {!clinica && <ImageStyled source={image} />}
+      {!isClinica && <ImageStyled source={image} />}
       <Group alignItems="flex-start">
         <Title fontSize={16} text={name} />
         <Subtitle bold fontSize={14} textAlign="left" text={desc} />
       </Group>
-      {clinica && (
+      {isClinica && (
         <Group alignItems="flex-end">
           <Subtitle
+            bold
             color="#F9A620"
             text={[
               <AntDesign key="star" size={14} color={"#F9A620"} name="star" />,
+              " ",
               estrelas,
             ]}
           />
