@@ -59,21 +59,28 @@ export const Perfil = ({ navigation }) => {
 
   const [editMode, setEditMode] = useState(false);
 
+  const [cadastro, setCadastro] = useState(false)
+
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [, setModalOpen] = useState(false);
 
   const [photo, setPhoto] = useState(null);
 
   const [inputs, setInputs] = useState({
-    crm: "",
-    dataNascimento: "",
-    cpf: "",
-    numero: "",
-    endereco: "",
-    cep: "",
+    nome: "",
     cidade: "",
+    logradouro: "",
+    cpf: "",
+    dataNascimento: "",
+    numero: "",
+    cep: "",
+    rg: "",
+    foto: "",
+    crm: ""
   });
+
+  // console.log(inputs.numero);
 
   async function Logout() {
     //Remover token do AsyncStorage
@@ -89,25 +96,32 @@ export const Perfil = ({ navigation }) => {
     const url = user.role === "paciente" ? "Pacientes" : "Medicos";
     try {
       const response = await api.get(`/${url}/BuscarPorId?id=${user.id}`);
-      console.log(response.data);
+      // console.log(response.data);
 
       if (user.role === "paciente") {
         setInputs({
-          dataNascimento: response.data.dataNascimento,
-          cpf: response.data.cpf,
-          cep: response.data.endereco.cep,
-          endereco: response.data.endereco.logradouro,
-          numero: response.data.endereco.numero,
+          nome: response.data.idNavigation.nome,
           cidade: response.data.endereco.cidade,
-        });
+          logradouro: response.data.endereco.logradouro,
+          dataNascimento: new Date(response.data.dataNascimento).toLocaleDateString(),
+          cpf: response.data.cpf,
+          foto: response.data.idNavigation.foto,
+          numero: response.data.endereco.numero,
+          cep: response.data.endereco.cep,
+          rg: response.data.rg,
+        })
       } else {
         setInputs({
-          crm: response.data.crm,
+          nome: response.data.idNavigation.nome,
           cep: response.data.endereco.cep,
-          endereco: response.data.endereco.logradouro,
+          logradouro: response.data.endereco.logradouro,
           numero: response.data.endereco.numero,
+          foto: response.data.idNavigation.foto,
+          cidade: response.data.endereco.cidade,
+          crm: response.data.crm,
         });
       }
+
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +132,6 @@ export const Perfil = ({ navigation }) => {
 
     await ImagePicker.requestMediaLibraryPermissionsAsync();
   }
-  
   async function ProfileLoad() {
     try {
       const decodedUser = await userDecodeToken();
@@ -138,6 +151,15 @@ export const Perfil = ({ navigation }) => {
   useEffect(() => {
     BuscarPorId();
   }, [user]);
+
+  useEffect(() => {
+    if (cadastro === true) {
+
+      setEditMode(true)
+      setCadastro(true)
+    }
+    ProfileLoad();
+  }, []);
 
   async function AlterarFotoPerfil() {
     setLoadingPhoto(true);
@@ -159,6 +181,38 @@ export const Perfil = ({ navigation }) => {
       ProfileLoad();
       setPhoto(null);
       setLoadingPhoto(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateProfile() {
+    const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
+    console.log(inputs);
+    console.log("comecou");
+    try {
+      const response = await api.put(`/${url}?idUsuario=${user.id}`, {
+        nome: inputs.nome,
+        cidade: inputs.cidade,
+        logradouro: inputs.logradouro,
+        cpf: inputs.cpf,
+        dataNascimento: url == "Pacientes" ? inputs.dataNascimento.toString() : null,
+        numero: parseInt(inputs.numero),
+        cep: inputs.cep,
+        rg: inputs.rg,
+        crm: inputs.crm,
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log(response.data);
+      console.log("passou");
+
+      BuscarPorId()
+
+
     } catch (error) {
       console.log(error);
     }
@@ -202,91 +256,132 @@ export const Perfil = ({ navigation }) => {
         {user.role === "paciente" ? (
           <>
             <Input
-              inputValue={new Date(inputs.dataNascimento).toLocaleDateString()}
-              onChange={(text) =>
-                setInputs({ ...inputs, dataNascimento: text })
-              }
+              inputValue={inputs.nome}
+              onChangeText={(text) => setInputs({ ...inputs, nome: text })}
+              border={editMode}
+              label="Nome"
+              placeholder="Sampaio"
+            />
+            <Input
+              inputValue={inputs.cidade}
+              onChangeText={(text) => setInputs({ ...inputs, cidade: text })}
+              border={editMode}
+              label="Cidade"
+              placeholder="São Paulo"
+            />
+            <Input
+              inputValue={inputs.logradouro}
+              onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+              border={editMode}
+              label="Logradouro"
+              placeholder="Rua Itambé"
+            />
+            <Input
+              inputValue={inputs.dataNascimento}
+              onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
               border={editMode}
               label="Data de nascimento:"
               placeholder="04/05/1999"
             />
+            <Group row={true}>
 
-            <Input
-              inputValue={inputs.cpf}
-              onChange={(text) => setInputs({ ...inputs, cpf: text })}
-              border={editMode}
-              label="CPF:"
-              placeholder="859********"
-            />
+              <Input
+                inputValue={inputs.cpf}
+                onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
+                border={editMode}
+                label="CPF"
+                placeholder="859********"
+              />
 
-            <Input
-              inputValue={inputs.endereco}
-              onChange={(text) => setInputs({ ...inputs, endereco: text })}
-              border={editMode}
-              label="Endereço"
-              placeholder="Rua Vicenso Silva, 987"
-            />
-
+              <Input
+                inputValue={inputs.numero.toString()}
+                onChangeText={(text) => setInputs({ ...inputs, numero: text })}
+                border={editMode}
+                label="Número"
+                placeholder="22"
+              />
+            </Group>
             <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
               <Input
                 inputValue={inputs.cep}
-                onChange={(text) => setInputs({ ...inputs, cep: text })}
+                onChangeText={(text) => setInputs({ ...inputs, cep: text })}
                 border={editMode}
                 label="Cep"
                 placeholder="06548-909"
               />
 
               <Input
-                inputValue={inputs.cidade}
-                onChange={(text) => setInputs({ ...inputs, cidade: text })}
+                inputValue={inputs.rg}
+                onChangeText={(text) => setInputs({ ...inputs, rg: text })}
                 border={editMode}
-                label="Cidade"
-                placeholder="Moema-SP"
+                label="Rg"
+                placeholder="412487214"
               />
             </Group>
           </>
         ) : (
           <>
-            <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
-              <Input
-                inputValue={inputs.crm}
-                onChange={(text) => setInputs({ ...inputs, crm: text })}
-                border={editMode}
-                label="CRM:"
-                placeholder="04/05/1999"
-              />
-              <Input
-                inputValue={inputs.cep}
-                onChange={(text) => setInputs({ ...inputs, cep: text })}
-                border={editMode}
-                label="CEP:"
-                placeholder="04/05/1999"
-              />
-            </Group>
+            <Input
+              inputValue={inputs.nome}
+              onChangeText={(text) => setInputs({ ...inputs, nome: text })}
+              border={editMode}
+              label="Nome"
+              placeholder="Sampaio"
+            />
+            <Input
+              inputValue={inputs.logradouro}
+              onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+              border={editMode}
+              label="Logradouro"
+              placeholder="Rua Itambé"
+            />
             <Input
               inputValue={inputs.numero.toString()}
-              onChange={(text) => setInputs({ ...inputs, numero: text })}
+              onChangeText={(text) => setInputs({ ...inputs, numero: text })}
               border={editMode}
-              label="Número:"
-              placeholder="04/05/1999"
+              label="Número"
+              placeholder="22"
             />
-            <Input
-              inputValue={inputs.endereco}
-              onChange={(text) => setInputs({ ...inputs, endereco: text })}
-              border={editMode}
-              label="Logradouro:"
-              placeholder="04/05/1999"
-            />
+
+            <Group gap={20} row={window.innerWidth <= 350 ? false : true}>
+              <Input
+                inputValue={inputs.cep}
+                onChangeText={(text) => setInputs({ ...inputs, cep: text })}
+                border={editMode}
+                label="Cep"
+                placeholder="06548-909"
+              />
+              <Input
+                inputValue={inputs.crm}
+                onChangeText={(text) => setInputs({ ...inputs, crm: text })}
+                border={editMode}
+                label="CRM"
+                placeholder="123456"
+              />
+            </Group>
           </>
         )}
+
         <Group gap={10}>
+
           <Button
-            onPress={() => setEditMode(!editMode)}
-            text={editMode ? "SALVAR" : "EDITAR"}
+            onPress={!user ? () => {
+
+              fillProfile();
+              navigation.navigate("Login")
+            } : () => {
+
+              setEditMode(!editMode)
+              editMode ? updateProfile() : null
+            }
+            }
+            text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
           />
 
-          <Button onPress={() => Logout()} outlined text="SAIR DA CONTA" />
+          <Button
+            onPress={() => Logout()} outlined text="SAIR DA CONTA" />
         </Group>
+
       </ContainerSpacing>
     </ContainerScroll>
   );

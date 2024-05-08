@@ -9,21 +9,26 @@ import { NavigationButton } from "./../../components/NavigationButton/index";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
 import api from "../../service/service";
-
+import { ActivityIndicator } from "react-native";
 
 export const RecuperarSenha = ({ navigation }) => {
-
+  
   const [email, setEmail] = useState('tinassenai@gmail.com')
+  
+  const [carregando, setCarregando] = useState(false);
 
+  // Requisição para recuperar senha 
   async function EnviarEmail() {
+    setCarregando(true)
     await api.post(`/RecuperarSenha?email=${email}`)
       .then(() => {
 
-        navigation.replace("VerificarEmail", { emailRecuperacao : email })
+        navigation.replace("VerificarEmail", { emailRecuperacao: email })
 
       }).catch(error => {
         console.log(error);
       })
+    setCarregando(false)
   }
 
   return (
@@ -39,7 +44,7 @@ export const RecuperarSenha = ({ navigation }) => {
           text={
             "Digite abaixo seu email cadastrado que enviaremos um link para recuperação de senha"
           }
-          
+
         />
         <Input
           inputValue={email}
@@ -48,8 +53,8 @@ export const RecuperarSenha = ({ navigation }) => {
         />
         <Button
           onPress={() => EnviarEmail()}
-          // onPress={() => navigation.navigate("VerificarEmail")}
-          text="Continuar"
+          disabled={carregando}
+          text={carregando ? <ActivityIndicator /> : "Continuar"}
         />
       </ContainerSpacing>
     </ContainerScroll>

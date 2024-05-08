@@ -38,7 +38,7 @@ export const Main = () => {
                     }
                   >
                     <FontAwesome name="user-circle" size={18} color="#4e4b59" />
-                    {focused && <TextIcon>PerfilPaciente</TextIcon>}
+                    {focused && <TextIcon>Perfil</TextIcon>}
                   </ContentIcon>
                 </>
               );

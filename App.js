@@ -111,7 +111,7 @@ export default function App() {
             options={{ title: "Criar Conta" }}
           />
           <Stack.Screen
-            name="PerfilPaciente"
+            name="Perfil"
             component={Perfil}
             options={{ title: "Perfil" }}
           />
