@@ -16,6 +16,7 @@ import api from "../../service/service";
 import moment from "moment/moment";
 
 export const Home = ({ navigation }) => {
+  
   //STATE DE SITUACAO DE CONSULTA
   const [statusButtons, setStatusButtons] = useState("agendadas");
 
