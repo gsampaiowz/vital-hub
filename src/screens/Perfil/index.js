@@ -195,45 +195,27 @@ export const Perfil = ({ navigation }) => {
     console.log(inputs);
     console.log("comecou");
     try {
-      const response = await api.put(`/${url}?idUsuario=${user.id}`, inputs, {
+      const response = await api.put(`/${url}?idUsuario=${user.id}`, {
+        nome: inputs.nome,
+        cidade: inputs.cidade,
+        logradouro: inputs.logradouro,
+        cpf: inputs.cpf,
+        dataNascimento: url == "Pacientes" ? inputs.dataNascimento.toString() : null,
+        numero: parseInt(inputs.numero),
+        cep: inputs.cep,
+        rg: inputs.rg,
+        crm: inputs.crm,
+      }, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      
+
       console.log(response.data);
       console.log("passou");
-      if (user.role === "paciente") {
 
-        setInputs({
+      BuscarPorId()
 
-          rg: inputs.rg,
-          cpf: inputs.cpf,
-          dataNascimento: new Date(inputs.dataNascimento.split("/").reverse().join("-")),
-          cep: inputs.cep,
-          logradouro: inputs.logradouro,
-          numero: parseInt(inputs.numero),
-          cidade: inputs.cidade,
-          nome: inputs.nome,
-
-          // arrumar aqui está faltando o foto eu acho, dando um log no inputs ele devolve foto também, tentei colocar aqui mas não rodou
-          // foto: inputs.foto
-
-        })
-      } else {
-
-        setInputs({
-
-          nome: inputs.nome,
-          logradouro: inputs.logradouro,
-          numero: parseInt(inputs.numero),
-          cep: inputs.cep,
-          crm: inputs.crm,
-
-        })
-        BuscarPorId()
-        console.log("deu certo");
-      }
 
     } catch (error) {
       console.log(error);

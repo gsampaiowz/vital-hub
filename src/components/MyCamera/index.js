@@ -1,4 +1,4 @@
-import { Camera, CameraType } from "expo-camera";
+import { Camera, CameraType } from "expo-camera/legacy";
 import { useEffect, useRef, useState } from "react";
 import * as MediaLibrary from "expo-media-library";
 import styled from "styled-components/native";
