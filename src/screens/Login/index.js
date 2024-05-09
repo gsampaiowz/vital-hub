@@ -88,8 +88,8 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "sampaioMedico@gmail.com",
-    senha: "sampaio123",
+    email: "paciente@email.com",
+    senha: "paciente12",
   });
 
   //METODO LOGIN COM API
@@ -124,7 +124,7 @@ export const Login = ({ navigation }) => {
           <Input
             inputValue={inputs.email}
             onChangeText={(text) => setInputs({ ...inputs, email: text })}
-            placeholder="Usuário ou E-mail"
+            placeholder="E-mail"
           />
           <Input
             inputValue={inputs.senha}

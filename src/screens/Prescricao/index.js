@@ -203,14 +203,13 @@ export const Prescricao = ({ route }) => {
         <Divider />
 
         <Subtitle bold text="Resultado do exame:" />
-          <Subtitle
-          
-            text={
-              descricaoExame != ""
-                ? descricaoExame
-                : "Nenhum exame informado ainda."
-            }
-          />
+        <Subtitle
+          text={
+            descricaoExame != ""
+              ? descricaoExame
+              : "Nenhum exame informado ainda."
+          }
+        />
 
         <Group gap={10}>
           <Button

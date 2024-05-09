@@ -17,59 +17,59 @@ import { ActivityIndicator } from "react-native";
 
 export const CriarConta = ({ navigation }) => {
 
-  const [confirmarSenha, setConfirmarSenha] = useState('pacienteTeste')
-
   // Const com os campos de criação de conta
   const [inputs, setInputs] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    cidade: "",
-    logradouro: "",
-    cpf: "",
-    dataNascimento: "",
+    nome: "thiago",
+    email: "thiago@email.com",
+    senha: "thiago123",
+    cidade: "santo andre",
+    logradouro: "elba",
+    cpf: "432423",
+    dataNascimento: "23/02/2000",
     numero: 10,
-    cep: "",
-    rg: "",
-    foto: ""
-
+    cep: "243242",
+    rg: "4324234",
   });
 
-  const [user, setUser] = useState({})
   const [carregando, setCarregando] = useState(false);
 
   // Requisição para Cadastrar um Usuário novo
   async function fillProfile() {
-    setCarregando(true)
+    setCarregando(true);
 
     // Instanciando um new Form
     const formData = new FormData();
 
-    formData.append('rg', inputs.rg);
-    formData.append('cpf', inputs.cpf);
-    formData.append('cep', inputs.cep);
-    formData.append('logradouro', inputs.logradouro);
-    formData.append('numero', inputs.numero);
-    formData.append('cidade', inputs.cidade);
-    formData.append('nome', inputs.nome);
-    formData.append('email', inputs.email);
-    // formData.append('foto', foto); // Adiciona o arquivo
-    formData.append('senha', inputs.senha);
-    formData.append('idTipoUsuario', "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
-    formData.append('dataNascimento', new Date(inputs.dataNascimento.split('/').reverse().join('-') + 'T00:00:00.000Z').toISOString());
+    formData.append("rg", inputs.rg);
+    formData.append("cpf", inputs.cpf);
+    formData.append("cep", inputs.cep);
+    formData.append("logradouro", inputs.logradouro);
+    formData.append("numero", inputs.numero);
+    formData.append("cidade", inputs.cidade);
+    formData.append("nome", inputs.nome);
+    formData.append("email", inputs.email);
+    formData.append("senha", inputs.senha);
+    formData.append("idTipoUsuario", "701230CA-0D31-4161-8F45-1E7341485369");
+    formData.append(
+      "dataNascimento",
+      new Date(
+        inputs.dataNascimento.split("/").reverse().join("-") + "T00:00:00.000Z"
+      ).toISOString()
+    );
 
-    await api.post("/Pacientes", formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then(response => {
+    await api
+      .post("/Pacientes", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
         console.log(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
-    setCarregando(false)
+    setCarregando(false);
   }
 
   return (
@@ -122,7 +122,9 @@ export const CriarConta = ({ navigation }) => {
             inputValue={inputs.dataNascimento}
             label="Data de Nascimento"
             placeholder="_ / _ / _"
-            onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
+            onChangeText={(text) =>
+              setInputs({ ...inputs, dataNascimento: text })
+            }
           />
           <Group row={true}>
             <Input
@@ -153,7 +155,10 @@ export const CriarConta = ({ navigation }) => {
             />
           </Group>
         </Group>
-        <Button text={carregando ? <ActivityIndicator /> : "Cadastrar"} onPress={() => fillProfile() && navigation.navigate("Login")} />
+        <Button
+          text={carregando ? <ActivityIndicator /> : "Cadastrar"}
+          onPress={() => fillProfile() && navigation.navigate("Login")}
+        />
         <Link
           doubleColor
           text2="Já possui uma conta? "

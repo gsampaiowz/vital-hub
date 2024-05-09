@@ -88,6 +88,7 @@ export const CameraModal = ({
       setModalOpen(false);
       setLoad(false);
     } catch (error) {
+      console.log(error);
       setLoad(false);
       setModalOpen(false);
     }

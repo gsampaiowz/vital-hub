@@ -68,7 +68,7 @@ export const Home = ({ navigation }) => {
   //BUSCA AS CONSULTAS AO VOLTAR A TELA HOME
   useFocusEffect(
     useCallback(() => {
-      getConsultas();
+      ExpirarConsultas();
     }, [])
   );
 

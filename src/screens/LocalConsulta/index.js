@@ -6,6 +6,7 @@ import { Maps } from "../../components/Maps";
 import { ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import api from "../../service/service";
+import { Button } from './../../components/Button/index';
 
 export const LocalConsulta = ({ navigation, route }) => {
   const [clinica, setClinica] = useState(null);
@@ -49,6 +50,7 @@ export const LocalConsulta = ({ navigation, route }) => {
             label="CEP"
             inputValue={clinica.endereco.cep}
           />
+          <Button text="Voltar" onPress={() => navigation.goBack()}/>
         </ContainerSpacing>
       </ContainerScroll>
     </>

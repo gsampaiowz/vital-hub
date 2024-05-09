@@ -196,7 +196,7 @@ export const Perfil = ({ navigation }) => {
         cidade: inputs.cidade,
         logradouro: inputs.logradouro,
         cpf: inputs.cpf,
-        dataNascimento: url == "Pacientes" ? inputs.dataNascimento.toString() : null,
+        dataNascimento: url == "Pacientes" ? new Date(inputs.dataNascimento) : null,
         numero: parseInt(inputs.numero),
         cep: inputs.cep,
         rg: inputs.rg,
