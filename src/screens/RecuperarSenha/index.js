@@ -13,7 +13,7 @@ import { ActivityIndicator } from "react-native";
 
 export const RecuperarSenha = ({ navigation }) => {
   
-  const [email, setEmail] = useState('tinassenai@gmail.com')
+  const [email, setEmail] = useState('medico2@email.com')
   
   const [carregando, setCarregando] = useState(false);
 

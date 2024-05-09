@@ -63,14 +63,12 @@ export const Perfil = ({ navigation }) => {
 
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
-  const [modalOpen, setModalOpen] = useState(false);
+  const [, setModalOpen] = useState(false);
 
   const [photo, setPhoto] = useState(null);
 
   const [inputs, setInputs] = useState({
     nome: "",
-    email: "",
-    senha: "",
     cidade: "",
     logradouro: "",
     cpf: "",
@@ -198,7 +196,7 @@ export const Perfil = ({ navigation }) => {
         cidade: inputs.cidade,
         logradouro: inputs.logradouro,
         cpf: inputs.cpf,
-        dataNascimento: url == "Pacientes" ? inputs.dataNascimento.toString() : null,
+        dataNascimento: url == "Pacientes" ? new Date(inputs.dataNascimento) : null,
         numero: parseInt(inputs.numero),
         cep: inputs.cep,
         rg: inputs.rg,
@@ -365,10 +363,6 @@ export const Perfil = ({ navigation }) => {
         )}
 
         <Group gap={10}>
-          {/* <Button
-            onPress={() => setEditMode(!editMode)}
-            text={editMode ? "SALVAR" : "EDITAR"}
-          /> */}
 
           <Button
             onPress={!user ? () => {

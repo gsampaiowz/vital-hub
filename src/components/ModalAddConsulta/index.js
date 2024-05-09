@@ -38,44 +38,53 @@ const MySelect = styled(RNPickerSelect)`
 
 export const ModalAddConsulta = ({
   navigation,
+  getConsultas,
   setShowModalConsulta,
   visible = false,
   ...rest
 }) => {
-  const tiposConsulta = [
-    { label: "Exame", value: 0 },
-    { label: "Rotina", value: 1 },
-    { label: "Urgência", value: 2 },
+  const prioridades = [
+    { label: "Exame", value: "43FFA829-7896-4BF2-9DBF-C28249726DE6" },
+    { label: "Rotina", value: "299A8E90-4459-4F59-BCC5-F0F5CE876FA5" },
+    { label: "Urgência", value: "4397D79A-2B8D-4A53-9F07-0ECEA4A6A138" },
   ];
 
-  const [clinicaSelecionada, setClinicaSelecionada] = useState({});
+  const [agendamento, setAgendamento] = useState({
+    localizacao: "Rio de Janeiro",
+  });
 
-  const [clinicas, setClinicas] = useState([]);
+  const [cidades, setCidades] = useState([]);
 
-  useEffect(() => {
-    getClinicas();
-  }, []);
+  async function Continue() {
+    if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
+      await setShowModalConsulta(false);
+      navigation.navigate("SelecionarClinica", {
+        agendamento: agendamento,
+        getConsultas: getConsultas,
+      });
+    }
+  }
 
-  let clinicasArray = [];
-
-  async function getClinicas() {
+  async function getCidades() {
     try {
-      const response = await api.get("/Clinica/ListarTodas");
-      setClinicas(response.data);
-      clinicasArray.push()
+      const response = await api.get(`/Clinica/ListarTodas`);
+      const cities = new Set();
+      response.data.forEach((clinica) => {
+        if (cities.has(clinica.endereco.cidade.toLowerCase())) return;
+        cities.add(clinica.endereco.cidade.toLowerCase());
+        setCidades((prevState) => [
+          ...prevState,
+          { label: clinica.endereco.cidade, value: clinica.endereco.cidade },
+        ]);
+      });
     } catch (error) {
       console.log(error);
     }
   }
 
-  const [prioridade, setPrioridade] = useState(undefined);
-
-  function Continue() {
-    if (prioridade) {
-      setShowModalConsulta(false);
-      navigation.navigate("SelecionarClinica");
-    }
-  }
+  useEffect(() => {
+    getCidades();
+  }, []);
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
@@ -87,12 +96,20 @@ export const ModalAddConsulta = ({
               bold
               fontSize={14}
               color="black"
-              text="Informe o tipo de consulta"
+              text="Informe a prioridade da consulta"
             />
             <MySelect
-              placeholder={{ label: "Tipo de consulta" }}
-              items={tiposConsulta}
-              onValueChange={(value) => setPrioridade(value)}
+              placeholder={{ label: "Prioridade da consulta", value: null }}
+              items={prioridades}
+              onValueChange={(value) =>
+                setAgendamento({
+                  ...agendamento,
+                  prioridadeId: value,
+                  prioridadeLabel: prioridades.find(
+                    (item) => item.value === value
+                  ).label,
+                })
+              }
             />
             <Subtitle
               bold
@@ -101,10 +118,15 @@ export const ModalAddConsulta = ({
               text="Informe a localização desejada"
             />
             <MySelect
-              placeholder={{ label: "Clínica" }}
-              items={clinicas}
-              
-              onValueChange={(value) => setClinicaSelecionada(value)}
+              placeholder={{ label: "Localização", value: null }}
+              items={cidades}
+              inputValue={agendamento ? agendamento.localizacao : null}
+              onValueChange={(value) =>
+                setAgendamento({
+                  ...agendamento,
+                  localizacao: value,
+                })
+              }
             />
             <Group gap={10}>
               <Button onPress={() => Continue()} text="Continuar" />

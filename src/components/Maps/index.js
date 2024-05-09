@@ -76,7 +76,7 @@ export const Maps = ({ clinica }) => {
         });
       }
     );
-  }, [localizacao]);
+  }, [1000]);
 
   useEffect(() => {
     RecarregarVisualizacaoMapa();
