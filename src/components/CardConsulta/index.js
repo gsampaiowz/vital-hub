@@ -55,7 +55,7 @@ export const CardConsulta = ({
   return (
     <CardConsultaStyled
       onPress={() => {
-        setShowLocalModal(true);
+        situacao == 'agendadas' ? setShowLocalModal(true) : null ;
         onPress;
       }}
     >

@@ -88,12 +88,15 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "paciente@email.com",
-    senha: "paciente12",
+    email: "thiagorafael2005@gmail.com",
+    senha: "thiago123",
   });
 
   //METODO LOGIN COM API
   async function Login() {
+    if (inputs.email === "" || inputs.senha === "") {
+      Toast.error("Preencha os campos");
+    }
     setCarregando(true);
     await api
       .post("/Login", {
@@ -106,9 +109,7 @@ export const Login = ({ navigation }) => {
         navigation.navigate("Main");
       })
       .catch(() => {
-        if (inputs.email === "" || inputs.senha === "") {
-          Toast.error("Preencha todos os campos");
-        }
+        
         Toast.error("Email ou senha incorretos");
       });
     setCarregando(false);

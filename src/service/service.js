@@ -5,7 +5,7 @@ const portaApi = "4466";
 
 // Declarar o ip da máquina
 
-const ip = "192.168.21.101";
+const ip = "192.168.21.98";
 
 // Definir URL padrão
 const apiUrllocal = `http://${ip}:${portaApi}/api`;

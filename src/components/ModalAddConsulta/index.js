@@ -44,9 +44,9 @@ export const ModalAddConsulta = ({
   ...rest
 }) => {
   const prioridades = [
-    { label: "Exame", value: "43FFA829-7896-4BF2-9DBF-C28249726DE6" },
-    { label: "Rotina", value: "299A8E90-4459-4F59-BCC5-F0F5CE876FA5" },
-    { label: "Urgência", value: "4397D79A-2B8D-4A53-9F07-0ECEA4A6A138" },
+    { label: "Exame", value: "A6270D61-0DC7-4819-A436-82F63D0C520E" },
+    { label: "Rotina", value: "A8A248A3-FBE1-40ED-901F-1D12976A97B2" },
+    { label: "Urgência", value: "D6038F3D-0384-49D6-8123-96AE2455C37A" },
   ];
 
   const [agendamento, setAgendamento] = useState({
