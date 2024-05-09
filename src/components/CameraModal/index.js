@@ -21,7 +21,6 @@ const ModalImage = styled.Image`
 
 export const CameraModal = ({
   photoUri,
-  setDescricaoExame,
   visible,
   setInCamera,
   consultaId,
@@ -84,7 +83,6 @@ export const CameraModal = ({
         },
       });
 
-      await setDescricaoExame(response.data.descricao);
       setModalOpen(false);
       setLoad(false);
     } catch (error) {

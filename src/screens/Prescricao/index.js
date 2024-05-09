@@ -13,7 +13,8 @@ import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
 import moment from "moment";
 import api from "../../service/service";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 
 const Divider = styled.View`
   width: 100%;
@@ -44,7 +45,7 @@ export const Prescricao = ({ route }) => {
 
   const [consulta, setConsulta] = useState({});
 
-  const [descricaoExame, setDescricaoExame] = useState("");
+  const [exames, setExames] = useState([]);
 
   const [photo, setPhoto] = useState(null);
 
@@ -63,9 +64,6 @@ export const Prescricao = ({ route }) => {
 
   useEffect(() => {
     getConsulta();
-    return () => {
-      getConsulta();
-    };
   }, []);
 
   useEffect(() => {
@@ -112,6 +110,26 @@ export const Prescricao = ({ route }) => {
         descricao: inputs.descricao,
         medicamento: inputs.medicamento,
       });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function buscarExames() {
+    try {
+      await api
+        .get("Exame/BuscarPorIdConsulta?id=" + consultaId)
+        .then(async (response) => {
+          await response.data.forEach((exame, index) => {
+            setExames((prevExames) => [
+              ...prevExames,
+              { label: "Exame " + index + 1, value: exame.descricao },
+            ]);
+          });
+        })
+        .then(() => {
+          console.log(exames);
+        });
     } catch (error) {
       console.log(error);
     }
@@ -175,7 +193,7 @@ export const Prescricao = ({ route }) => {
               border={editMode}
               label="Exames médicos:"
               icon={
-                descricaoExame == "" ? (
+                exames.length < 1 ? (
                   <AntDesign
                     name="exclamationcircleo"
                     size={24}
@@ -184,7 +202,7 @@ export const Prescricao = ({ route }) => {
                 ) : null
               }
               placeholder={
-                descricaoExame == ""
+                exames.length < 1
                   ? "Nenhuma foto informada"
                   : "Exame já informado!"
               }
@@ -203,13 +221,14 @@ export const Prescricao = ({ route }) => {
         <Divider />
 
         <Subtitle bold text="Resultado do exame:" />
-        <Subtitle
+        <RNPickerSelect items={exames} />
+        {/* <Subtitle
           text={
             descricaoExame != ""
               ? descricaoExame
               : "Nenhum exame informado ainda."
           }
-        />
+        /> */}
 
         <Group gap={10}>
           <Button
@@ -224,7 +243,6 @@ export const Prescricao = ({ route }) => {
         </Group>
       </ContainerSpacing>
       <CameraModal
-        setDescricaoExame={setDescricaoExame}
         consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}
