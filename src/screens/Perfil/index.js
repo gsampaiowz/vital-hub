@@ -67,8 +67,6 @@ export const Perfil = ({ navigation }) => {
 
   const [photo, setPhoto] = useState(null);
 
-  const [id, setId] = useState('')
-
   const [inputs, setInputs] = useState({
     nome: "",
     email: "",
