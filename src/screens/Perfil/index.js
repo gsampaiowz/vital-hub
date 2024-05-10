@@ -15,6 +15,8 @@ import * as ImagePicker from "expo-image-picker";
 import { MyCamera } from "../../components/MyCamera/index";
 import api from "../../service/service";
 import { ActivityIndicator, Dimensions } from "react-native";
+import ToastManager, { Toast } from "toastify-react-native";
+
 
 const ButtonCamera = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
@@ -188,8 +190,14 @@ export const Perfil = ({ navigation }) => {
 
   async function updateProfile() {
     const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
-    console.log(inputs);
-    console.log("comecou");
+    if (Object.values(inputs).some(input => input === "")) {
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      Toast.error("Campo Vazio ou Inválido")
+
+      return
+    }
+    // console.log(inputs);
+    // console.log("comecou");
     try {
       const response = await api.put(`/${url}?idUsuario=${user.id}`, {
         nome: inputs.nome,
@@ -208,14 +216,25 @@ export const Perfil = ({ navigation }) => {
       });
 
       console.log(response.data);
-      console.log("passou");
+      // console.log("passou");
 
       BuscarPorId()
 
 
     } catch (error) {
+      Toast.error('Campo Vazio ou Inválido')
       console.log(error);
     }
+  }
+
+  async function CheckExistAuthentication() {
+    LocalAuthentication.hashHardwareAsync().then((response) => {
+      if (response) {
+        Toast.success('Conta atualizada com sucesso')
+      } else {
+        Toast.error('Campo Vazio/Inválido')
+      }
+    })
   }
 
   return showCamera ? (
@@ -228,6 +247,7 @@ export const Perfil = ({ navigation }) => {
     />
   ) : (
     <ContainerScroll>
+      <ToastManager height={60} width={300} />
       <Group>
         {loadingPhoto == true ? (
           <ActivityIndicator style={{ height: screenWidth }} />
