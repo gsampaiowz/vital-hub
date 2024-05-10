@@ -51,7 +51,7 @@ export const Button = ({
           ? "white"
           : !clickButton
           ? "white"
-          : borderColor,
+          : color,
       }}
       onPress={onPress}
       clickButton={clickButton}

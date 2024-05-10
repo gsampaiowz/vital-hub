@@ -6,7 +6,7 @@ import { Group } from "../../components/Group/index";
 import { useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
-import { MyModal } from "../../components/Modal/index";
+import { ModalCancel } from "../../components/Modal/index";
 
 export const ConsultasDoutor = () => {
   const [statusButtons, setStatusButtons] = useState("Agendadas");
@@ -130,12 +130,12 @@ export const ConsultasDoutor = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      <MyModal
+      <ModalCancel
         cancel
         setShowModal={setShowModalCancel}
         visible={showModalCancel}
       />
-      <MyModal
+      <ModalCancel
         nome={"Romário"}
         email={"romario@email.com"}
         idade={32}

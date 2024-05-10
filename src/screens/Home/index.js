@@ -7,13 +7,13 @@ import { Group } from "../../components/Group/index";
 import { useCallback, useEffect, useState } from "react";
 import { CardConsulta } from "../../components/CardConsulta";
 import { ListComponent } from "../../components/CardList";
-import { MyModal } from "../../components/Modal/index";
 import { AddConsulta } from "../../components/AddConsulta/index";
 import { Fontisto } from "@expo/vector-icons";
 import { ModalAddConsulta } from "../../components/ModalAddConsulta";
 import { userDecodeToken } from "../../utils/Auth";
 import api from "../../service/service";
 import moment from "moment/moment";
+import  AsyncStorage  from '@react-native-async-storage/async-storage';
 
 export const Home = ({ navigation }) => {
   
@@ -28,15 +28,6 @@ export const Home = ({ navigation }) => {
 
   //STATE DE VISIBILIDADE DO MODAL DE CADASTRAR CONSULTA
   const [showModalConsulta, setShowModalConsulta] = useState(false);
-
-  //STATE PARA PASSAR PROPS PARA OS MODAIS
-  const [consultaSelecionada, setConsultaSelecionada] = useState(null);
-
-  //STATE DE VISIBILIDADE DO MODAL DE CANCELAR CONSULTA
-  const [showModalCancel, setShowModalCancel] = useState(false);
-
-  //STATE DE VISIBILIDADE DO MODAL DE ACESSAR O PRONTUARIO
-  const [showModalProntuario, setShowModalProntuario] = useState(false);
 
   //STATE DO USUARIO (TOKEN)
   const [user, setUser] = useState({});
@@ -63,11 +54,13 @@ export const Home = ({ navigation }) => {
   //BUSCA AS CONSULTAS AO INICIAR E AO MUDAR A DATA
   useEffect(() => {
     ExpirarConsultas();
+    AsyncStorage.setItem("data", data.toString());
   }, [data]);
 
   //BUSCA AS CONSULTAS AO VOLTAR A TELA HOME
   useFocusEffect(
-    useCallback(() => {
+    useCallback(async () => {
+      setData(moment(await AsyncStorage.getItem("data")));
       ExpirarConsultas();
     }, [])
   );
@@ -147,8 +140,9 @@ export const Home = ({ navigation }) => {
             <CardConsulta
               clinica={item.medicoClinica.clinicaId}
               navigation={navigation}
-              onPress={setConsultaSelecionada(item)}
+              item={item}
               user={user}
+              getConsultas={getConsultas}
               image={require("./../../assets/img/UserImage.jpg")}
               name={
                 user.role === "paciente"
@@ -163,8 +157,6 @@ export const Home = ({ navigation }) => {
                       "years"
                     )
               }
-              setShowModalCancel={setShowModalCancel}
-              setShowModalProntuario={setShowModalProntuario}
               prioridade={item.prioridade.prioridade}
               horario={new Date(item.dataConsulta).toLocaleTimeString([], {
                 hour: "2-digit",
@@ -177,24 +169,6 @@ export const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* MODAL DE CANCELAMENTO */}
-      <MyModal
-        item={consultaSelecionada}
-        cancel
-        getConsultas={getConsultas}
-        user={user}
-        setShowModal={setShowModalCancel}
-        visible={showModalCancel}
-      />
-      {/* MODAL DE PRONTUÁRIO/PRESCRICAO */}
-      <MyModal
-        user={user}
-        navigation={navigation}
-        item={consultaSelecionada}
-        image={require("./../../assets/img/UserImage.jpg")}
-        setShowModal={setShowModalProntuario}
-        visible={showModalProntuario}
-      />
       {/* BOTAO PARA ABRIR O MODAL DE ADICIONAR CONSULTA, VISIVEL SOMENTE PARA PACIENTES */}
       {user.role === "medico" ? null : (
         <AddConsulta onPress={() => setShowModalConsulta(true)}>

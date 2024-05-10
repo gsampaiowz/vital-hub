@@ -4,6 +4,8 @@ import { Title } from "../Title";
 import { Subtitle } from "../Subtitle/index";
 import { Button } from "../Button";
 import { Group } from "../Group";
+import { ModalCancel } from "./../ModalCancel/index";
+import { useState } from "react";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -32,10 +34,12 @@ const ImageStyled = styled.Image`
   height: 260px;
 `;
 
-export const ModalVerLocal = ({
-  setShowLocalModal,
+export const ModalDetalhes = ({
+  setShowDetalhesModal,
   user,
+  item,
   navigation,
+  getConsultas,
   clinica,
   name,
   prioridade,
@@ -43,6 +47,9 @@ export const ModalVerLocal = ({
   visible = false,
   ...rest
 }) => {
+  //STATE DE VISIBILIDADE DO MODAL DE CANCELAR CONSULTA
+  const [showModalCancel, setShowModalCancel] = useState(false);
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -54,21 +61,47 @@ export const ModalVerLocal = ({
             <Subtitle text={user.role === "paciente" ? info : info + " anos"} />
           </Group>
           <Group>
+            {item.situacao.situacao !== "realizadas" && (
+              <Button
+                onPress={() => {
+                  setShowDetalhesModal(false);
+                  navigation.navigate("LocalConsulta", { clinicaId: clinica });
+                }}
+                text="VER LOCAL DA CONSULTA"
+              />
+            )}
             <Button
               onPress={() => {
-                setShowLocalModal(false);
-                navigation.navigate("LocalConsulta", { clinicaId: clinica });
+                setShowDetalhesModal(false);
+                navigation.navigate("Prescricao", { consulta: item });
               }}
-              text="VER LOCAL DA CONSULTA"
+              text={
+                user.role === "paciente"
+                  ? "VER PRONTUÁRIO"
+                  : "INSERIR PRONTUÁRIO"
+              }
             />
             <Button
-              onPress={() => setShowLocalModal(false)}
+              borderColor="red"
               outlined
-              text="Cancelar"
+              color="red"
+              onPress={() => setShowModalCancel(true)}
+              text="CANCELAR CONSULTA"
+            />
+            <Button
+              onPress={() => setShowDetalhesModal(false)}
+              outlined
+              text="Voltar"
             />
           </Group>
         </ModalContent>
       </PatientModal>
+      <ModalCancel
+        getConsultas={getConsultas}
+        setShowModal={setShowModalCancel}
+        item={item}
+        visible={showModalCancel}
+      />
     </Modal>
   );
 };

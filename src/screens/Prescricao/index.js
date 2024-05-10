@@ -47,6 +47,8 @@ export const Prescricao = ({ route }) => {
 
   const [exames, setExames] = useState([]);
 
+  const [descricaoExame, setDescricaoExame] = useState("");
+
   const [photo, setPhoto] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -64,21 +66,13 @@ export const Prescricao = ({ route }) => {
 
   useEffect(() => {
     getConsulta();
-  }, []);
-
-  useEffect(() => {
-    getConsulta();
-    setInputs({
-      ...inputs,
-      exame: descricaoExame,
-    });
   }, [photo]);
 
   async function getConsulta() {
     try {
       await api
         .get("Consultas/BuscarPorId?id=" + consultaId)
-        .then((response) => {
+        .then(async (response) => {
           setInputs({
             ...inputs,
             descricao: response.data.descricao,
@@ -95,7 +89,22 @@ export const Prescricao = ({ route }) => {
             ),
             foto: response.data.paciente.idNavigation.foto,
           });
+
           setConsulta(response.data);
+          console.log(response.data.exames.length);
+
+          response.data.exames.forEach((exame, index) => {
+            setExames((prevExames) =>
+              prevExames.some((value) => value.value === exame.descricao)
+                ? prevExames
+                : [
+                    ...prevExames,
+                    { label: "Exame " + (index + 1), value: exame.descricao },
+                  ]
+            );
+          });
+          console.log(exames.length);
+          
         });
     } catch (error) {
       console.log(error);
@@ -110,26 +119,6 @@ export const Prescricao = ({ route }) => {
         descricao: inputs.descricao,
         medicamento: inputs.medicamento,
       });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function buscarExames() {
-    try {
-      await api
-        .get("Exame/BuscarPorIdConsulta?id=" + consultaId)
-        .then(async (response) => {
-          await response.data.forEach((exame, index) => {
-            setExames((prevExames) => [
-              ...prevExames,
-              { label: "Exame " + index + 1, value: exame.descricao },
-            ]);
-          });
-        })
-        .then(() => {
-          console.log(exames);
-        });
     } catch (error) {
       console.log(error);
     }
@@ -221,14 +210,18 @@ export const Prescricao = ({ route }) => {
         <Divider />
 
         <Subtitle bold text="Resultado do exame:" />
-        <RNPickerSelect items={exames} />
-        {/* <Subtitle
+        <RNPickerSelect
+          onValueChange={(value) => setDescricaoExame(value)}
+          items={exames}
+          placeholder={{ label: "Selecione um exame", value: null }}
+        />
+        <Subtitle
           text={
-            descricaoExame != ""
+            exames.length >= 1
               ? descricaoExame
               : "Nenhum exame informado ainda."
           }
-        /> */}
+        />
 
         <Group gap={10}>
           <Button
@@ -243,6 +236,7 @@ export const Prescricao = ({ route }) => {
         </Group>
       </ContainerSpacing>
       <CameraModal
+        getConsulta={getConsulta}
         consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}
