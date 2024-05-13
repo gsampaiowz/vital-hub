@@ -65,9 +65,11 @@ export const ModalAddConsulta = ({
     }
   }
 
+  
   async function getCidades() {
     try {
       const response = await api.get(`/Clinica/ListarTodas`);
+      setCidades([]);
       const cities = new Set();
       response.data.forEach((clinica) => {
         if (cities.has(clinica.endereco.cidade.toLowerCase())) return;

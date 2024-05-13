@@ -16,7 +16,7 @@ const ModalContent = styled.View`
 
 const ModalImage = styled.Image`
   width: 100%;
-  height: 350px;
+  height: 500px;
 `;
 
 export const CameraModal = ({
@@ -26,6 +26,7 @@ export const CameraModal = ({
   consultaId,
   getConsulta,
   setModalOpen,
+  examesSemRepetir,
   isPhotoSaved,
   setIsPhotoSaved,
   ...rest
@@ -88,7 +89,6 @@ export const CameraModal = ({
           setModalOpen(false);
           setLoad(false);
           getConsulta();
-          
         });
     } catch (error) {
       console.log(error);

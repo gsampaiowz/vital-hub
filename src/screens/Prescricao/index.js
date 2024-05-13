@@ -25,11 +25,8 @@ const Divider = styled.View`
 
 const InputImage = styled.Image`
   height: 500px;
-  border-radius: 20px;
-`;
-
-const ImagePress = styled.TouchableOpacity`
   width: 100%;
+  border-radius: 20px;
 `;
 
 export const Prescricao = ({ route }) => {
@@ -51,6 +48,7 @@ export const Prescricao = ({ route }) => {
 
   const [photo, setPhoto] = useState(null);
 
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const [isPhotoSaved, setIsPhotoSaved] = useState(false);
@@ -66,7 +64,9 @@ export const Prescricao = ({ route }) => {
 
   useEffect(() => {
     getConsulta();
-  }, [photo]);
+  }, [photo, modalOpen, inCamera]);
+
+  const examesSemRepetir = new Set();
 
   async function getConsulta() {
     try {
@@ -91,20 +91,29 @@ export const Prescricao = ({ route }) => {
           });
 
           setConsulta(response.data);
-          console.log(response.data.exames.length);
 
-          response.data.exames.forEach((exame, index) => {
-            setExames((prevExames) =>
-              prevExames.some((value) => value.value === exame.descricao)
-                ? prevExames
-                : [
-                    ...prevExames,
-                    { label: "Exame " + (index + 1), value: exame.descricao },
-                  ]
-            );
+
+          setExames([]);
+
+          response.data.exames.forEach(async (exame) => {
+            if (examesSemRepetir.has(exame.descricao)) {
+              try {
+                await api.delete("/Exame?id=" + exame.id);
+              } catch (error) {
+                console.log(error);
+              }
+              return;
+            }
+            examesSemRepetir.add(exame.descricao);
           });
-          console.log(exames.length);
-          
+
+
+          Array.from(examesSemRepetir).forEach((exame, index) => {
+            setExames((prevExames) => [
+              ...prevExames,
+              { label: `Exame ${index + 1}`, value: exame },
+            ]);
+          });
         });
     } catch (error) {
       console.log(error);
@@ -172,9 +181,7 @@ export const Prescricao = ({ route }) => {
           {photo != null ? (
             <>
               <Subtitle bold text="Exame médico" />
-              <ImagePress onPress={() => setModalOpen(true)}>
-                <InputImage source={{ uri: photo }} />
-              </ImagePress>
+              <InputImage source={{ uri: photo }} />
             </>
           ) : (
             <Input
@@ -190,11 +197,7 @@ export const Prescricao = ({ route }) => {
                   />
                 ) : null
               }
-              placeholder={
-                exames.length < 1
-                  ? "Nenhuma foto informada"
-                  : "Exame já informado!"
-              }
+              placeholder="Enviar exames médicos"
             />
           )}
           <Button
@@ -202,7 +205,7 @@ export const Prescricao = ({ route }) => {
               setInCamera(true);
               setModalOpen(true);
             }}
-            text={photo != null ? "Trocar" : "Enviar"}
+            text={photo != null ? "Enviar outro" : "Enviar"}
             icon={<Feather name="camera" size={18} color="white" />}
           />
         </>
@@ -236,6 +239,7 @@ export const Prescricao = ({ route }) => {
         </Group>
       </ContainerSpacing>
       <CameraModal
+        examesSemRepetir={examesSemRepetir}
         getConsulta={getConsulta}
         consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}

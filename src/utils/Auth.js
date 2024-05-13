@@ -26,6 +26,7 @@ export const userDecodeToken = async () => {
   try {
     const response = await api.get(`/Usuario/BuscarPorId?id=${decoded.jti}`);
     fotoUsuario = response.data.foto;
+    decoded.name = response.data.nome;
   } catch (error) {
     console.log(error);
   }

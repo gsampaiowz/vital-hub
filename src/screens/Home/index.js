@@ -13,10 +13,9 @@ import { ModalAddConsulta } from "../../components/ModalAddConsulta";
 import { userDecodeToken } from "../../utils/Auth";
 import api from "../../service/service";
 import moment from "moment/moment";
-import  AsyncStorage  from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Home = ({ navigation }) => {
-  
   //STATE DE SITUACAO DE CONSULTA
   const [statusButtons, setStatusButtons] = useState("agendadas");
 
@@ -61,6 +60,8 @@ export const Home = ({ navigation }) => {
   useFocusEffect(
     useCallback(async () => {
       setData(moment(await AsyncStorage.getItem("data")));
+      ProfileLoad();
+      console.log(await userDecodeToken());
       ExpirarConsultas();
     }, [])
   );
@@ -104,7 +105,7 @@ export const Home = ({ navigation }) => {
 
   return (
     <ContainerSafe style={{ paddingTop: 0 }}>
-      <HeaderConsultas image={{ uri: user.foto }} />
+      <HeaderConsultas nome={user.name} image={{ uri: user.foto }} />
       <Calendar data={data} setData={setData} />
 
       <ContainerSpacing>
