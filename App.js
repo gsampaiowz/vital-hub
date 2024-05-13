@@ -23,7 +23,6 @@ import { VerificarEmail } from "./src/screens/VerificarEmail";
 import { RedefinirSenha } from "./src/screens/RedefinirSenha/index";
 import { CriarConta } from "./src/screens/CriarConta";
 import { Perfil } from "./src/screens/Perfil";
-import { ConsultasDoutor } from "./src/screens/ConsultasDoutor/index";
 import { SelecionarClinica } from "./src/screens/SelecionarClinica";
 import { SelecionarMedico } from "./src/screens/SelecionarMedico";
 import { Home } from "./src/screens/Home";
@@ -114,11 +113,6 @@ export default function App() {
             name="Perfil"
             component={Perfil}
             options={{ title: "Perfil" }}
-          />
-          <Stack.Screen
-            name="ConsultasDoutor"
-            component={ConsultasDoutor}
-            options={{ title: "Consultas Doutor" }}
           />
           <Stack.Screen
             name="Home"

@@ -16,7 +16,7 @@ import { ActivityIndicator } from "react-native";
 
 export const CriarConta = ({ navigation }) => {
 
-  // Const com os campos de criação de conta
+  // CONST COM OS CAMPOS DE CRIAÇÃO DE CONTA
   const [inputs, setInputs] = useState({
     nome: "thiago",
     email: "thiago@email.com",
@@ -34,7 +34,7 @@ export const CriarConta = ({ navigation }) => {
 
   const scrollViewRef = useRef(null);
 
-  // Requisição para Cadastrar um Usuário novo
+  // REQUISIÇÃO PARA CADASTRAR UM USUÁRIO NOVO
   async function fillProfile() {
     if(Object.values(inputs).some(input => input === "")){
       scrollViewRef.current.scrollTo({ y: 0, animated: true });
@@ -44,7 +44,8 @@ export const CriarConta = ({ navigation }) => {
     }
 
     setCarregando(true);
-    // Instanciando um new Form
+
+    // INSTANCIA UM FORMDATA
     const formData = new FormData();
     
     formData.append("rg", inputs.rg);
@@ -79,7 +80,8 @@ export const CriarConta = ({ navigation }) => {
         setCarregando(false);
         navigation.navigate("Login")
   }
-
+  
+// LÓGICA PARA O TOAST
   async function CheckExistAuthentication() {
     LocalAuthentication.hashHardwareAsync().then((response) => {
       if (response) {

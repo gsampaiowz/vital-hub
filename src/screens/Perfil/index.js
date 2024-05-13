@@ -5,7 +5,7 @@ import { Subtitle } from "../../components/Subtitle";
 import { Input } from "../../components/Input";
 import { Group } from "../../components/Group";
 import { Button } from "../../components/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../../utils/Auth";
 import { styled } from "styled-components/native";
@@ -16,6 +16,7 @@ import { MyCamera } from "../../components/MyCamera/index";
 import api from "../../service/service";
 import { ActivityIndicator, Dimensions } from "react-native";
 import ToastManager, { Toast } from "toastify-react-native";
+import { ModalSairConta } from "../../components/ModalSairConta";
 
 
 const ButtonCamera = styled.TouchableOpacity.attrs({
@@ -56,7 +57,11 @@ const ButtonCancel = styled.TouchableOpacity.attrs({
 
 const screenWidth = Dimensions.get("window").width;
 
-export const Perfil = ({ navigation }) => {
+export const Perfil = ({
+  navigation,
+  visible = false,
+}) => {
+
   const [showCamera, setShowCamera] = useState(false);
 
   const [editMode, setEditMode] = useState(false);
@@ -64,6 +69,8 @@ export const Perfil = ({ navigation }) => {
   const [cadastro, setCadastro] = useState(false)
 
   const [loadingPhoto, setLoadingPhoto] = useState(false);
+
+  const [showModalSairConta, setShowModalSairConta] = useState(false)
 
   const [, setModalOpen] = useState(false);
 
@@ -84,6 +91,7 @@ export const Perfil = ({ navigation }) => {
 
   // console.log(inputs.numero);
 
+  // FUNÇÃO QUE DESLOGA DA CONTA DO USUÁRIO
   async function Logout() {
     //Remover token do AsyncStorage
     await AsyncStorage.removeItem("token");
@@ -94,6 +102,8 @@ export const Perfil = ({ navigation }) => {
 
   const [user, setUser] = useState({});
 
+
+  // FUNÇÃO QUE BUSCA PELO ID DO USUÁRIO
   async function BuscarPorId() {
     const url = user.role === "paciente" ? "Pacientes" : "Medicos";
     try {
@@ -129,11 +139,14 @@ export const Perfil = ({ navigation }) => {
     }
   }
 
+  // FUNÇÃO QUE PEGA IMAGEM DA GALERIA
   async function requestGaleria() {
     await MediaLibrary.requestPermissionsAsync();
 
     await ImagePicker.requestMediaLibraryPermissionsAsync();
   }
+
+  // FUNÇÃO QUE CARREGA O TOKEN
   async function ProfileLoad() {
     try {
       const decodedUser = await userDecodeToken();
@@ -163,6 +176,7 @@ export const Perfil = ({ navigation }) => {
     ProfileLoad();
   }, []);
 
+  // FUNÇÃO DE ALTERAR FOTO DO PERFIL
   async function AlterarFotoPerfil() {
     setLoadingPhoto(true);
     const formData = new FormData();
@@ -188,14 +202,19 @@ export const Perfil = ({ navigation }) => {
     }
   }
 
+  const scrollViewRef = useRef(null);
+
+  // FUNÇÃO PARA ATUALIZAR O PERFIL
   async function updateProfile() {
-    const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
+
     if (Object.values(inputs).some(input => input === "")) {
-      scrollViewRef.current.scrollTo({ y: 0, animated: true });
       Toast.error("Campo Vazio ou Inválido")
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
       return
     }
+    // VERIFICAÇÃO SE É PACIENTE OU MEDICOS
+    const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
     // console.log(inputs);
     // console.log("comecou");
     try {
@@ -222,7 +241,7 @@ export const Perfil = ({ navigation }) => {
 
 
     } catch (error) {
-      Toast.error('Campo Vazio ou Inválido')
+      console.log("Erro ao atulizar perfil");
       console.log(error);
     }
   }
@@ -232,7 +251,7 @@ export const Perfil = ({ navigation }) => {
       if (response) {
         Toast.success('Conta atualizada com sucesso')
       } else {
-        Toast.error('Campo Vazio/Inválido')
+        Toast.error('Campo Vazio ou Inválido')
       }
     })
   }
@@ -246,7 +265,7 @@ export const Perfil = ({ navigation }) => {
       setInCamera={setShowCamera}
     />
   ) : (
-    <ContainerScroll>
+    <ContainerScroll ref={scrollViewRef}>
       <ToastManager height={60} width={300} />
       <Group>
         {loadingPhoto == true ? (
@@ -398,9 +417,18 @@ export const Perfil = ({ navigation }) => {
             text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
           />
 
+            {/* BOTÃO QUE ABRE O MODAL DE SAIR DA CONTA */}
           <Button
-            onPress={() => Logout()} outlined text="SAIR DA CONTA" />
+            onPress={() => setShowModalSairConta(true)} outlined text="SAIR DA CONTA" />
         </Group>
+
+        {/* MODAL PARA SAIR DA CONTA */}
+        <ModalSairConta
+          Logout={Logout}
+          navigation={navigation}
+          setShowModalSairConta={setShowModalSairConta}
+          visible={showModalSairConta}
+        />
 
       </ContainerSpacing>
     </ContainerScroll>

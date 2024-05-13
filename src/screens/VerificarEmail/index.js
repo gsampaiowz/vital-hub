@@ -23,7 +23,7 @@ export const VerificarEmail = ({ navigation, route }) => {
     console.log(value);
   }, [value])
 
-  // Requisição para validação do código de recuperação de email
+  // REQUISIÇÃO PARA VALIDAÇÃO DO CÓDIGO DE RECUPERAÇÃO DE E-MAIL
   async function validarCodigo() {
 
     setCarregando(true)
@@ -66,41 +66,9 @@ export const VerificarEmail = ({ navigation, route }) => {
 
         <Group row justifyContent="space-between">
 
-          {
+            {/* COMPONENTE DE VERIFICAÇÃO DE CODIGO DO E-MAIL */}
             <CodeInput setValue={setValue} value={value} />
-          /* {
-          // Busca o indece do codigos de recuperar senha
-            [0, 1, 2, 3].map((index) => (
-              <Input
-                inputValue={inputs[index]}
-                key={index}
-                ref={(ref) => handleInputRef(ref, index)}
-                maxLength={1}
-                textAlign={"center"}
-                width={60}
-                height={60}
-                fontSize={32}
-                placeholder="0"
 
-                onChangeText={(txt) => {
-                  //verificar se o campo é vazio
-                  if (txt == "") {
-
-                    focusPrevInput(index)
-                    
-
-                  } else {
-                    //verificar se o campo foi preenchido
-                    const codigoInformado = [...codigo]
-                    codigoInformado[index] = txt
-                    setCodigo(codigoInformado.join(""))
-                    
-                    // focusNextInput(index)
-                  }
-                }}
-              />
-            ))
-          } */}
         </Group>
         <Button
           onPress={() => validarCodigo()}

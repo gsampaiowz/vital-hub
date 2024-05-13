@@ -18,6 +18,7 @@ export const RecuperarSenha = ({ navigation }) => {
 
   const [carregando, setCarregando] = useState(false);
 
+    // REQUISIÇÃO PARA CADASTRAR UM USUÁRIO NOVO
   async function CheckExistAuthentication() {
     LocalAuthentication.hasHardwareAsync().then((response) => {
       if (response) {
@@ -28,7 +29,7 @@ export const RecuperarSenha = ({ navigation }) => {
     });
   }
 
-  // Requisição para recuperar senha 
+  // REQUISIÇÃO PARA RECUPERAR SENHA
   async function EnviarEmail() {
 
 

@@ -51,6 +51,7 @@ export const ModalResumoConsulta = ({
       console.log(error);
     }
   }
+  
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
