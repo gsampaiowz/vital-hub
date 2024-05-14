@@ -31,8 +31,8 @@ export const SelecionarData = ({ route, navigation }) => {
     await getHorarios();
     //CAPTURAR A QUANTIDADE DE HORAS QUE FALTAM PARA AS 24H
 
-    const horasRestantes = 13
-    
+    const horasRestantes = 13;
+
     //CRIAR LAÇO QUE RODE A QUANTIDADE DE HORAS QUE FALTAM
     const options = Array.from(
       {
@@ -45,7 +45,8 @@ export const SelecionarData = ({ route, navigation }) => {
         if (
           horariosSemRepetir.has(
             `${dataSelecionada.split("-").reverse().join("/")} ${valor}:00`
-          ) || (valor < new Date().getHours() + 1 && dataSelecionada == dataAtual)
+          ) ||
+          (valor < new Date().getHours() + 1 && dataSelecionada == dataAtual)
         ) {
           return {
             label: "",
@@ -82,9 +83,11 @@ export const SelecionarData = ({ route, navigation }) => {
     try {
       const response = await api.get("/Consultas/ListarTodos");
       response.data.forEach((consulta) => {
-        horariosSemRepetir.add(
-          moment(consulta.dataConsulta).format("DD/MM/YYYY HH:mm")
-        );
+        if (consulta.situacao.situacao === "agendadas") {
+          horariosSemRepetir.add(
+            moment(consulta.dataConsulta).format("DD/MM/YYYY HH:mm")
+          );
+        }
       });
       console.log(horariosSemRepetir);
     } catch (error) {

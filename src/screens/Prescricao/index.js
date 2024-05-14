@@ -13,7 +13,8 @@ import { CameraModal } from "../../components/CameraModal";
 import { MyCamera } from "./../../components/MyCamera/index";
 import moment from "moment";
 import api from "../../service/service";
-import { ActivityIndicator, FlatList } from "react-native";
+import { ActivityIndicator } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 
 const Divider = styled.View`
   width: 100%;
@@ -24,11 +25,8 @@ const Divider = styled.View`
 
 const InputImage = styled.Image`
   height: 500px;
-  border-radius: 20px;
-`;
-
-const ImagePress = styled.TouchableOpacity`
   width: 100%;
+  border-radius: 20px;
 `;
 
 export const Prescricao = ({ route }) => {
@@ -44,9 +42,12 @@ export const Prescricao = ({ route }) => {
 
   const [consulta, setConsulta] = useState({});
 
+  const [exames, setExames] = useState([]);
+
   const [descricaoExame, setDescricaoExame] = useState("");
 
   const [photo, setPhoto] = useState(null);
+
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -63,24 +64,15 @@ export const Prescricao = ({ route }) => {
 
   useEffect(() => {
     getConsulta();
-    return () => {
-      getConsulta();
-    };
-  }, []);
+  }, [photo, modalOpen, inCamera]);
 
-  useEffect(() => {
-    getConsulta();
-    setInputs({
-      ...inputs,
-      exame: descricaoExame,
-    });
-  }, [photo]);
+  const examesSemRepetir = new Set();
 
   async function getConsulta() {
     try {
       await api
         .get("Consultas/BuscarPorId?id=" + consultaId)
-        .then((response) => {
+        .then(async (response) => {
           setInputs({
             ...inputs,
             descricao: response.data.descricao,
@@ -97,7 +89,31 @@ export const Prescricao = ({ route }) => {
             ),
             foto: response.data.paciente.idNavigation.foto,
           });
+
           setConsulta(response.data);
+
+
+          setExames([]);
+
+          response.data.exames.forEach(async (exame) => {
+            if (examesSemRepetir.has(exame.descricao)) {
+              try {
+                await api.delete("/Exame?id=" + exame.id);
+              } catch (error) {
+                console.log(error);
+              }
+              return;
+            }
+            examesSemRepetir.add(exame.descricao);
+          });
+
+
+          Array.from(examesSemRepetir).forEach((exame, index) => {
+            setExames((prevExames) => [
+              ...prevExames,
+              { label: `Exame ${index + 1}`, value: exame },
+            ]);
+          });
         });
     } catch (error) {
       console.log(error);
@@ -165,9 +181,7 @@ export const Prescricao = ({ route }) => {
           {photo != null ? (
             <>
               <Subtitle bold text="Exame médico" />
-              <ImagePress onPress={() => setModalOpen(true)}>
-                <InputImage source={{ uri: photo }} />
-              </ImagePress>
+              <InputImage source={{ uri: photo }} />
             </>
           ) : (
             <Input
@@ -175,7 +189,7 @@ export const Prescricao = ({ route }) => {
               border={editMode}
               label="Exames médicos:"
               icon={
-                descricaoExame == "" ? (
+                exames.length < 1 ? (
                   <AntDesign
                     name="exclamationcircleo"
                     size={24}
@@ -183,11 +197,7 @@ export const Prescricao = ({ route }) => {
                   />
                 ) : null
               }
-              placeholder={
-                descricaoExame == ""
-                  ? "Nenhuma foto informada"
-                  : "Exame já informado!"
-              }
+              placeholder="Enviar exames médicos"
             />
           )}
           <Button
@@ -195,7 +205,7 @@ export const Prescricao = ({ route }) => {
               setInCamera(true);
               setModalOpen(true);
             }}
-            text={photo != null ? "Trocar" : "Enviar"}
+            text={photo != null ? "Enviar outro" : "Enviar"}
             icon={<Feather name="camera" size={18} color="white" />}
           />
         </>
@@ -203,9 +213,14 @@ export const Prescricao = ({ route }) => {
         <Divider />
 
         <Subtitle bold text="Resultado do exame:" />
+        <RNPickerSelect
+          onValueChange={(value) => setDescricaoExame(value)}
+          items={exames}
+          placeholder={{ label: "Selecione um exame", value: null }}
+        />
         <Subtitle
           text={
-            descricaoExame != ""
+            exames.length >= 1
               ? descricaoExame
               : "Nenhum exame informado ainda."
           }
@@ -224,7 +239,8 @@ export const Prescricao = ({ route }) => {
         </Group>
       </ContainerSpacing>
       <CameraModal
-        setDescricaoExame={setDescricaoExame}
+        examesSemRepetir={examesSemRepetir}
+        getConsulta={getConsulta}
         consultaId={consulta.id}
         isPhotoSaved={isPhotoSaved}
         setIsPhotoSaved={setIsPhotoSaved}

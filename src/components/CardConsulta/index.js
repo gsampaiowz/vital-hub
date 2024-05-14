@@ -5,7 +5,7 @@ import { Subtitle } from "./../Subtitle/index";
 import { Button } from "./../Button/index";
 import { AntDesign } from "@expo/vector-icons";
 import { useState } from "react";
-import { ModalVerLocal } from "../ModalVerLocal";
+import { ModalDetalhes } from "../ModalDetalhes";
 
 const CardConsultaStyled = styled.Pressable`
   width: 90%;
@@ -38,16 +38,15 @@ export const CardConsulta = ({
   clinica,
   name,
   info,
+  getConsultas,
   prioridade,
   horario,
   situacao,
-  setShowModalProntuario,
-  setShowModalCancel,
   user,
+  item,
   navigation,
-  onPress,
 }) => {
-  const [showLocalModal, setShowLocalModal] = useState(false);
+  const [showDetalhesModal, setShowDetalhesModal] = useState(false);
 
   const nivelPrioridade =
     prioridade === 0 ? "Exame" : prioridade === 1 ? "Rotina" : "Urgência";
@@ -90,35 +89,26 @@ export const CardConsulta = ({
           />
         </Group>
       </Group>
-      {situacao === "agendadas" ? (
-        <Button
-          width={150}
-          spacing={4}
-          fontSize={12}
-          outlined
-          onPress={() => setShowModalCancel(true)}
-          borderColor="#C81D25"
-          color="#C81D25"
-          text="Cancelar"
-        />
-      ) : situacao === "realizadas" ? (
+      {item.situacao.situacao !== "canceladas" && (
         <Button
           width={160}
           spacing={4}
           fontSize={12}
           outlined
-          onPress={() => setShowModalProntuario(true)}
+          onPress={() => setShowDetalhesModal(true)}
           borderColor="#344F8F"
           color="#344F8F"
-          text="Ver prontuário"
+          text="Ver detalhes"
         />
-      ) : null}
-      <ModalVerLocal
+      )}
+      <ModalDetalhes
+        item={item}
+        getConsultas={getConsultas}
         user={user}
         clinica={clinica}
         navigation={navigation}
-        setShowLocalModal={setShowLocalModal}
-        visible={showLocalModal}
+        setShowDetalhesModal={setShowDetalhesModal}
+        visible={showDetalhesModal}
         name={name}
         prioridade={nivelPrioridade}
         info={info}

@@ -3,7 +3,6 @@ import { Title } from "./../Title/index";
 import { Subtitle } from "./../Subtitle/index";
 import { Button } from "../Button";
 import { Modal } from "react-native";
-import { Group } from "./../Group/index";
 import { Audio } from "expo-av";
 
 //IMPORTAR RECURSOS DO EXPO-NOTIFICATION
@@ -35,17 +34,9 @@ const ModalContent = styled.View`
   align-items: center;
 `;
 
-const ImageModal = styled.Image`
-  width: 100%;
-  border-radius: 10px;
-  height: 300px;
-`;
-
-export const MyModal = ({
-  cancel = false,
+export const ModalCancel = ({
   visible = false,
   setShowModal,
-  image,
   item,
   getConsultas,
   navigation,
@@ -97,20 +88,6 @@ export const MyModal = ({
     });
   };
 
-  let nome, info, email;
-
-  if (item) {
-    if (user.role === "paciente") {
-      nome = item.medicoClinica.medico.idNavigation.nome;
-      email = item.medicoClinica.medico.idNavigation.email;
-      info = item.medicoClinica.medico.crm;
-    } else {
-      nome = item.paciente.idNavigation.nome;
-      email = item.paciente.idNavigation.email;
-      info = moment().diff(new Date(item.paciente.dataNascimento), "years");
-    }
-  }
-
   async function CancelarConsulta() {
     try {
       await api.put(
@@ -128,37 +105,10 @@ export const MyModal = ({
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
         <ModalContent>
-          {cancel ? (
-            <>
-              <Title text="Cancelar consulta" />
-              <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
-              <Button onPress={() => CancelarConsulta()} text="CONFIRMAR" />
-            </>
-          ) : (
-            <>
-              <ImageModal source={image} />
-              <Title text={nome} />
-              <Group row>
-                <Subtitle
-                  fontSize={12}
-                  text={
-                    user.role === "paciente" ? "CRM: " + info : info + " anos"
-                  }
-                />
-                <Subtitle bold fontSize={12} text={email} />
-              </Group>
-              <Button
-                onPress={() => {
-                  setShowModal(false);
-                  navigation.navigate("Prescricao", {
-                    consulta: item,
-                    user: user,
-                  });
-                }}
-                text="VER PRONTUÁRIO"
-              />
-            </>
-          )}
+          <Title text="Cancelar consulta" />
+          <Subtitle text="Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário, deseja mesmo cancelar essa consulta?" />
+          <Button onPress={() => CancelarConsulta()} text="CONFIRMAR" />
+
           <Button onPress={() => setShowModal(false)} outlined text="Voltar" />
         </ModalContent>
       </PatientModal>

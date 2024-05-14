@@ -117,7 +117,7 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ title: "Consultas Paciente" }}
+            options={{ title: "Consultas" }}
           />
           <Stack.Screen
             name="SelecionarClinica"
