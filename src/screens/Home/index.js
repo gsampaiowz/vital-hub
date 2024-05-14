@@ -14,6 +14,8 @@ import { userDecodeToken } from "../../utils/Auth";
 import api from "../../service/service";
 import moment from "moment/moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator } from "react-native";
+import { Subtitle } from "../../components/Subtitle";
 
 export const Home = ({ navigation }) => {
   //STATE DE SITUACAO DE CONSULTA
@@ -28,12 +30,17 @@ export const Home = ({ navigation }) => {
   //STATE DE VISIBILIDADE DO MODAL DE CADASTRAR CONSULTA
   const [showModalConsulta, setShowModalConsulta] = useState(false);
 
+  //STATE PARA CARREGAMENTO DE CONSULTAS
+  const [loading, setLoading] = useState(false);
+
   //STATE DO USUARIO (TOKEN)
   const [user, setUser] = useState({});
 
   //FUNÇÃO QUE BUSCA AS CONSULTAS DO USUARIO
   async function getConsultas() {
     try {
+      setConsultas([]);
+      setLoading(true);
       const responseUser = await userDecodeToken();
       const url = responseUser.role === "paciente" ? "Pacientes" : "Medicos";
       const response = await api.get(
@@ -43,8 +50,16 @@ export const Home = ({ navigation }) => {
           .reverse()
           .join("-")}&id=${responseUser.id}`
       );
-      setConsultas(response.data);
-      console.log(consultas);
+      setLoading(false);
+      await response.data.forEach((c) => {
+        if (
+          c.situacao.situacao === statusButtons &&
+          consultas.find((co) => co.id == c.id) == undefined
+        ) {
+          setConsultas((prevState) => [...prevState, c]);
+        }
+      });
+      setConsultas((prevState) => [prevState, {}]);
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +69,7 @@ export const Home = ({ navigation }) => {
   useEffect(() => {
     ExpirarConsultas();
     AsyncStorage.setItem("data", data.toString());
-  }, [data]);
+  }, [data, statusButtons]);
 
   //BUSCA AS CONSULTAS AO VOLTAR A TELA HOME
   useFocusEffect(
@@ -132,11 +147,15 @@ export const Home = ({ navigation }) => {
       </ContainerSpacing>
 
       {/* COMPONENTE QUE RENDERIZA AS CONSULTAS EM FORMA DE LISTA */}
-      <ListComponent
-        data={consultas}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) =>
-          statusButtons === item.situacao.situacao && (
+      {loading ? (
+        <ActivityIndicator style={{ height: "50%" }} />
+      ) : consultas.length === 0 ? (
+        <Subtitle bold text="Não há consultas aqui." />
+      ) : (
+        <ListComponent
+          data={consultas}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
             //CARD DE CONSULTA QUE PASSA OS DADOS COM TERNARIOS ENTRE TIPOS DE USUARIO
             <CardConsulta
               clinica={item.medicoClinica.clinicaId}
@@ -165,10 +184,10 @@ export const Home = ({ navigation }) => {
               })}
               situacao={item.situacao.situacao}
             />
-          )
-        }
-        showsVerticalScrollIndicator={false}
-      />
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
 
       {/* BOTAO PARA ABRIR O MODAL DE ADICIONAR CONSULTA, VISIVEL SOMENTE PARA PACIENTES */}
       {user.role === "medico" ? null : (

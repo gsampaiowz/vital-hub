@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import { Modal } from "react-native";
+import { ActivityIndicator, Modal } from "react-native";
 import { Title } from "../Title";
 import { Subtitle } from "../Subtitle/index";
 import { Button } from "../Button";
@@ -7,6 +7,7 @@ import { Group } from "../Group";
 import moment from "moment";
 import api from "./../../service/service";
 import { userDecodeToken } from "../../utils/Auth";
+import { useState } from "react";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -37,12 +38,15 @@ export const ModalResumoConsulta = ({
   visible = false,
   ...rest
 }) => {
+  const [loading, setLoading] = useState(false);
+
   async function CadastrarConsulta() {
+    setLoading(true)
     const user = await userDecodeToken();
     try {
       await api.post("/Consultas/Cadastrar", {
         ...resumo,
-        situacaoId: "2321DAB3-45B8-47CF-A76D-FB87CB44BFBC",
+        situacaoId: "8240E2BC-531C-46A4-9361-36D3BCEF2B6D",
         pacienteId: user.id,
       });
       setShowResumoModal(false);
@@ -51,7 +55,6 @@ export const ModalResumoConsulta = ({
       console.log(error);
     }
   }
-  
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
@@ -82,7 +85,10 @@ export const ModalResumoConsulta = ({
             <Subtitle text={resumo.prioridadeLabel} />
           </Group>
           <Group gap={10}>
-            <Button text="Continuar" onPress={() => CadastrarConsulta()} />
+            <Button
+              text={loading ? <ActivityIndicator /> : "Continuar"}
+              onPress={() => !loading && CadastrarConsulta()}
+            />
             <Button
               onPress={() => setShowResumoModal(false)}
               outlined

@@ -41,17 +41,13 @@ export const Button = ({
 }) => {
   return (
     <ButtonStyled
-    disabled={disabled}
+      disabled={disabled}
       style={{
         width: width,
         paddingVertical: spacing - 1,
         paddingHorizontal: spacing / 2,
         borderColor: border ? borderColor : "transparent",
-        backgroundColor: outlined
-          ? "white"
-          : !clickButton
-          ? "white"
-          : color,
+        backgroundColor: outlined ? "white" : !clickButton ? "white" : color,
       }}
       onPress={onPress}
       clickButton={clickButton}

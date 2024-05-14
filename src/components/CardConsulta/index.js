@@ -52,12 +52,7 @@ export const CardConsulta = ({
     prioridade === 0 ? "Exame" : prioridade === 1 ? "Rotina" : "Urgência";
 
   return (
-    <CardConsultaStyled
-      onPress={() => {
-        situacao == 'agendadas' ? setShowLocalModal(true) : null ;
-        onPress;
-      }}
-    >
+    <CardConsultaStyled>
       <CardConsultaImage source={image} />
       <Group gap={5}>
         <Title fontSize={16} text={name} />

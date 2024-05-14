@@ -18,7 +18,6 @@ import { ActivityIndicator, Dimensions } from "react-native";
 import ToastManager, { Toast } from "toastify-react-native";
 import { ModalSairConta } from "../../components/ModalSairConta";
 
-
 const ButtonCamera = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
 })`
@@ -57,20 +56,14 @@ const ButtonCancel = styled.TouchableOpacity.attrs({
 
 const screenWidth = Dimensions.get("window").width;
 
-export const Perfil = ({
-  navigation,
-  visible = false,
-}) => {
-
+export const Perfil = ({ navigation, visible = false }) => {
   const [showCamera, setShowCamera] = useState(false);
 
   const [editMode, setEditMode] = useState(false);
 
-  const [cadastro, setCadastro] = useState(false)
-
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
-  const [showModalSairConta, setShowModalSairConta] = useState(false)
+  const [showModalSairConta, setShowModalSairConta] = useState(false);
 
   const [, setModalOpen] = useState(false);
 
@@ -86,10 +79,8 @@ export const Perfil = ({
     cep: "",
     rg: "",
     foto: "",
-    crm: ""
+    crm: "",
   });
-
-  // console.log(inputs.numero);
 
   // FUNÇÃO QUE DESLOGA DA CONTA DO USUÁRIO
   async function Logout() {
@@ -102,26 +93,27 @@ export const Perfil = ({
 
   const [user, setUser] = useState({});
 
-
   // FUNÇÃO QUE BUSCA PELO ID DO USUÁRIO
   async function BuscarPorId() {
-    const url = user.role === "paciente" ? "Pacientes" : "Medicos";
+    const thisUser = await userDecodeToken();
+    const url = thisUser.role === "paciente" ? "Pacientes" : "Medicos";
     try {
-      const response = await api.get(`/${url}/BuscarPorId?id=${user.id}`);
-      // console.log(response.data);
+      const response = await api.get(`/${url}/BuscarPorId?id=${thisUser.id}`);
 
       if (user.role === "paciente") {
         setInputs({
           nome: response.data.idNavigation.nome,
           cidade: response.data.endereco.cidade,
           logradouro: response.data.endereco.logradouro,
-          dataNascimento: new Date(response.data.dataNascimento).toLocaleDateString(),
+          dataNascimento: new Date(
+            response.data.dataNascimento
+          ).toLocaleDateString(),
           cpf: response.data.cpf,
           foto: response.data.idNavigation.foto,
           numero: response.data.endereco.numero,
           cep: response.data.endereco.cep,
           rg: response.data.rg,
-        })
+        });
       } else {
         setInputs({
           nome: response.data.idNavigation.nome,
@@ -133,7 +125,6 @@ export const Perfil = ({
           crm: response.data.crm,
         });
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -165,16 +156,7 @@ export const Perfil = ({
 
   useEffect(() => {
     BuscarPorId();
-  }, [user]);
-
-  useEffect(() => {
-    if (cadastro === true) {
-
-      setEditMode(true)
-      setCadastro(true)
-    }
-    ProfileLoad();
-  }, []);
+  }, [loadingPhoto]);
 
   // FUNÇÃO DE ALTERAR FOTO DO PERFIL
   async function AlterarFotoPerfil() {
@@ -206,54 +188,44 @@ export const Perfil = ({
 
   // FUNÇÃO PARA ATUALIZAR O PERFIL
   async function updateProfile() {
-
-    if (Object.values(inputs).some(input => input === "")) {
-      Toast.error("Campo Vazio ou Inválido")
+    if (Object.values(inputs).some((input) => input === "")) {
+      Toast.error("Campo Vazio ou Inválido");
       scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
-      return
+      return;
     }
+
+    const thisUser = await userDecodeToken();
+
     // VERIFICAÇÃO SE É PACIENTE OU MEDICOS
-    const url = user.role === 'paciente' ? "Pacientes" : "Medicos"
-    // console.log(inputs);
-    // console.log("comecou");
+    const url = thisUser.role === "paciente" ? "Pacientes" : "Medicos";
     try {
-      const response = await api.put(`/${url}?idUsuario=${user.id}`, {
-        nome: inputs.nome,
-        cidade: inputs.cidade,
-        logradouro: inputs.logradouro,
-        cpf: inputs.cpf,
-        dataNascimento: url == "Pacientes" ? new Date(inputs.dataNascimento) : null,
-        numero: parseInt(inputs.numero),
-        cep: inputs.cep,
-        rg: inputs.rg,
-        crm: inputs.crm,
-      }, {
-        headers: {
-          'Content-Type': 'application/json'
+      await api.put(
+        `/${url}?idUsuario=${thisUser.id}`,
+        {
+          nome: inputs.nome,
+          cidade: inputs.cidade,
+          logradouro: inputs.logradouro,
+          cpf: inputs.cpf,
+          dataNascimento:
+            url == "Pacientes" ? new Date(inputs.dataNascimento) : null,
+          numero: parseInt(inputs.numero),
+          cep: inputs.cep,
+          rg: inputs.rg,
+          crm: inputs.crm,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
-      });
+      );
 
-      console.log(response.data);
-      // console.log("passou");
-
-      BuscarPorId()
-
-
+      BuscarPorId();
     } catch (error) {
       console.log("Erro ao atulizar perfil");
       console.log(error);
     }
-  }
-
-  async function CheckExistAuthentication() {
-    LocalAuthentication.hashHardwareAsync().then((response) => {
-      if (response) {
-        Toast.success('Conta atualizada com sucesso')
-      } else {
-        Toast.error('Campo Vazio ou Inválido')
-      }
-    })
   }
 
   return showCamera ? (
@@ -310,20 +282,23 @@ export const Perfil = ({
             />
             <Input
               inputValue={inputs.logradouro}
-              onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+              onChangeText={(text) =>
+                setInputs({ ...inputs, logradouro: text })
+              }
               border={editMode}
               label="Logradouro"
               placeholder="Rua Itambé"
             />
             <Input
               inputValue={inputs.dataNascimento}
-              onChangeText={(text) => setInputs({ ...inputs, dataNascimento: text })}
+              onChangeText={(text) =>
+                setInputs({ ...inputs, dataNascimento: text })
+              }
               border={editMode}
               label="Data de nascimento:"
               placeholder="04/05/1999"
             />
             <Group row={true}>
-
               <Input
                 inputValue={inputs.cpf}
                 onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
@@ -369,7 +344,9 @@ export const Perfil = ({
             />
             <Input
               inputValue={inputs.logradouro}
-              onChangeText={(text) => setInputs({ ...inputs, logradouro: text })}
+              onChangeText={(text) =>
+                setInputs({ ...inputs, logradouro: text })
+              }
               border={editMode}
               label="Logradouro"
               placeholder="Rua Itambé"
@@ -402,24 +379,27 @@ export const Perfil = ({
         )}
 
         <Group gap={10}>
-
           <Button
-            onPress={!user ? () => {
-
-              fillProfile();
-              navigation.navigate("Login")
-            } : () => {
-
-              setEditMode(!editMode)
-              editMode ? updateProfile() : null
+            onPress={
+              !user
+                ? () => {
+                    fillProfile();
+                    navigation.navigate("Login");
+                  }
+                : () => {
+                    setEditMode(!editMode);
+                    editMode ? updateProfile() : null;
+                  }
             }
-            }
-            text={!editMode ? "EDITAR" : cadastro ? "CADASTRAR" : "SALVAR"}
+            text={!editMode ? "EDITAR" : "SALVAR"}
           />
 
-            {/* BOTÃO QUE ABRE O MODAL DE SAIR DA CONTA */}
+          {/* BOTÃO QUE ABRE O MODAL DE SAIR DA CONTA */}
           <Button
-            onPress={() => setShowModalSairConta(true)} outlined text="SAIR DA CONTA" />
+            onPress={() => setShowModalSairConta(true)}
+            outlined
+            text="SAIR DA CONTA"
+          />
         </Group>
 
         {/* MODAL PARA SAIR DA CONTA */}
@@ -429,7 +409,6 @@ export const Perfil = ({
           setShowModalSairConta={setShowModalSairConta}
           visible={showModalSairConta}
         />
-
       </ContainerSpacing>
     </ContainerScroll>
   );

@@ -88,7 +88,7 @@ export const Login = ({ navigation }) => {
   }
 
   const [inputs, setInputs] = useState({
-    email: "thiagorafael2005@gmail.com",
+    email: "thiago@email.com",
     senha: "thiago123",
   });
 

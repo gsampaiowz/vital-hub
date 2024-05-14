@@ -25,7 +25,7 @@ export const CriarConta = ({ navigation }) => {
     logradouro: "elba",
     cpf: "432423",
     dataNascimento: "23/02/2000",
-    numero: 10,
+    numero: "10",
     cep: "243242",
     rg: "4324234",
   });
@@ -57,7 +57,7 @@ export const CriarConta = ({ navigation }) => {
     formData.append("nome", inputs.nome);
     formData.append("email", inputs.email);
     formData.append("senha", inputs.senha);
-    formData.append("idTipoUsuario", "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
+    formData.append("idTipoUsuario", "701230CA-0D31-4161-8F45-1E7341485369");
     formData.append(
       "dataNascimento",
       new Date(
