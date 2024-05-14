@@ -75,7 +75,7 @@ export const Home = ({ navigation }) => {
       consultas.forEach(async (consulta) => {
         if (
           new Date(consulta.dataConsulta) < new Date() &&
-          consulta.situacaoId == "8240e2bc-531c-46a4-9361-36d3bcef2b6d"
+          consulta.situacao.situacao == "agendadas"
         ) {
           //ATUALIZA A CONSULTA PARA STATUS REALIZADAS
           await api

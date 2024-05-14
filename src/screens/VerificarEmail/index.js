@@ -9,37 +9,25 @@ import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { Link } from "./../../components/Link/index";
 import { Group } from "../../components/Group";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
+import CodeInput from "../../components/CodeInput";
 
 export const VerificarEmail = ({ navigation, route }) => {
  
-  const inputs = [useRef(null), useRef(null), useRef(null), useRef(null)]
-  const [codigo, setCodigo] = useState('')
   const [carregando, setCarregando] = useState(false);
-  const handleInputRef = (ref, index) => {
-    inputs[index] = ref;
-  };
-  function focusNextInput(index) {
-    // Verificar se o index é menor do que a quantidade de campos
-    if (index < inputs.length - 1) {
-      inputs[index + 1].current?.focus()
-    }
-  }
+  const [value, setValue] = useState('');
 
-  function focusPrevInput(index) { 
-    // Verificar se o index é menor do que a quantidade de campos
-    if (index > 0) {
-      inputs[index - 1].current?.focus()
-    }
-  }
+  useEffect(() => {
+    console.log(value);
+  }, [value])
 
-  // Requisição para validação do código de recuperação de email
+  // REQUISIÇÃO PARA VALIDAÇÃO DO CÓDIGO DE RECUPERAÇÃO DE E-MAIL
   async function validarCodigo() {
 
     setCarregando(true)
-    await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${codigo}`)
+    await api.post(`/RecuperarSenha/RotaDeRecuperacaoDeSenha?email=${route.params.emailRecuperacao}&recoveryCode=${value}`)
 
       .then(() => {
         navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao });
@@ -78,39 +66,9 @@ export const VerificarEmail = ({ navigation, route }) => {
 
         <Group row justifyContent="space-between">
 
-          {
-          // Busca o indece do codigos de recuperar senha
-            [0, 1, 2, 3].map((index) => (
-              <Input
-                inputValue={inputs[index]}
-                key={index}
-                ref={(ref) => handleInputRef(ref, index)}
-                maxLength={1}
-                textAlign={"center"}
-                width={60}
-                height={60}
-                fontSize={32}
-                placeholder="0"
+            {/* COMPONENTE DE VERIFICAÇÃO DE CODIGO DO E-MAIL */}
+            <CodeInput setValue={setValue} value={value} />
 
-                onChangeText={(txt) => {
-                  //verificar se o campo é vazio
-                  if (txt == "") {
-
-                    focusPrevInput(index)
-                    
-
-                  } else {
-                    //verificar se o campo foi preenchido
-                    const codigoInformado = [...codigo]
-                    codigoInformado[index] = txt
-                    setCodigo(codigoInformado.join(""))
-                    
-                    // focusNextInput(index)
-                  }
-                }}
-              />
-            ))
-          }
         </Group>
         <Button
           onPress={() => validarCodigo()}

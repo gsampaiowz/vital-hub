@@ -42,7 +42,7 @@ export const ModalResumoConsulta = ({
     try {
       await api.post("/Consultas/Cadastrar", {
         ...resumo,
-        situacaoId: "8240E2BC-531C-46A4-9361-36D3BCEF2B6D",
+        situacaoId: "2321DAB3-45B8-47CF-A76D-FB87CB44BFBC",
         pacienteId: user.id,
       });
       setShowResumoModal(false);
@@ -51,6 +51,7 @@ export const ModalResumoConsulta = ({
       console.log(error);
     }
   }
+  
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">

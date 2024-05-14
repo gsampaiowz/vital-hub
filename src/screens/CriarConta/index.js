@@ -9,15 +9,14 @@ import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { Title } from "./../../components/Title";
 import { Group } from "../../components/Group";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import ToastManager, { Toast } from "toastify-react-native";
-import { userDecodeToken } from "../../utils/Auth";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 
 export const CriarConta = ({ navigation }) => {
 
-  // Const com os campos de criação de conta
+  // CONST COM OS CAMPOS DE CRIAÇÃO DE CONTA
   const [inputs, setInputs] = useState({
     nome: "thiago",
     email: "thiago@email.com",
@@ -33,13 +32,22 @@ export const CriarConta = ({ navigation }) => {
 
   const [carregando, setCarregando] = useState(false);
 
-  // Requisição para Cadastrar um Usuário novo
+  const scrollViewRef = useRef(null);
+
+  // REQUISIÇÃO PARA CADASTRAR UM USUÁRIO NOVO
   async function fillProfile() {
+    if(Object.values(inputs).some(input => input === "")){
+      scrollViewRef.current.scrollTo({ y: 0, animated: true });
+      Toast.error("Preencha todos os campos" )
+
+      return
+    }
+
     setCarregando(true);
 
-    // Instanciando um new Form
+    // INSTANCIA UM FORMDATA
     const formData = new FormData();
-
+    
     formData.append("rg", inputs.rg);
     formData.append("cpf", inputs.cpf);
     formData.append("cep", inputs.cep);
@@ -49,32 +57,44 @@ export const CriarConta = ({ navigation }) => {
     formData.append("nome", inputs.nome);
     formData.append("email", inputs.email);
     formData.append("senha", inputs.senha);
-    formData.append("idTipoUsuario", "701230CA-0D31-4161-8F45-1E7341485369");
+    formData.append("idTipoUsuario", "979DD35B-0C04-4D8F-8FD1-AB55D1DEC1C3");
     formData.append(
       "dataNascimento",
       new Date(
         inputs.dataNascimento.split("/").reverse().join("-") + "T00:00:00.000Z"
-      ).toISOString()
-    );
-
-    await api
-      .post("/Pacientes", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    setCarregando(false);
+        ).toISOString()
+        );
+        
+        await api
+        .post("/Pacientes", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+        setCarregando(false);
+        navigation.navigate("Login")
+  }
+  
+// LÓGICA PARA O TOAST
+  async function CheckExistAuthentication() {
+    LocalAuthentication.hashHardwareAsync().then((response) => {
+      if (response) {
+        Toast.success('Conta Criado com sucesso')
+      } else {
+        Toast.error('Campo inválido')
+      }
+    })
   }
 
   return (
-    <ContainerScroll>
-      <ToastManager />
+    <ContainerScroll ref={scrollViewRef}>
+      <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}
@@ -157,7 +177,7 @@ export const CriarConta = ({ navigation }) => {
         </Group>
         <Button
           text={carregando ? <ActivityIndicator /> : "Cadastrar"}
-          onPress={() => fillProfile() && navigation.navigate("Login")}
+          onPress={() => fillProfile()}
         />
         <Link
           doubleColor

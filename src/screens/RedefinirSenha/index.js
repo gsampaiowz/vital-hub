@@ -15,8 +15,8 @@ export const RedefinirSenha = ({ navigation, route }) => {
 
   const [senha, setSenha] = useState('')
   const [confirmar, setConfirmar] = useState('')
-  //#endregion
 
+  // FUNÇÃO DE ALTERAR SENHA DO USUÁRIO
   async function AlterarSenha() {
     if (senha === confirmar) {
 
