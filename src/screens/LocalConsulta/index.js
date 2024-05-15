@@ -22,6 +22,7 @@ export const LocalConsulta = ({ navigation, route }) => {
     }
   }
 
+  //SE CLINICA FOR NULL, BUSCA A CLINICA
   useEffect(() => {
     if (clinica == null) {
       getClinica();

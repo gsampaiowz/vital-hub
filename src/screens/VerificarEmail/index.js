@@ -16,7 +16,9 @@ import CodeInput from "../../components/CodeInput";
 
 export const VerificarEmail = ({ navigation, route }) => {
  
+  //INICIAR LOADING
   const [carregando, setCarregando] = useState(false);
+  //VALOR DO CODIGO
   const [value, setValue] = useState('');
 
   useEffect(() => {

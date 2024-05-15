@@ -1,5 +1,6 @@
 import { View, Button } from "react-native";
 
+//TELA DE NAVEGAÇAO PARA TESTES
 export const Navigation = ({ navigation }) => {
   return (
     <View>

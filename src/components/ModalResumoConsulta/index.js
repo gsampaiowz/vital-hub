@@ -7,7 +7,8 @@ import { Group } from "../Group";
 import moment from "moment";
 import api from "./../../service/service";
 import { userDecodeToken } from "../../utils/Auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import * as Notifications from "expo-notifications";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -40,8 +41,56 @@ export const ModalResumoConsulta = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  //STATE DO SOM DE NOTIFICACAO
+  const [sound, setSound] = useState(null);
+
+  //FUNCAO PARA TOCAR O SOM
+  async function playSound() {
+    const { sound: newSound } = await Audio.Sound.createAsync(
+      require("../../assets/sound/timao.mp3")
+    );
+    setSound(newSound);
+
+    await newSound.playAsync();
+  }
+
+  //PARA DESATIVAR O SOM QUANDO O MODAL FOR DESMONTADO
+  useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+  //FUNCAO PARA LIDAR COM A CHAMADA DE NOTIFICACAO
+  const HandleCallNotifications = async () => {
+    setShowResumoModal(false);
+
+    //OBTEM O STATUS DA PERMISSAO
+    const { status } = await Notifications.getPermissionsAsync();
+
+    if (status !== "granted") {
+      Toast.error("Você não permitiu as notificações!");
+      return;
+    }
+
+    await playSound();
+
+    //AGENDA UMA NOTIFICACAO
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Consulta cadastrada!",
+        body: `Cadastro de consulta concluído para o dia ${moment(item.dataConsulta).format(
+          "DD/MM"
+        )}.`,
+      },
+      trigger: null,
+    });
+  };
+
   async function CadastrarConsulta() {
-    setLoading(true)
+    setLoading(true);
     const user = await userDecodeToken();
     try {
       await api.post("/Consultas/Cadastrar", {
@@ -49,8 +98,8 @@ export const ModalResumoConsulta = ({
         situacaoId: "8240E2BC-531C-46A4-9361-36D3BCEF2B6D",
         pacienteId: user.id,
       });
-      setShowResumoModal(false);
       navigation.navigate("Main");
+      HandleCallNotifications();
     } catch (error) {
       console.log(error);
     }

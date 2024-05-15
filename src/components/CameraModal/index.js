@@ -31,10 +31,13 @@ export const CameraModal = ({
   setIsPhotoSaved,
   ...rest
 }) => {
+  //FOTO QUE SELECIONA DA GALERIA
   const [fotoGaleria, setFotoGaleria] = useState(null);
 
+  //STATE DE LOADING
   const [load, setLoad] = useState(false);
 
+  //TROCA A FUNCAO DO BOTAO PRA SALVAR OU EXCLUIR 
   const handleButtonPress = async () => {
     if (isPhotoSaved) {
       await ClearPhoto();
@@ -43,6 +46,7 @@ export const CameraModal = ({
     }
   };
 
+  //SALVAR FOTO
   async function UploadPhoto() {
     await MediaLibrary.createAssetAsync(photoUri)
       .then((response) => {
@@ -55,6 +59,7 @@ export const CameraModal = ({
       });
   }
 
+  //DELETA FOTO
   async function ClearPhoto() {
     try {
       await MediaLibrary.deleteAssetsAsync(fotoGaleria);
@@ -65,6 +70,7 @@ export const CameraModal = ({
     }
   }
 
+//METODO PRA CADASTRAR EXAME
   async function InserirExame() {
     setLoad(true);
 

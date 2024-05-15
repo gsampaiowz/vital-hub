@@ -8,12 +8,15 @@ import { Group } from "./../../components/Group/index";
 import api from "../../service/service";
 
 export const SelecionarMedico = ({ route, navigation }) => {
+  //STATE DA LISTA DE MEDICOS
   const [medicoLista, setMedicoLista] = useState([]);
 
+  //BUSCA MEDICOS AO INICIAR
   useEffect(() => {
     ListarMedicos();
   }, []);
 
+  //FUNCTION PARA BUSCAR MEDICOS
   async function ListarMedicos() {
     //Instanciar a nossa conexão da API
 
@@ -22,18 +25,19 @@ export const SelecionarMedico = ({ route, navigation }) => {
         "/Medicos/BuscarPorIdClinica?id=" + route.params.agendamento.clinicaId
       )
       .then((response) => {
-        console.log(response.data);
         setMedicoLista(response.data);
       })
       .catch((error) => console.log(error));
   }
 
+  //STATE PRA PASSAR NO ROUTE
   const [medico, setMedico] = useState({
     medicoClinicaId: "",
     medicoLabel: "",
     medicoEspecialidade: "",
   });
 
+  //FUNCTION QUE NAVEGA PASSANDO OS DADOS NO ROUTE
   function Continue() {
     if (medico.medicoClinicaId != "") {
       navigation.navigate("SelecionarData", {

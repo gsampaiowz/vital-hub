@@ -17,8 +17,10 @@ import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 
 export const Login = ({ navigation }) => {
-  const [dateHistory, setDateHistory] = useState({}); //SALVAR O OBJ COM HISTORICO DE ACESSO
+  //SALVAR O OBJ COM HISTORICO DE ACESSO
+  const [dateHistory, setDateHistory] = useState({});
 
+  //STATE DO LOADING DO BOTAO
   const [carregando, setCarregando] = useState(false);
 
   //FUNCAO PARA VERIFICAR SE EXISTE BIOMETRIA NO APARELHO
@@ -87,9 +89,10 @@ export const Login = ({ navigation }) => {
     }
   }
 
+  //STATE DOS INPUTS DE LOGIN
   const [inputs, setInputs] = useState({
-    email: "thiago@email.com",
-    senha: "thiago123",
+    email: "paciente@email.com",
+    senha: "paciente123",
   });
 
   //METODO LOGIN COM API
@@ -97,6 +100,7 @@ export const Login = ({ navigation }) => {
     if (inputs.email === "" || inputs.senha === "") {
       Toast.error("Preencha os campos");
     }
+    //INICIA ACTIVITY INDICATOR
     setCarregando(true);
     await api
       .post("/Login", {
@@ -104,15 +108,15 @@ export const Login = ({ navigation }) => {
         senha: inputs.senha,
       })
       .then(async (response) => {
+        //SETA O TOKEN NO ASYNC STORAGE E NAVEGA PRA MAIN
         await AsyncStorage.setItem("token", JSON.stringify(response.data));
-        console.log(response.data);
         navigation.navigate("Main");
       })
       .catch(() => {
-        
         Toast.error("Email ou senha incorretos");
       });
-    setCarregando(false);
+      //FINALIZA O LOADING
+      setCarregando(false);
   }
 
   return (
@@ -126,6 +130,7 @@ export const Login = ({ navigation }) => {
             inputValue={inputs.email}
             onChangeText={(text) => setInputs({ ...inputs, email: text })}
             placeholder="E-mail"
+            keyboardType="email-address"
           />
           <Input
             inputValue={inputs.senha}

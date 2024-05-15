@@ -43,8 +43,10 @@ export const ModalCancel = ({
   user,
   ...rest
 }) => {
+  //STATE DO SOM DE NOTIFICACAO
   const [sound, setSound] = useState(null);
 
+  //FUNCAO PARA TOCAR O SOM
   async function playSound() {
     const { sound: newSound } = await Audio.Sound.createAsync(
       require("../../assets/sound/timao.mp3")
@@ -54,6 +56,7 @@ export const ModalCancel = ({
     await newSound.playAsync();
   }
 
+  //PARA DESATIVAR O SOM QUANDO O MODAL FOR DESMONTADO
   useEffect(() => {
     return sound
       ? () => {
@@ -88,6 +91,7 @@ export const ModalCancel = ({
     });
   };
 
+  //CANCELAR CONSULTA
   async function CancelarConsulta() {
     try {
       await api.put(

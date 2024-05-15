@@ -40,7 +40,11 @@ export const HeaderConsultas = ({ image, nome = "" }) => {
           text={nome != "" ? nome : "Carregando..."}
         />
       </Group>
-      <Ionicons name="notifications" size={25} color="white" />
+      <Ionicons
+        name="notifications"
+        size={25}
+        color="white"
+      />
     </HeaderConsultasStyled>
   );
 };

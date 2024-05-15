@@ -39,8 +39,11 @@ export const Home = ({ navigation }) => {
   //FUNÇÃO QUE BUSCA AS CONSULTAS DO USUARIO
   async function getConsultas() {
     try {
+      //ESVAZIA O STATE
       setConsultas([]);
+      //INICIA O ACTIVELOADING
       setLoading(true);
+
       const responseUser = await userDecodeToken();
       const url = responseUser.role === "paciente" ? "Pacientes" : "Medicos";
       const response = await api.get(
@@ -50,7 +53,9 @@ export const Home = ({ navigation }) => {
           .reverse()
           .join("-")}&id=${responseUser.id}`
       );
+      //FINALIZA O LOADING
       setLoading(false);
+      //ADICIONA AS CONSULTAS CONFORME A SITUACAO SELECIONADA, E NÃO PERMITE REPETIÇÃO
       await response.data.forEach((c) => {
         if (
           c.situacao.situacao === statusButtons &&
@@ -59,32 +64,35 @@ export const Home = ({ navigation }) => {
           setConsultas((prevState) => [...prevState, c]);
         }
       });
-      setConsultas((prevState) => [prevState, {}]);
     } catch (error) {
       console.log(error);
     }
   }
 
-  //BUSCA AS CONSULTAS AO INICIAR E AO MUDAR A DATA
+  //BUSCA AS CONSULTAS AO INICIAR E AO MUDAR A DATA OU O STATUS
   useEffect(() => {
-    ExpirarConsultas();
     AsyncStorage.setItem("data", data.toString());
   }, [data, statusButtons]);
 
-  //BUSCA AS CONSULTAS AO VOLTAR A TELA HOME
+  //BUSCA AS CONSULTAS E SETA A DATA AO VOLTAR A TELA HOME
   useFocusEffect(
-    useCallback(async () => {
-      setData(moment(await AsyncStorage.getItem("data")));
+    useCallback(() => {
+      async function dataLoad() {
+        if (data.toDate() != (await AsyncStorage.getItem("data").toDate())) {
+          setData(moment(await AsyncStorage.getItem("data")));
+        }
+      }
+      dataLoad();
       ProfileLoad();
-      console.log(await userDecodeToken());
       ExpirarConsultas();
-    }, [])
+    }, [statusButtons, data])
   );
 
   //FUNÇÃO QUE ATUALIZA AS CONSULTAS AGENDADAS PARA REALIZADAS AO EXPIRAR A DATA DA CONSULTA
   async function ExpirarConsultas() {
     try {
       //BUSCA AS CONSULTAS
+      setConsultas([]);
       await getConsultas();
       //PERCORRE AS CONSULTAS E VERIFICA SE A DATA DA CONSULTA E MENOR QUE A DATA ATUAL
       consultas.forEach(async (consulta) => {
@@ -163,7 +171,12 @@ export const Home = ({ navigation }) => {
               item={item}
               user={user}
               getConsultas={getConsultas}
-              image={require("./../../assets/img/UserImage.jpg")}
+              image={{
+                uri:
+                  user.role === "paciente"
+                    ? item.medicoClinica.medico.idNavigation.foto
+                    : item.paciente.idNavigation.foto,
+              }}
               name={
                 user.role === "paciente"
                   ? item.medicoClinica.medico.idNavigation.nome

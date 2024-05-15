@@ -5,6 +5,7 @@ import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { Perfil } from "../Perfil";
 
 export const Main = () => {
+  //NAVEGADOR DE TELAS INFERIOR
   const BottomTab = createBottomTabNavigator();
 
   return (

@@ -43,18 +43,22 @@ export const ModalAddConsulta = ({
   visible = false,
   ...rest
 }) => {
+  //STATE DO PRIORIDADES COM IDS DO BANCO DE DADOS
   const prioridades = [
     { label: "Exame", value: "43FFA829-7896-4BF2-9DBF-C28249726DE6" },
     { label: "Rotina", value: "299A8E90-4459-4F59-BCC5-F0F5CE876FA5" },
     { label: "Urgência", value: "4397D79A-2B8D-4A53-9F07-0ECEA4A6A138" },
   ];
 
+  //STATE DO AGENDAMENTO PARA PASSAR NO ROUTE
   const [agendamento, setAgendamento] = useState({
     localizacao: "Rio de Janeiro",
   });
 
+  //STATE DAS CIDADES QUE EM QUE EXISTEM CLINICAS VITALHUB
   const [cidades, setCidades] = useState([]);
 
+  //FUNCTION PARA NAVEGAR E PASSAR DADOS NO ROUTE
   async function Continue() {
     if (agendamento.prioridadeId != null && agendamento.localizacao != null) {
       await setShowModalConsulta(false);
@@ -65,7 +69,7 @@ export const ModalAddConsulta = ({
     }
   }
 
-  
+  //BUSCA CIDADES PARA MOSTRAR NO SELECT
   async function getCidades() {
     try {
       const response = await api.get(`/Clinica/ListarTodas`);
@@ -84,6 +88,7 @@ export const ModalAddConsulta = ({
     }
   }
 
+  //BUSCA CIDADES AO INICIAR
   useEffect(() => {
     getCidades();
   }, []);

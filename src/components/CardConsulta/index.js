@@ -48,6 +48,7 @@ export const CardConsulta = ({
 }) => {
   const [showDetalhesModal, setShowDetalhesModal] = useState(false);
 
+  //TRANSFORMA OS VALORES DE PRIORIDADE EM TEXTO
   const nivelPrioridade =
     prioridade === 0 ? "Exame" : prioridade === 1 ? "Rotina" : "Urgência";
 

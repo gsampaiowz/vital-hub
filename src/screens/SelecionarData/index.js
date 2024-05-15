@@ -17,20 +17,28 @@ const SelectHorario = styled(RNPickerSelect)`
 `;
 
 export const SelecionarData = ({ route, navigation }) => {
+  //STATE PARA ABRIR MODAL COM RESUMO DA CONSULTA
   const [showResumoModal, setShowResumoModal] = useState(false);
 
+  //PEGA A DATA ATUAL
   const dataAtual = moment().format("YYYY-MM-DD");
+  //STATE DA DATA SELECIONADA
   const [dataSelecionada, setDataSelecionada] = useState(dataAtual);
+  //STATE DO HORARIO SELECIONADO
   const [horarioSelecionado, setHorarioSelecionado] = useState("");
+  //STATE DO AGENDAMENTO DA CONSULTA PARA RECEBER TODOS OS DADOS
   const [agendamento, setAgendamento] = useState();
-
+//SET PARA NÃO REPETIR HORARIOS
   const horariosSemRepetir = new Set();
+  //ARRAY PARA SELECIONAR HORARIOS
   const [arrayOptions, setArrayOptions] = useState(null);
 
+  //FUNCTION PARA CARREGAR AS OPCOES DE HORARIOS
   async function loadOptions() {
+    //BUSCA HORARIOS NA API
     await getHorarios();
-    //CAPTURAR A QUANTIDADE DE HORAS QUE FALTAM PARA AS 24H
 
+    //HORAS QUE A CLINICA VAI FICAR ABERTA
     const horasRestantes = 13;
 
     //CRIAR LAÇO QUE RODE A QUANTIDADE DE HORAS QUE FALTAM
@@ -42,6 +50,7 @@ export const SelecionarData = ({ route, navigation }) => {
         let valor = 7 + (index + 1);
 
         //PRA CADA HORA SERÁ UMA NOVA OPTION
+        //NAO DEIXA REPETIR CADASTRO COM MESMO HORARIO NO MESMO DIA
         if (
           horariosSemRepetir.has(
             `${dataSelecionada.split("-").reverse().join("/")} ${valor}:00`
@@ -60,15 +69,16 @@ export const SelecionarData = ({ route, navigation }) => {
       }
     );
 
+    //FILTRA AS OPCOES QUE NÃO ESTÁO REPETIDAS
     setArrayOptions(options.filter((option) => option.value !== ""));
   }
 
+  //CARREGA AS OPCOES DO SELECT AO SELECIONAR OUTRA DATA
   useEffect(() => {
     loadOptions();
-    console.log("Data selecionada: ", dataSelecionada);
-    console.log("Data atual: ", dataAtual);
   }, [dataSelecionada]);
 
+  //FUNCTION DE CONTINUAR PARA O MODAL
   function Continue() {
     if (horarioSelecionado != "") {
       setAgendamento({
@@ -79,9 +89,11 @@ export const SelecionarData = ({ route, navigation }) => {
     }
   }
 
+  //FUNCTION Q BUSCA HORARIOS NA API
   async function getHorarios() {
     try {
       const response = await api.get("/Consultas/ListarTodos");
+      //ADICIONA OS HORARIOS AO SET
       response.data.forEach((consulta) => {
         if (consulta.situacao.situacao === "agendadas") {
           horariosSemRepetir.add(
@@ -89,7 +101,6 @@ export const SelecionarData = ({ route, navigation }) => {
           );
         }
       });
-      console.log(horariosSemRepetir);
     } catch (error) {
       console.log(error);
     }

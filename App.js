@@ -78,17 +78,19 @@ export default function App() {
       // >> options ( title ): Título da tela.
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen
-            name="Navigation"
-            component={Navigation}
-            options={{ title: "Navegação" }}
-          />
+          {/* TELA QUE SE INICIAR AO ABRIR O APP */}
           <Stack.Screen
             name="Login"
             component={Login}
             options={{ title: "Login" }}
           />
+          {/* ----------------------------------------- */}
           <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen
+            name="Navigation"
+            component={Navigation}
+            options={{ title: "Navegação" }}
+          />
           <Stack.Screen
             name="RecuperarSenha"
             component={RecuperarSenha}

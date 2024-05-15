@@ -38,8 +38,8 @@ export const Input = ({
   onChange = () => {},
   inputValue = "",
   icon = null,
-  
-
+  keyboardType,
+  textContentType,
   onChangeText = () => {},
   maxWidth = "100%",
   height = 53,
@@ -58,6 +58,8 @@ export const Input = ({
     >
       {label !== "" && <InputLabel>{label}</InputLabel>}
       <InputStyled
+        keyboardType={keyboardType}
+        textContentType={textContentType}
         maxLength={maxLength}
         multiline
         editable={false}

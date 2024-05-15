@@ -8,17 +8,21 @@ import { Group } from "./../../components/Group/index";
 import api from "../../service/service";
 
 export const SelecionarClinica = ({ route, navigation }) => {
+  //STATE DE CLINICAS
   const [clinicas, setClinicas] = useState([]);
 
+  //BUSCA CLINICAS AO INICIAR
   useEffect(() => {
     getClinicas();
   }, []);
 
+  //STATE PARA PASSAR PELO ROUTE
   const [clinica, setClinica] = useState({
     clinicaId: "",
     clinicaLabel: "",
   });
 
+  //FUNCTION PARA BUSCAR CLINICAS
   async function getClinicas() {
     try {
       const response = await api.get(
@@ -31,6 +35,7 @@ export const SelecionarClinica = ({ route, navigation }) => {
     }
   }
 
+  //FUNCTION PARA NAVEGAR E PASSAR DADOS NO ROUTE
   function Continue() {
     if (clinica.clinicaId != "") {
       navigation.navigate("SelecionarMedico", {

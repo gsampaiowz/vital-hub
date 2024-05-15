@@ -56,19 +56,26 @@ const ButtonCancel = styled.TouchableOpacity.attrs({
 
 const screenWidth = Dimensions.get("window").width;
 
-export const Perfil = ({ navigation, visible = false }) => {
+export const Perfil = ({ navigation }) => {
+  //STATE PARA ABRIR CAMERA
   const [showCamera, setShowCamera] = useState(false);
 
+  //STATE PARA MODO DE EDITAR
   const [editMode, setEditMode] = useState(false);
 
+  //STATE DE CARREGAR A FOTO APOS ALTERAR
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
+  //STATE PARA ABRIR MODAL DE LOGOFF
   const [showModalSairConta, setShowModalSairConta] = useState(false);
 
+  //SETSTATE DO MODAL DE FOTO TIRADA
   const [, setModalOpen] = useState(false);
 
+  //STATE DA FOTO NA CAMERA
   const [photo, setPhoto] = useState(null);
 
+  //STATE DOS INPUTS
   const [inputs, setInputs] = useState({
     nome: "",
     cidade: "",
@@ -91,15 +98,18 @@ export const Perfil = ({ navigation, visible = false }) => {
     navigation.navigate("Login");
   }
 
+  //STATE DO USER (TOKEN)
   const [user, setUser] = useState({});
 
   // FUNÇÃO QUE BUSCA PELO ID DO USUÁRIO
   async function BuscarPorId() {
+    //DEFINE A ROTA DA API DE ACORDO COM A ROLE
     const thisUser = await userDecodeToken();
     const url = thisUser.role === "paciente" ? "Pacientes" : "Medicos";
     try {
       const response = await api.get(`/${url}/BuscarPorId?id=${thisUser.id}`);
 
+      //SETA OS CAMPOS DE ACORDO COM A ROLE
       if (user.role === "paciente") {
         setInputs({
           nome: response.data.idNavigation.nome,
@@ -149,17 +159,20 @@ export const Perfil = ({ navigation, visible = false }) => {
     }
   }
 
+  //CARREGA USER E PERMITE A GALERIA (SE NÃO TIVER PERMISSÃO)
   useEffect(() => {
     ProfileLoad();
     requestGaleria();
   }, []);
 
+  // BUSCA POR ID DO USUÁRIO SEMPRE QUE TROCAR A FOTO
   useEffect(() => {
     BuscarPorId();
   }, [loadingPhoto]);
 
   // FUNÇÃO DE ALTERAR FOTO DO PERFIL
   async function AlterarFotoPerfil() {
+    //INICIA LOADING
     setLoadingPhoto(true);
     const formData = new FormData();
 
@@ -176,8 +189,11 @@ export const Perfil = ({ navigation, visible = false }) => {
         },
       });
 
+      //ATUALIZA O PERFIL
       ProfileLoad();
+      //ESVAZIA O STATE DA FOTO
       setPhoto(null);
+      //FINALIZA LOADING
       setLoadingPhoto(false);
     } catch (error) {
       console.log(error);
@@ -188,8 +204,11 @@ export const Perfil = ({ navigation, visible = false }) => {
 
   // FUNÇÃO PARA ATUALIZAR O PERFIL
   async function updateProfile() {
+    //VERIFICA SE EXISTE ALGUM INPUT VAZIO
     if (Object.values(inputs).some((input) => input === "")) {
+      //EXIBE UM TOAST E VAI NO TOPO DA TELA
       Toast.error("Campo Vazio ou Inválido");
+      
       scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
       return;
@@ -221,6 +240,7 @@ export const Perfil = ({ navigation, visible = false }) => {
         }
       );
 
+      //BUSCA OS DADOS APOS ATUALIZADOS
       BuscarPorId();
     } catch (error) {
       console.log("Erro ao atulizar perfil");
