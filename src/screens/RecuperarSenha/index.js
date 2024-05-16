@@ -14,7 +14,7 @@ import ToastManager, { Toast } from "toastify-react-native";
 
 export const RecuperarSenha = ({ navigation }) => {
 
-  const [email, setEmail] = useState('paciente@email.com')
+  const [email, setEmail] = useState('')
 
   const [carregando, setCarregando] = useState(false);
 
