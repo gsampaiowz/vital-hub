@@ -17,8 +17,7 @@ import api from "../../service/service";
 import { ActivityIndicator, Dimensions } from "react-native";
 import ToastManager, { Toast } from "toastify-react-native";
 import { ModalSairConta } from "../../components/ModalSairConta";
-import { useMaskedInputProps } from "react-native-mask-input";
-import { Masks } from "react-native-mask-input";
+import { Masks, useMaskedInputProps } from "react-native-mask-input";
 
 const ButtonCamera = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
@@ -91,6 +90,18 @@ export const Perfil = ({ navigation }) => {
     crm: "",
   });
 
+  const dataMasked = useMaskedInputProps({
+    value: inputs.dataNascimento,
+    onChangeText: (data) => setInputs({ ...inputs, dataNascimento: data }),
+    mask: Masks.DATE_DDMMYYYY,
+  });
+
+  const cpfMasked = useMaskedInputProps({
+    value: inputs.cpf,
+    onChangeText: (txt) => setInputs({ ...inputs, cpf: txt }),
+    mask: Masks.BRL_CPF,
+  });
+
   // FUNÇÃO QUE DESLOGA DA CONTA DO USUÁRIO
   async function Logout() {
     //Remover token do AsyncStorage
@@ -112,7 +123,7 @@ export const Perfil = ({ navigation }) => {
       const response = await api.get(`/${url}/BuscarPorId?id=${thisUser.id}`);
 
       //SETA OS CAMPOS DE ACORDO COM A ROLE
-      if (user.role === "paciente") {
+      if (thisUser.role === "paciente") {
         setInputs({
           nome: response.data.idNavigation.nome,
           cidade: response.data.endereco.cidade,
@@ -170,6 +181,7 @@ export const Perfil = ({ navigation }) => {
   // BUSCA POR ID DO USUÁRIO SEMPRE QUE TROCAR A FOTO
   useEffect(() => {
     BuscarPorId();
+    console.log(inputs);
   }, [loadingPhoto]);
 
   // FUNÇÃO DE ALTERAR FOTO DO PERFIL
@@ -245,7 +257,6 @@ export const Perfil = ({ navigation }) => {
       //BUSCA OS DADOS APOS ATUALIZADOS
       BuscarPorId();
     } catch (error) {
-      console.log("Erro ao atulizar perfil");
       console.log(error);
     }
   }
@@ -318,7 +329,7 @@ export const Perfil = ({ navigation }) => {
               }
               border={editMode}
               label="Data de nascimento:"
-              placeholder="04/05/1999"
+              {...dataMasked}
             />
             <Group row={true}>
               <Input
@@ -326,7 +337,7 @@ export const Perfil = ({ navigation }) => {
                 onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
                 border={editMode}
                 label="CPF"
-                placeholder="859********"
+                {...cpfMasked}
               />
 
               <Input
@@ -351,7 +362,6 @@ export const Perfil = ({ navigation }) => {
                 onChangeText={(text) => setInputs({ ...inputs, rg: text })}
                 border={editMode}
                 label="Rg"
-                placeholder="412487214"
               />
             </Group>
           </>
