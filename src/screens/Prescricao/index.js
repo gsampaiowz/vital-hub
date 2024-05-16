@@ -179,6 +179,7 @@ export const Prescricao = ({ route }) => {
         </Group>
 
         <Input
+          multiline
           height={100}
           inputValue={inputs.descricao}
           onChange={(text) => setInputs({ ...inputs, descricao: text })}
@@ -188,6 +189,7 @@ export const Prescricao = ({ route }) => {
         />
 
         <Input
+          multiline
           inputValue={inputs.diagnostico}
           onChange={(text) => setInputs({ ...inputs, diagnostico: text })}
           border={editMode}
@@ -196,6 +198,7 @@ export const Prescricao = ({ route }) => {
         />
 
         <Input
+          multiline
           height={100}
           inputValue={inputs.medicamento}
           onChange={(text) => setInputs({ ...inputs, medicamento: text })}
@@ -251,7 +254,8 @@ export const Prescricao = ({ route }) => {
         />
 
         <Group gap={10}>
-          {user.role == "paciente" ? null : (
+          {user.role == "paciente" ? null : consulta.situacao.situacao !=
+            "realizadas" ? null : (
             <Button
               onPress={() => {
                 setEditMode(!editMode);

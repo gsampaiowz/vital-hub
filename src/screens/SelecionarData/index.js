@@ -25,7 +25,7 @@ export const SelecionarData = ({ route, navigation }) => {
   //STATE DA DATA SELECIONADA
   const [dataSelecionada, setDataSelecionada] = useState(dataAtual);
   //STATE DO HORARIO SELECIONADO
-  const [horarioSelecionado, setHorarioSelecionado] = useState("");
+  const [horarioSelecionado, setHorarioSelecionado] = useState(null);
   //STATE DO AGENDAMENTO DA CONSULTA PARA RECEBER TODOS OS DADOS
   const [agendamento, setAgendamento] = useState();
 //SET PARA NÃO REPETIR HORARIOS
@@ -80,7 +80,7 @@ export const SelecionarData = ({ route, navigation }) => {
 
   //FUNCTION DE CONTINUAR PARA O MODAL
   function Continue() {
-    if (horarioSelecionado != "") {
+    if (horarioSelecionado != null) {
       setAgendamento({
         ...route.params.agendamento,
         dataConsulta: `${horarioSelecionado}`,

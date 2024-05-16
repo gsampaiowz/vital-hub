@@ -8,7 +8,6 @@ import { Audio } from "expo-av";
 //IMPORTAR RECURSOS DO EXPO-NOTIFICATION
 
 import * as Notifications from "expo-notifications";
-import { useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
 import moment from "moment";
 import api from "../../service/service";
@@ -37,38 +36,24 @@ const ModalContent = styled.View`
 export const ModalCancel = ({
   visible = false,
   setShowModal,
-  item,
+  setShowDetalhesModal,
   getConsultas,
+  item,
   navigation,
   user,
   ...rest
 }) => {
-  //STATE DO SOM DE NOTIFICACAO
-  const [sound, setSound] = useState(null);
-
   //FUNCAO PARA TOCAR O SOM
   async function playSound() {
     const { sound: newSound } = await Audio.Sound.createAsync(
       require("../../assets/sound/timao.mp3")
     );
-    setSound(newSound);
 
     await newSound.playAsync();
   }
 
-  //PARA DESATIVAR O SOM QUANDO O MODAL FOR DESMONTADO
-  useEffect(() => {
-    return sound
-      ? () => {
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
-
   //FUNCAO PARA LIDAR COM A CHAMADA DE NOTIFICACAO
   const HandleCallNotifications = async () => {
-    setShowModal(false);
-
     //OBTEM O STATUS DA PERMISSAO
     const { status } = await Notifications.getPermissionsAsync();
 
@@ -97,9 +82,11 @@ export const ModalCancel = ({
       await api.put(
         `/Consultas/Status?idConsulta=${item.id}&status=canceladas`
       );
-      await getConsultas();
-      HandleCallNotifications();
       setShowModal(false);
+      setShowDetalhesModal(false);
+      navigation.navigate("Main");
+      HandleCallNotifications();
+      getConsultas();
     } catch (error) {
       console.log(error);
     }

@@ -17,6 +17,8 @@ import api from "../../service/service";
 import { ActivityIndicator, Dimensions } from "react-native";
 import ToastManager, { Toast } from "toastify-react-native";
 import { ModalSairConta } from "../../components/ModalSairConta";
+import { useMaskedInputProps } from "react-native-mask-input";
+import { Masks } from "react-native-mask-input";
 
 const ButtonCamera = styled.TouchableOpacity.attrs({
   activeOpacity: 0.8,
@@ -208,7 +210,7 @@ export const Perfil = ({ navigation }) => {
     if (Object.values(inputs).some((input) => input === "")) {
       //EXIBE UM TOAST E VAI NO TOPO DA TELA
       Toast.error("Campo Vazio ou Inválido");
-      
+
       scrollViewRef.current.scrollTo({ y: 0, animated: true });
 
       return;
@@ -415,6 +417,13 @@ export const Perfil = ({ navigation }) => {
           />
 
           {/* BOTÃO QUE ABRE O MODAL DE SAIR DA CONTA */}
+          {editMode ? (
+            <Button
+              onPress={() => setEditMode(false)}
+              outlined
+              text="CANCELAR"
+            />
+          ) : null}
           <Button
             onPress={() => setShowModalSairConta(true)}
             outlined

@@ -34,6 +34,7 @@ export const RecuperarSenha = ({ navigation }) => {
 
 
     setCarregando(true)
+    console.log(`/RecuperarSenha?email=${email}`);
     await api.post(`/RecuperarSenha?email=${email}`)
       .then(() => {
 

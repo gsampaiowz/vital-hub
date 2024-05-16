@@ -39,13 +39,13 @@ export const Home = ({ navigation }) => {
   //FUNÇÃO QUE BUSCA AS CONSULTAS DO USUARIO
   async function getConsultas() {
     try {
-      //ESVAZIA O STATE
       setConsultas([]);
       //INICIA O ACTIVELOADING
       setLoading(true);
 
       const responseUser = await userDecodeToken();
       const url = responseUser.role === "paciente" ? "Pacientes" : "Medicos";
+
       const response = await api.get(
         `/${url}/BuscarPorData?data=${new Date(data)
           .toLocaleDateString()
@@ -56,14 +56,10 @@ export const Home = ({ navigation }) => {
       //FINALIZA O LOADING
       setLoading(false);
       //ADICIONA AS CONSULTAS CONFORME A SITUACAO SELECIONADA, E NÃO PERMITE REPETIÇÃO
-      await response.data.forEach((c) => {
-        if (
-          c.situacao.situacao === statusButtons &&
-          consultas.find((co) => co.id == c.id) == undefined
-        ) {
-          setConsultas((prevState) => [...prevState, c]);
-        }
-      });
+
+      setConsultas(
+        response.data.filter((c) => c.situacao.situacao === statusButtons)
+      );
     } catch (error) {
       console.log(error);
     }
@@ -91,9 +87,7 @@ export const Home = ({ navigation }) => {
   //FUNÇÃO QUE ATUALIZA AS CONSULTAS AGENDADAS PARA REALIZADAS AO EXPIRAR A DATA DA CONSULTA
   async function ExpirarConsultas() {
     try {
-      //BUSCA AS CONSULTAS
-      setConsultas([]);
-      await getConsultas();
+      getConsultas();
       //PERCORRE AS CONSULTAS E VERIFICA SE A DATA DA CONSULTA E MENOR QUE A DATA ATUAL
       consultas.forEach(async (consulta) => {
         if (
@@ -107,7 +101,7 @@ export const Home = ({ navigation }) => {
             )
             .then(async () => {
               //BUSCA NOVAMENTE AS CONSULTAS
-              await getConsultas();
+              getConsultas();
             });
         }
       });
@@ -166,11 +160,11 @@ export const Home = ({ navigation }) => {
           renderItem={({ item }) => (
             //CARD DE CONSULTA QUE PASSA OS DADOS COM TERNARIOS ENTRE TIPOS DE USUARIO
             <CardConsulta
+              getConsultas={ExpirarConsultas}
               clinica={item.medicoClinica.clinicaId}
               navigation={navigation}
               item={item}
               user={user}
-              getConsultas={getConsultas}
               image={{
                 uri:
                   user.role === "paciente"

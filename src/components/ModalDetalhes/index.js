@@ -6,6 +6,7 @@ import { Button } from "../Button";
 import { Group } from "../Group";
 import { ModalCancel } from "./../ModalCancel/index";
 import { useState } from "react";
+import api from "../../service/service";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -50,6 +51,18 @@ export const ModalDetalhes = ({
   //STATE DE VISIBILIDADE DO MODAL DE CANCELAR CONSULTA
   const [showModalCancel, setShowModalCancel] = useState(false);
 
+  async function realizarConsulta() {
+    try {
+      await api.put(
+        `/Consultas/Status?idConsulta=${item.id}&status=realizadas`
+      );
+      setShowDetalhesModal(false);
+      getConsultas();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
       <PatientModal>
@@ -89,6 +102,10 @@ export const ModalDetalhes = ({
               text="CANCELAR CONSULTA"
             />
             <Button
+              onPress={() => realizarConsulta()}
+              text="REALIZAR CONSULTA (para teste)"
+            />
+            <Button
               onPress={() => setShowDetalhesModal(false)}
               outlined
               text="Voltar"
@@ -97,7 +114,9 @@ export const ModalDetalhes = ({
         </ModalContent>
       </PatientModal>
       <ModalCancel
+        navigation={navigation}
         getConsultas={getConsultas}
+        setShowDetalhesModal={setShowDetalhesModal}
         setShowModal={setShowModalCancel}
         item={item}
         visible={showModalCancel}

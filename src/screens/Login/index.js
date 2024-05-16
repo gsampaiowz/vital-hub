@@ -15,10 +15,14 @@ import moment from "moment";
 import { Subtitle } from "../../components/Subtitle";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
+import Entypo from '@expo/vector-icons/Entypo';
 
 export const Login = ({ navigation }) => {
   //SALVAR O OBJ COM HISTORICO DE ACESSO
   const [dateHistory, setDateHistory] = useState({});
+
+  //STATE DO SECURE INPUT
+  const [secure, setSecure] = useState(true);
 
   //STATE DO LOADING DO BOTAO
   const [carregando, setCarregando] = useState(false);
@@ -115,8 +119,8 @@ export const Login = ({ navigation }) => {
       .catch(() => {
         Toast.error("Email ou senha incorretos");
       });
-      //FINALIZA O LOADING
-      setCarregando(false);
+    //FINALIZA O LOADING
+    setCarregando(false);
   }
 
   return (
@@ -133,9 +137,11 @@ export const Login = ({ navigation }) => {
             keyboardType="email-address"
           />
           <Input
+            secureTextEntry={secure}
             inputValue={inputs.senha}
             onChangeText={(text) => setInputs({ ...inputs, senha: text })}
             placeholder="Senha"
+            icon={<Entypo onPress={()=> setSecure(!secure)} name={secure ? "eye-with-line" : "eye"} size={24} color="#34898f" />}
           />
           <Link
             onPress={() => navigation.navigate("RecuperarSenha")}

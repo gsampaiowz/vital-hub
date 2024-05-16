@@ -24,7 +24,7 @@ const InputGroup = styled.View`
 const Icon = styled.View`
   position: absolute;
   right: 10px;
-  top: 50%;
+  top: 25%;
 `;
 
 export const Input = ({
@@ -40,6 +40,8 @@ export const Input = ({
   icon = null,
   keyboardType,
   textContentType,
+  secureTextEntry = false,
+  multiline = false,
   onChangeText = () => {},
   maxWidth = "100%",
   height = 53,
@@ -61,7 +63,8 @@ export const Input = ({
         keyboardType={keyboardType}
         textContentType={textContentType}
         maxLength={maxLength}
-        multiline
+        secureTextEntry={secureTextEntry}
+        multiline={multiline}
         editable={false}
         onPressIn={onPress}
         readOnly={!border}

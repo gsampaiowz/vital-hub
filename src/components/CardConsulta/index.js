@@ -37,8 +37,8 @@ export const CardConsulta = ({
   image,
   clinica,
   name,
-  info,
   getConsultas,
+  info,
   prioridade,
   horario,
   situacao,
@@ -98,8 +98,8 @@ export const CardConsulta = ({
         />
       )}
       <ModalDetalhes
+      getConsultas={getConsultas}
         item={item}
-        getConsultas={getConsultas}
         user={user}
         clinica={clinica}
         navigation={navigation}

@@ -13,21 +13,33 @@ import { useRef, useState } from "react";
 import ToastManager, { Toast } from "toastify-react-native";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
+import { Masks, useMaskedInputProps } from "react-native-mask-input";
 
 export const CriarConta = ({ navigation }) => {
-
   // CONST COM OS CAMPOS DE CRIAÇÃO DE CONTA
   const [inputs, setInputs] = useState({
-    nome: "thiago",
-    email: "thiago@email.com",
-    senha: "thiago123",
-    cidade: "santo andre",
-    logradouro: "elba",
-    cpf: "432423",
-    dataNascimento: "23/02/2000",
-    numero: "10",
-    cep: "243242",
-    rg: "4324234",
+    nome: "",
+    email: "",
+    senha: "",
+    cidade: "",
+    logradouro: "",
+    cpf: "",
+    dataNascimento: "",
+    numero: "",
+    cep: "",
+    rg: "",
+  });
+
+  const dataMasked = useMaskedInputProps({
+    value: inputs.dataNascimento,
+    onChangeText: (data) => setInputs({ ...inputs, dataNascimento: data }),
+    mask: Masks.DATE_DDMMYYYY,
+  });
+
+  const cpfMasked = useMaskedInputProps({
+    value: inputs.cpf,
+    onChangeText: (txt) => setInputs({ ...inputs, cpf: txt }),
+    mask: Masks.BRL_CPF,
   });
 
   const [carregando, setCarregando] = useState(false);
@@ -36,18 +48,18 @@ export const CriarConta = ({ navigation }) => {
 
   // REQUISIÇÃO PARA CADASTRAR UM USUÁRIO NOVO
   async function fillProfile() {
-    if(Object.values(inputs).some(input => input === "")){
+    if (Object.values(inputs).some((input) => input === "")) {
       scrollViewRef.current.scrollTo({ y: 0, animated: true });
-      Toast.error("Preencha todos os campos" )
+      Toast.error("Preencha todos os campos");
 
-      return
+      return;
     }
 
     setCarregando(true);
 
     // INSTANCIA UM FORMDATA
     const formData = new FormData();
-    
+
     formData.append("rg", inputs.rg);
     formData.append("cpf", inputs.cpf);
     formData.append("cep", inputs.cep);
@@ -62,34 +74,34 @@ export const CriarConta = ({ navigation }) => {
       "dataNascimento",
       new Date(
         inputs.dataNascimento.split("/").reverse().join("-") + "T00:00:00.000Z"
-        ).toISOString()
-        );
-        
-        await api
-        .post("/Pacientes", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-        setCarregando(false);
-        navigation.navigate("Login")
+      ).toISOString()
+    );
+
+    await api
+      .post("/Pacientes", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    setCarregando(false);
+    navigation.navigate("Login");
   }
-  
-// LÓGICA PARA O TOAST
+
+  // LÓGICA PARA O TOAST
   async function CheckExistAuthentication() {
     LocalAuthentication.hashHardwareAsync().then((response) => {
       if (response) {
-        Toast.success('Conta Criado com sucesso')
+        Toast.success("Conta Criado com sucesso");
       } else {
-        Toast.error('Campo inválido')
+        Toast.error("Campo inválido");
       }
-    })
+    });
   }
 
   return (
@@ -145,6 +157,7 @@ export const CriarConta = ({ navigation }) => {
             onChangeText={(text) =>
               setInputs({ ...inputs, dataNascimento: text })
             }
+            {...dataMasked}
           />
           <Group row={true}>
             <Input
@@ -152,6 +165,7 @@ export const CriarConta = ({ navigation }) => {
               label="Cpf"
               placeholder="000.000.000-00"
               onChangeText={(text) => setInputs({ ...inputs, cpf: text })}
+              {...cpfMasked}
             />
             <Input
               inputValue={inputs.numero}
