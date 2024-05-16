@@ -14,6 +14,7 @@ import ToastManager, { Toast } from "toastify-react-native";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 import { Masks, useMaskedInputProps } from "react-native-mask-input";
+import Entypo  from '@expo/vector-icons/Entypo';
 
 export const CriarConta = ({ navigation }) => {
   // CONST COM OS CAMPOS DE CRIAÇÃO DE CONTA
@@ -43,6 +44,8 @@ export const CriarConta = ({ navigation }) => {
   });
 
   const [carregando, setCarregando] = useState(false);
+
+  const [secure, setSecure] = useState(true);
 
   const scrollViewRef = useRef(null);
 
@@ -135,8 +138,10 @@ export const CriarConta = ({ navigation }) => {
           <Input
             inputValue={inputs.senha}
             label="Senha"
+            secureTextEntry={secure}
             placeholder="*******"
             onChangeText={(text) => setInputs({ ...inputs, senha: text })}
+            icon={<Entypo onPress={()=> setSecure(!secure)} name={secure ? "eye-with-line" : "eye"} size={24} color="#34898f" />}
           />
           <Input
             inputValue={inputs.cidade}

@@ -6,6 +6,7 @@ import { CardMedClini } from "../../components/CardMedClini";
 import { Button } from "./../../components/Button/index";
 import { Group } from "./../../components/Group/index";
 import api from "../../service/service";
+import ToastManager, { Toast } from "toastify-react-native";
 
 export const SelecionarMedico = ({ route, navigation }) => {
   //STATE DA LISTA DE MEDICOS
@@ -47,12 +48,13 @@ export const SelecionarMedico = ({ route, navigation }) => {
         },
       });
     } else {
-      alert("Selecione um medico");
+      Toast.error("Selecione um medico");
     }
   }
 
   return (
     <ContainerSafe>
+      <ToastManager height={60} width={300} />
       <Title text="Selecionar Médico" />
       <ListComponent
         data={medicoLista}

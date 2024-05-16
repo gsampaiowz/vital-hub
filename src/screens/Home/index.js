@@ -57,9 +57,11 @@ export const Home = ({ navigation }) => {
       setLoading(false);
       //ADICIONA AS CONSULTAS CONFORME A SITUACAO SELECIONADA, E NÃO PERMITE REPETIÇÃO
 
-      setConsultas(
-        response.data.filter((c) => c.situacao.situacao === statusButtons)
+      const consultasFiltradas = response.data.filter(
+        (c) => c.situacao.situacao === statusButtons
       );
+
+      setConsultas(consultasFiltradas);
     } catch (error) {
       console.log(error);
     }

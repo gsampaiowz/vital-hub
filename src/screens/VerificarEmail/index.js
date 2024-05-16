@@ -5,14 +5,14 @@ import { Subtitle } from "../../components/Subtitle";
 import { Title } from "../../components/Title";
 import LogoImage from "../../assets/img/Logo.png";
 import { Logo } from "../../components/Logo";
-import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { Link } from "./../../components/Link/index";
 import { Group } from "../../components/Group";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 import CodeInput from "../../components/CodeInput";
+import ToastManager, { Toast } from "toastify-react-native";
 
 export const VerificarEmail = ({ navigation, route }) => {
  
@@ -20,10 +20,6 @@ export const VerificarEmail = ({ navigation, route }) => {
   const [carregando, setCarregando] = useState(false);
   //VALOR DO CODIGO
   const [value, setValue] = useState('');
-
-  useEffect(() => {
-    console.log(value);
-  }, [value])
 
   // REQUISIÇÃO PARA VALIDAÇÃO DO CÓDIGO DE RECUPERAÇÃO DE E-MAIL
   async function validarCodigo() {
@@ -35,6 +31,7 @@ export const VerificarEmail = ({ navigation, route }) => {
         navigation.replace("RedefinirSenha", { emailRecuperacao: route.params.emailRecuperacao });
 
       }).catch(error => {
+        Toast.error("Cógido incorreto!")
         console.log(error);
       })
     setCarregando(false)
@@ -42,6 +39,7 @@ export const VerificarEmail = ({ navigation, route }) => {
 
   return (
     <ContainerScroll>
+      <ToastManager height={60} width={300} />
       <ContainerSpacing>
         <NavigationButton
           onPress={() => navigation.navigate("Login")}

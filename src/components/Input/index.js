@@ -21,11 +21,6 @@ const InputGroup = styled.View`
   gap: 10px;
 `;
 
-const Icon = styled.View`
-  position: absolute;
-  right: 10px;
-  top: 25%;
-`;
 
 export const Input = ({
   fontSize = 14,
@@ -47,6 +42,13 @@ export const Input = ({
   height = 53,
   textAlign = "left",
 }) => {
+
+  const Icon = styled.View`
+    position: absolute;
+    right: 10px;
+    top: ${label ? "50%" : "25%"};
+  `;
+
   const [colorState, setColorState] = useState("#34898f");
   color = colorState;
 

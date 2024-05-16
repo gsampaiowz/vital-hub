@@ -16,6 +16,7 @@ import api from "../../service/service";
 import { ActivityIndicator } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { userDecodeToken } from "../../utils/Auth";
+import ToastManager, { Toast } from "toastify-react-native";
 
 const Divider = styled.View`
   width: 100%;
@@ -126,6 +127,7 @@ export const Prescricao = ({ route }) => {
             if (examesSemRepetir.has(exame.descricao)) {
               try {
                 await api.delete("/Exame?id=" + exame.id);
+                Toast.error("Já existe um exame idêntico.")
               } catch (error) {
                 console.log(error);
               }
@@ -169,6 +171,7 @@ export const Prescricao = ({ route }) => {
     />
   ) : dados.email !== "" ? (
     <ContainerScroll>
+      <ToastManager height={80} />
       <PacienteImage source={{ uri: dados.foto }} />
       <ContainerSpacing>
         <Title text={dados.nome} />

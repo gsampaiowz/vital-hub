@@ -4,10 +4,10 @@ import { Title } from "../Title";
 import { Group } from "../Group";
 import { Subtitle } from "./../Subtitle/index";
 import { Button } from "../Button";
-import { Input } from "./../Input/index";
 import { Modal } from "react-native";
 import { useEffect, useState } from "react";
 import api from "../../service/service";
+import ToastManager, { Toast } from "toastify-react-native";
 
 const PatientModal = styled.View`
   flex: 1;
@@ -66,6 +66,8 @@ export const ModalAddConsulta = ({
         agendamento: agendamento,
         getConsultas: getConsultas,
       });
+    } else {
+      Toast.error("Preencha as opções!");
     }
   }
 
@@ -95,6 +97,7 @@ export const ModalAddConsulta = ({
 
   return (
     <Modal {...rest} transparent visible={visible} animationType="fade">
+      <ToastManager height={60} width={300} />
       <PatientModal>
         <ModalContent>
           <Group gap={20}>

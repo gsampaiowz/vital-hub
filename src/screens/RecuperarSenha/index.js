@@ -18,20 +18,8 @@ export const RecuperarSenha = ({ navigation }) => {
 
   const [carregando, setCarregando] = useState(false);
 
-    // REQUISIÇÃO PARA CADASTRAR UM USUÁRIO NOVO
-  async function CheckExistAuthentication() {
-    LocalAuthentication.hasHardwareAsync().then((response) => {
-      if (response) {
-        Toast.success("Senha alterada");
-      } else {
-        Toast.error("Preencha todos os campos");
-      }
-    });
-  }
-
   // REQUISIÇÃO PARA RECUPERAR SENHA
   async function EnviarEmail() {
-
 
     setCarregando(true)
     console.log(`/RecuperarSenha?email=${email}`);
@@ -41,10 +29,10 @@ export const RecuperarSenha = ({ navigation }) => {
         navigation.replace("VerificarEmail", { emailRecuperacao: email })
 
       }).catch(error => {
+        Toast.error("Email não cadastrado!")
         console.log(error);
       })
 
-    Toast.error("Campos inválido")
     setCarregando(false)
   }
 

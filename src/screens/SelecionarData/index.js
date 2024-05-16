@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import moment from "moment/moment";
 import { ActivityIndicator } from "react-native";
 import api from "../../service/service";
+import ToastManager, { Toast } from "toastify-react-native";
 
 const SelectHorario = styled(RNPickerSelect)`
   width: 90%;
@@ -86,6 +87,8 @@ export const SelecionarData = ({ route, navigation }) => {
         dataConsulta: `${horarioSelecionado}`,
       });
       setShowResumoModal(true);
+    }else{
+      Toast.error("Selecione um horário");
     }
   }
 
@@ -107,7 +110,8 @@ export const SelecionarData = ({ route, navigation }) => {
   }
 
   return (
-    <ContainerScroll contentContainerStyle={{ paddingTop: 20 }}>
+    <ContainerScroll contentContainerStyle={{ paddingTop: 20 }} style={{paddingTop:20}}>
+      <ToastManager height={60} width={300} />
       <Title text="Selecionar data" />
       <CalendarComponent
         setDataSelecionada={setDataSelecionada}
