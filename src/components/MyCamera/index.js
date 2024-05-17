@@ -88,7 +88,6 @@ export const MyCamera = ({
       setLastPhoto(assets[0].uri);
     }
 
-    console.log(assets);
   }
 
   useEffect(() => {
@@ -99,7 +98,6 @@ export const MyCamera = ({
       const { status: mediaStatus } =
         await MediaLibrary.requestPermissionsAsync();
     })();
-    console.log(lastPhoto);
   }, []);
 
   async function CapturePhoto() {

@@ -74,7 +74,8 @@ export const ModalDetalhes = ({
             <Subtitle text={user.role === "paciente" ? info : info + " anos"} />
           </Group>
           <Group>
-            {item.situacao.situacao !== "realizadas" && (
+            {item.situacao.situacao == "realizadas" ||
+            user.role == "medico" ? null : (
               <Button
                 onPress={() => {
                   setShowDetalhesModal(false);
@@ -85,8 +86,11 @@ export const ModalDetalhes = ({
             )}
             <Button
               onPress={() => {
+                navigation.navigate("Prescricao", {
+                  consulta: item,
+                  situacao: item.situacao.situacao,
+                });
                 setShowDetalhesModal(false);
-                navigation.navigate("Prescricao", { consulta: item });
               }}
               text={
                 user.role === "paciente"
@@ -101,10 +105,12 @@ export const ModalDetalhes = ({
               onPress={() => setShowModalCancel(true)}
               text="CANCELAR CONSULTA"
             />
-            <Button
-              onPress={() => realizarConsulta()}
-              text="REALIZAR CONSULTA (para teste)"
-            />
+            {user.role == "medico" && item.situacao.situacao == "agendadas" ? (
+              <Button
+                onPress={() => realizarConsulta()}
+                text="REALIZAR CONSULTA (para teste)"
+              />
+            ) : null}
             <Button
               onPress={() => setShowDetalhesModal(false)}
               outlined

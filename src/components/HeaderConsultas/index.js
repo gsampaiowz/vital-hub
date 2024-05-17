@@ -13,7 +13,7 @@ const HeaderConsultasStyled = styled(LinearGradient).attrs({
   width: 100vw;
   flex-direction: row;
   align-items: center;
-  padding: 20px 20px 20px 20px;
+  padding: 40px 20px 20px 20px;
   gap: 10px;
   shadow-color: #000;
   shadow-opacity: 0.08;

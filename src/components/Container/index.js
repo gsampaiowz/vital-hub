@@ -9,7 +9,7 @@ gap: 20px;
 
 export const ContainerSafe = styled.SafeAreaView`
   ${ContainersStyle}
-  padding: 20px 0;
+  padding: 60px 0 20px 0;
   align-items: center;
 `;
 
@@ -21,6 +21,7 @@ export const Container = styled.View`
 export const ContainerScroll = styled.ScrollView.attrs({
   contentContainerStyle: {
     paddingBottom: 20, 
+    paddingTop: 40,
     alignItems: "center",
     gap: 20,
   },

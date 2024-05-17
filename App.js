@@ -77,7 +77,7 @@ export default function App() {
       // >> component: Componente que será chamado.
       // >> options ( title ): Título da tela.
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
           {/* TELA QUE SE INICIAR AO ABRIR O APP */}
           <Stack.Screen
             name="Login"

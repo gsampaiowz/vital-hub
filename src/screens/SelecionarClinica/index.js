@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ContainerScroll, ContainerSpacing } from "../../components/Container";
+import { ContainerSafe, ContainerScroll, ContainerSpacing } from "../../components/Container";
 import { Title } from "./../../components/Title/index";
 import { ListComponent } from "../../components/CardList";
 import { CardMedClini } from "../../components/CardMedClini";
@@ -45,14 +45,13 @@ export const SelecionarClinica = ({ route, navigation }) => {
           ...clinica,
         },
       });
-    }
-    else{
+    } else {
       Toast.error("Selecione uma clinica");
     }
   }
 
   return (
-    <ContainerScroll style={{ paddingTop: 20 }}>
+    <ContainerSafe>
       <ToastManager height={60} width={300} />
       <Title text="Selecionar Clínica" />
       <ListComponent
@@ -80,6 +79,6 @@ export const SelecionarClinica = ({ route, navigation }) => {
           <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>
       </ContainerSpacing>
-    </ContainerScroll>
+    </ContainerSafe>
   );
 };

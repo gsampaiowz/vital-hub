@@ -31,7 +31,7 @@ const InputImage = styled.Image`
   border-radius: 20px;
 `;
 
-export const Prescricao = ({ route }) => {
+export const Prescricao = ({ route, navigation }) => {
   //MODO DE EDICAO
   const [editMode, setEditMode] = useState(false);
 
@@ -67,6 +67,7 @@ export const Prescricao = ({ route }) => {
 
   //BUSCA O ID DA CONSULTA NO ROUTE
   const consultaId = route.params.consulta.id;
+  const situacao = route.params.situacao;
 
   //STATE DO DADOS DO PACIENTE
   const [dados, setDados] = useState({
@@ -127,7 +128,7 @@ export const Prescricao = ({ route }) => {
             if (examesSemRepetir.has(exame.descricao)) {
               try {
                 await api.delete("/Exame?id=" + exame.id);
-                Toast.error("Já existe um exame idêntico.")
+                Toast.error("Já existe um exame idêntico.");
               } catch (error) {
                 console.log(error);
               }
@@ -169,7 +170,7 @@ export const Prescricao = ({ route }) => {
       setPhoto={setPhoto}
       setIsPhotoSaved={setIsPhotoSaved}
     />
-  ) : dados.email !== "" ? (
+  ) : dados.email !== "" || consulta !== null ? (
     <ContainerScroll>
       <ToastManager height={80} />
       <PacienteImage source={{ uri: dados.foto }} />
@@ -257,8 +258,7 @@ export const Prescricao = ({ route }) => {
         />
 
         <Group gap={10}>
-          {user.role == "paciente" ? null : consulta.situacao.situacao !=
-            "realizadas" ? null : (
+          {user.role == "paciente" || situacao != "realizadas" ? null : (
             <Button
               onPress={() => {
                 setEditMode(!editMode);
@@ -268,7 +268,7 @@ export const Prescricao = ({ route }) => {
             />
           )}
 
-          <Button outlined text="SAIR DO APP" />
+          <Button outlined text="Voltar" onPress={() => navigation.goBack()} />
         </Group>
       </ContainerSpacing>
       <CameraModal

@@ -98,7 +98,7 @@ export const CardConsulta = ({
         />
       )}
       <ModalDetalhes
-      getConsultas={getConsultas}
+        getConsultas={getConsultas}
         item={item}
         user={user}
         clinica={clinica}

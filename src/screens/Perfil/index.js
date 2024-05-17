@@ -181,7 +181,6 @@ export const Perfil = ({ navigation }) => {
   // BUSCA POR ID DO USUÁRIO SEMPRE QUE TROCAR A FOTO
   useEffect(() => {
     BuscarPorId();
-    console.log(inputs);
   }, [loadingPhoto]);
 
   // FUNÇÃO DE ALTERAR FOTO DO PERFIL

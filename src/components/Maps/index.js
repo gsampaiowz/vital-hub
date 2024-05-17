@@ -111,6 +111,13 @@ export const Maps = ({ clinica }) => {
         pinColor="purple"
       />
 
+      <Marker
+        coordinate={initialPosition.coords}
+        title="Senai Paulo Skaf"
+        description="Melhor escola de tecnologia do Brasil"
+        pinColor="purple"
+      />
+
       <MapViewDirections
         origin={initialPosition.coords}
         destination={{
